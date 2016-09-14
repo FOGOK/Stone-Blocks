@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.utils.Atalas;
 
 /**
- * Created by java4game on 10.09.2016 23:15.
+ * Created by java4game and FOGOK on 10.09.2016 23:15.
  * Если ты это читаешь, то знай, что этот код хуже
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985

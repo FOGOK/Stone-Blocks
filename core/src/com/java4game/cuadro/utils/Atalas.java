@@ -26,16 +26,30 @@ public class Atalas {
 
     /*
     *  после того, как мы добавили новый атлас текстур с координатами и размерами каждого региона текстур
-    *  мы должны создать поле string с названием текстуры и добавить его в массив **names**
+    *  мы должны создать поле string с названием текстуры и добавить его в массив **NAMES**
     *
     * */
 
 
-    public static final String sfieldT = "sFieldT";
-    public static final String squareT = "squareT";
+    public static final String sq00 = "0";
+    public static final String sq01 = "1";
+    public static final String sq02 = "2";
+    public static final String sq03 = "3";
+    public static final String sq04 = "4";
+    public static final String sq05 = "5";
+    public static final String sq06 = "6";
+    public static final String sq07 = "7";
+    public static final String sq08 = "8";
+    public static final String sq09 = "9";
+    public static final String sq10 = "10";
+    public static final String sq11 = "11";
+    public static final String squareT1 = "squareT1";
+    public static final String squareT2 = "squareT2";
+    public static final String squareT3 = "squareT3";
 
 
-    public static final String[] names = new String[] {sfieldT, squareT };
+
+    public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3};
 
     public static int textsCount;
 

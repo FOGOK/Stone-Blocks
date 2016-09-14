@@ -6,15 +6,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.utils.DebugValueChanger;
 
 public class Gm extends ApplicationAdapter {
-
-
 
 	SpriteBatch batch;
     OrthographicCamera camera;
@@ -24,6 +22,7 @@ public class Gm extends ApplicationAdapter {
     public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
 
 
+    DebugValueChanger debugValueChanger;
 
 	
 	@Override
@@ -37,6 +36,7 @@ public class Gm extends ApplicationAdapter {
         bf = new BitmapFont();
         bf.setColor(Color.BLACK);
         debugBatch = new SpriteBatch();
+        debugValueChanger = new DebugValueChanger(1, debugBatch);
         ///
 
         //initAll Game
@@ -78,19 +78,19 @@ public class Gm extends ApplicationAdapter {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S))
-            bw = !bw;
+            isSleep = !isSleep;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.T))
             textShow = !textShow;
 
-        if (bw)
+        if (isSleep)
             mdT = Math.min(Gdx.graphics.getDeltaTime() / 0.016f, 2f);
         else
             sleep(1);
         ///
     }
 
-    boolean bw = true, textShow = true;
+    boolean isSleep = true, textShow = true;
 
     private long diff, start = System.currentTimeMillis();
     public void sleep(int fps) {
@@ -108,19 +108,29 @@ public class Gm extends ApplicationAdapter {
 
     private void debugMethod1(){
         debugBatch.begin();
-        String mmm = (!bw) ? "IS SLEEEEEEEPING" : "";
+        String mmm = (!isSleep) ? "IS SLEEEEEEEPING" : "";
         bf.draw(debugBatch, "LOLOG    " + mmm + "\n-------------\n" +
+                        "KEYSETS: SLEEP - 'S',\nDebugValueChanger - 'C',\nEnable text - 'T' " + "\n" +
                         "FPS:" + Gdx.graphics.getFramesPerSecond() + "\n" +
                         DEBUG_VALUE1 + "\n" +
                         DEBUG_VALUE2,
 
                 20, Gdx.graphics.getHeight() - 20);
+
         debugBatch.end();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C))
+            showDebugValChanger = !showDebugValChanger;
+
+        if (showDebugValChanger)
+            debugValueChanger.draw();
     }
+    boolean showDebugValChanger = false;
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
+        debugBatch.dispose();
         handler.dispose();
+        debugValueChanger.dispose();
 	}
 }

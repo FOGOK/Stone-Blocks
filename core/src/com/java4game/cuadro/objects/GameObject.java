@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
- * Created by java4game on 10.09.2016 23:30.
+ * Created by java4game and FOGOK on 10.09.2016 23:30.
  * Если ты это читаешь, то знай, что этот код хуже
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985

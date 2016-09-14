@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Random;
 
 /**
- * Created by java4game on 10.09.2016 23:16.
+ * Created by java4game and FOGOK on 10.09.2016 23:16.
  * Если ты это читаешь, то знай, что этот код хуже
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985
@@ -27,24 +27,20 @@ public class Cube extends GameObject{           ///класс кубика, ко
     boolean povorot = false;
     Random rnd = new Random();
 
-    int SQSIZE = 5;         // 6 - 1, т.к. последняя клетка равна 5 а первая 0
+    public static int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
 
     float sizeSquareF; //размер клетки поля
 
     Rectangle levSqBounds;
 
-    public Cube(Sprite sprite, LevelSquare levelSquare, float otst, float size) {
+    public Cube(Sprite sprite, LevelSquare levelSquare) {
         super(sprite);
 
-
-
-        setSize(size);
-        this.otst = otst;
+        setSize(LevelSquare.sizOneSq * 0.9f);
+        this.otst = LevelSquare.otst * 2f;
         this.sprite.setOriginCenter();
         levSqBounds = levelSquare.getBounds();
-        sizeSquareF = levelSquare.getW() / (SQSIZE + 1);
-
-
+        sizeSquareF = LevelSquare.sizOneSq + LevelSquare.otst * 2;
 
 
         dir = (rnd.nextBoolean()) ? ((rnd.nextBoolean()) ? Dir.RIGHT : Dir.LEFT) : ((rnd.nextBoolean()) ? Dir.UP : Dir.DOWN);
@@ -85,57 +81,33 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
     boolean revers = false;
 
-    boolean perch = false;
+    boolean inmCHD = false, lockCHD = false;
     private void mathPosition(){
 
         switch (dir){
-            case RIGHT:
-                chngX = true;
-                chgVal = SQSIZE + 1;
-                cngTR = true;
-                nextDir = (revers) ? Dir.UP : Dir.DOWN;
-                pX = speed * Gm.mdT;
-                pY = 0f;
-
-                if (perch){
-                    dir = nextDir;
-                    setSQX(getSQPosX());
-                    pX = pY = 0f;
-                    perch = false;
-                    povorot = true;
-                }
+            case RIGHT:     ///если движемся вправо
+                chngX = true;                                       //указываем, двигаемся по x или y
+                chgVal = SQSIZE + 1;                                //указываем на какой клетке начать поворачивать
+                cngTR = true;                                       //указываем, ставить кубик при достижении края (наверх | направо(в зависимости от chngX))
+                nextDir = (revers) ? Dir.UP : Dir.DOWN;             //в зависимости от переменной revers говорим, куда двигатсья при достижении края
+                pX = speed * Gm.mdT;                                ///указываем скорость x
+                pY = 0f;                                            //указываем скорость y
                 break;
-            case DOWN:
+            case DOWN:      ///если движемся вниз
                 chngX = false;
                 chgVal = -1;
                 cngTR = false;
                 nextDir = (revers) ? Dir.RIGHT : Dir.LEFT;
                 pX = 0f;
                 pY = -speed * Gm.mdT;
-
-                if (perch){
-                    dir = nextDir;
-                    setSQY(getSQPosY());
-                    pX = pY = 0f;
-                    perch = false;
-                    povorot = true;
-                }
                 break;
-            case LEFT:
+            case LEFT:      ///если движемся влево
                 chngX = true;
                 chgVal = -1;
                 cngTR = false;
                 nextDir = (revers) ? Dir.DOWN : Dir.UP;
                 pX = -speed * Gm.mdT;
                 pY = 0f;
-
-                if (perch){
-                    dir = nextDir;
-                    setSQX(getSQPosX());
-                    pX = pY = 0f;
-                    perch = false;
-                    povorot = true;
-                }
                 break;
             case UP:
                 chngX = false;
@@ -144,15 +116,15 @@ public class Cube extends GameObject{           ///класс кубика, ко
                 nextDir = (revers) ? Dir.LEFT : Dir.RIGHT;
                 pX = 0f;
                 pY = speed * Gm.mdT;
-
-                if (perch){
-                    dir = nextDir;
-                    setSQY(getSQPosY());
-                    pX = pY = 0f;
-                    perch = false;
-                    povorot = true;
-                }
                 break;
+        }
+
+        if (inmCHD){         ///если должны повернуть раньше края
+            dir = nextDir;
+            if (chngX) setSQX(getSQPosX()); else setSQY(getSQPosY());
+            pX = pY = 0f;
+            inmCHD = false;
+            povorot = true;
         }
 
         int k = (chngX) ? getSQPosX() : getSQPosY();
@@ -169,76 +141,83 @@ public class Cube extends GameObject{           ///класс кубика, ко
             }
         }
 
+
+
         if (povorot){
-            float delt = -170f * speed * Gm.mdT;
+            float delt = -95f * speed * Gm.mdT;
             if (revers) delt *= -1;
             sprite.rotate(delt);
             if (Math.abs(sprite.getRotation() + delt) > limRot){
                 sprite.setRotation(0);
                 povorot = false;
+                if (getSQPosX() == -1 || getSQPosX() == SQSIZE + 1 || getSQPosY() == -1 || getSQPosY() == SQSIZE + 1)
+                    lockCHD = false;
+            }else if (Math.abs(sprite.getRotation() + delt) > limRot / 2f){
                 speed = 0.1f + (rnd.nextInt(2) / 10f);
             }
         }
 
 
-        if (Gdx.input.justTouched()){
-            perch = true;
+        if (Gdx.input.justTouched() && !lockCHD){
+            lockCHD = inmCHD = true;
             lastpSQX = getSQPosX();
             lastpSQY = getSQPosY();
         }
 
-        Gm.DEBUG_VALUE1 = "" + perch;
+        Gm.DEBUG_VALUE1 = "x" + getSQPosX() + "y" + getSQPosY();
     }
+    float limRot = 180;     /// на сколько поворачивать кубик
 
 
-    float limRot = 360;
 
-
+    //получить координаты кубика в клетках
     BigDecimal bigDecimal;
-
-
-
     public int getSQPosX(){
         bigDecimal = new BigDecimal((getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (SQSIZE + 1))).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
-
-    public int getSQPosY(){
+    public int getSQPosY() {
         bigDecimal = new BigDecimal((getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (SQSIZE + 1))).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
+    ///
 
 
-
+    //устанавливаем позицию по x | y в клетках
     private void setSQX(int iX){        //устанавливаем x на определённую клетку внутри поля
         setPosition(levSqBounds.getX() + iX * sizeSquareF + (sizeSquareF - getW()) / 2f, getY());
     }
-
     private void setSQY(int iY){    //устанавливаем y  на определённую клетку внутри поля
         setPosition(getX(), levSqBounds.getY() + iY * sizeSquareF + (sizeSquareF - getW()) / 2f);
     }
+    ///
 
+
+    ///устанавливаем кубик за поле по x | y
     private void setXZA(boolean right){     //устанавливаем кубик за поле по x
         if (right)
             setPosition(levSqBounds.getX() + levSqBounds.getWidth() + otst, getY());
         else
             setPosition(levSqBounds.getX() - getW() - otst, getY());
     }
-
-    private boolean isXOUT(boolean right){
-        return (right) ? getX() > levSqBounds.getX() + levSqBounds.getWidth() + otst : getX() < levSqBounds.getX() - getW() - otst;
-    }
-
-    private boolean isYOUT(boolean top){
-        return (top) ? getY() > levSqBounds.getY() + levSqBounds.getHeight() + otst : getY() < levSqBounds.getY() - getW() - otst;
-    }
-
     private void setYZA(boolean top){     //устанавливаем кубик за поле по y
         if (top)
             setPosition(getX(), levSqBounds.getY() + levSqBounds.getHeight() + otst);
         else
             setPosition(getX(), levSqBounds.getY() - getW() - otst);
     }
+    ///
+
+
+    //проверяем, находится ли кубик за полем по x | y
+    private boolean isXOUT(boolean right){
+        return (right) ? getX() > levSqBounds.getX() + levSqBounds.getWidth() + otst : getX() < levSqBounds.getX() - getW() - otst;
+    }
+    private boolean isYOUT(boolean top){
+        return (top) ? getY() > levSqBounds.getY() + levSqBounds.getHeight() + otst : getY() < levSqBounds.getY() - getW() - otst;
+    }
+    ////
+
 
 
 
