@@ -22,7 +22,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
     enum Dir{   //направление движения
         RIGHT, DOWN, LEFT, UP
     }
-    float speed = 0.12f;
+    float speed = 0.16f;
     float otst; //отступ от поля
     boolean povorot = false;
     Random rnd = new Random();
@@ -61,7 +61,6 @@ public class Cube extends GameObject{           ///класс кубика, ко
         }
 
         sprite.setRotation(0);
-        speed = 0.1f + (rnd.nextInt(2) / 10f);
     }
 
 
@@ -151,8 +150,6 @@ public class Cube extends GameObject{           ///класс кубика, ко
                 sprite.setRotation(0);
                 povorot = false;
             }else if (Math.abs(sprite.getRotation() + delt) > limRot / 2f){
-                speed = 0.1f + (rnd.nextInt(2) / 10f);
-
                 if ((getSQPosX() == -1 || getSQPosX() == SQSIZE + 1 || getSQPosY() == -1 || getSQPosY() == SQSIZE + 1) &&
                         !((getSQPosX() == -1) && (getSQPosY() == SQSIZE + 1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == SQSIZE + 1)) &&
                         !((getSQPosX() == -1) && (getSQPosY() == -1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == -1)))
