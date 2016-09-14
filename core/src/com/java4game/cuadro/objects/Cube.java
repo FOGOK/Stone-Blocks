@@ -150,10 +150,13 @@ public class Cube extends GameObject{           ///класс кубика, ко
             if (Math.abs(sprite.getRotation() + delt) > limRot){
                 sprite.setRotation(0);
                 povorot = false;
-                if (getSQPosX() == -1 || getSQPosX() == SQSIZE + 1 || getSQPosY() == -1 || getSQPosY() == SQSIZE + 1)
-                    lockCHD = false;
             }else if (Math.abs(sprite.getRotation() + delt) > limRot / 2f){
                 speed = 0.1f + (rnd.nextInt(2) / 10f);
+
+                if ((getSQPosX() == -1 || getSQPosX() == SQSIZE + 1 || getSQPosY() == -1 || getSQPosY() == SQSIZE + 1) &&
+                        !((getSQPosX() == -1) && (getSQPosY() == SQSIZE + 1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == SQSIZE + 1)) &&
+                        !((getSQPosX() == -1) && (getSQPosY() == -1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == -1)))
+                    lockCHD = false;
             }
         }
 

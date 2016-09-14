@@ -1,5 +1,7 @@
 package com.java4game.cuadro.core;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
@@ -23,6 +25,7 @@ public class LevelGen {
 
     Cube cube;
     LevelSquare levelSquare;
+    Sprite background;
 
     //ссылки
     TextureGen textureGen;
@@ -42,20 +45,21 @@ public class LevelGen {
 
         cube = new Cube(textureGen.getSprite(Atalas.squareT1), levelSquare);  ///инициализируем кубик и устанавливаем размер кубика
         ///
+
+        //инициализируем фон
+        background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
+        background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        background.setSize(Gm.WIDTH, Gm.HEIGHT);
+        ///
     }
 
     public void draw(SpriteBatch batch){
-        levelSquare.fRender(batch);
+        background.draw(batch);
+        levelSquare.draw(batch);
         cube.draw(batch);
     }
 
-    private Sprite generateLevSquare(final TextureGen textureGen){
-
-
-        return new Sprite();
-    }
-
     public void dispose() {
-
+        background.getTexture().dispose();
     }
 }

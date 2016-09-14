@@ -51,5 +51,6 @@ public class Handler {
 
     public void dispose() {
         atls.dispose();
+        levelGen.dispose();
     }
 }

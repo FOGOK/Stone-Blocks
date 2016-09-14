@@ -1,15 +1,10 @@
 package com.java4game.cuadro.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
 
 import java.util.Random;
@@ -21,9 +16,6 @@ import java.util.Random;
  * лавочке возле остановки автобуса номер 985
  */
 public class LevelSquare{            //игровое поле
-
-    FrameBuffer frameBuffer;
-    Texture texture;
     Sprite[][] sprites;
 
     Rectangle bounds;
@@ -56,25 +48,14 @@ public class LevelSquare{            //игровое поле
             }
         }
 //        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) (Gdx.graphics.getWidth() * (size / Gm.WIDTH)), (int) (Gdx.graphics.getWidth() * (size / Gm.WIDTH)), true);
-
-
     }
-
-
-
 
 
     public Rectangle getBounds(){
         return bounds;
     }
 
-    public float getSize(){
-        return size;
-    }
-
-
-
-    public void fRender(SpriteBatch batch){
+    public void draw(SpriteBatch batch){
         for (int i = 0; i <  sqCount; i++) {
             for (int i2 = 0; i2 < sqCount; i2++) {
                 sprites[i][i2].draw(batch);
