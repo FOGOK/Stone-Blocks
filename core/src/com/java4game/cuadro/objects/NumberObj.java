@@ -1,9 +1,13 @@
 package com.java4game.cuadro.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.LevelGen;
+import com.java4game.cuadro.utils.DebugValueChanger;
+import com.java4game.cuadro.utils.FloatAnimator;
+import com.java4game.cuadro.utils.GMUtils;
 
 /**
  * Created by FOGOK on 16.09.2016 15:52.
@@ -11,38 +15,39 @@ import com.java4game.cuadro.core.LevelGen;
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985
  */
-public class NumberObj extends GameObject {
+public class NumberObj extends SquareObject {
 
+    //переменная с очками
 
-    int number;
-    boolean isDestroyed;
+    public static float pXii, pYii;    ///куда будут лететь очки
+    float firstX, firstY;
+    float distToPXY;
+    int number, degrToPXY;
     public NumberObj(Sprite sprite, int x, int y, Rectangle sqBounds, int number) {
-        super(sprite);
+        super(sprite, x, y, sqBounds);
         this.number = number;
-        setPosition(sqBounds.x + (x * (LevelSquare.sizOneSq + LevelSquare.otst * 2)), sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)));
-        setSize(LevelSquare.sizOneSq);
+        firstX = getX();
+        firstY = getY();
+        distToPXY = GMUtils.getDist(firstX, firstY, pXii, pYii);
+        degrToPXY = (int) GMUtils.getDeg(firstX, firstY, pXii, pYii);
+        //инициализируем аниматор
+        floatAnimator = new FloatAnimator(0f, 1f, 0.92f, Interpolation.swingIn);
+        ///
     }
 
-    boolean isCollect = false;
-    public void collect(){
-       isCollect = true;
-    }
 
     @Override
-    public void draw(SpriteBatch batch) {
-        super.draw(batch);
-        if (isCollect){
-            collectAnimation();
+    protected void collectAnimation() {
+        super.collectAnimation();
+
+        setPosition(firstX + GMUtils.getNextX(distToPXY * floatAnimator.current, degrToPXY),
+                firstY + GMUtils.getNextY(distToPXY * floatAnimator.current, degrToPXY));
+
+        if (!floatAnimator.isNeedToUpdate()){
+            LevelGen.SCORE += number;
+            isEndedAnim = true;
         }
-    }
-
-
-    private void collectAnimation(){
-        LevelGen.SCORE += number;
-        isDestroyed = true;
-    }
-
-    public boolean isDestroyed(){
-        return isDestroyed;
+        else
+            floatAnimator.update(Gdx.graphics.getDeltaTime());
     }
 }

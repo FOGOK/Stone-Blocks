@@ -195,7 +195,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
     private void checkCollisionInObjects(){
         for (int i = 0; i < objectsGen.getObjCount(); i++) {
-            if (objectsGen.getObjects(i).getBounds().overlaps(getBounds()))
+            if (objectsGen.getObjects(i).getBounds().overlaps(getBounds()) && !objectsGen.getObjects(i).isDestroyed())
                 objectsGen.collectObject(i);
         }
     }

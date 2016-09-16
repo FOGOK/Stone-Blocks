@@ -1,12 +1,9 @@
 package com.java4game.cuadro.objects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.TextureGen;
-import com.java4game.cuadro.utils.DebugDrawer;
 
 import java.util.Random;
 

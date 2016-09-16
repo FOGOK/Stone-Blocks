@@ -15,6 +15,10 @@ import com.java4game.cuadro.utils.DebugValueChanger;
 
 public class Gm extends ApplicationAdapter {
 
+    /**THIS VARS IN DEBUG**/
+    boolean isNoSleep = true, textShow = false, showDebugValChanger = false;
+    /***/
+
 	SpriteBatch batch;
     OrthographicCamera camera;
     Handler handler;
@@ -81,19 +85,17 @@ public class Gm extends ApplicationAdapter {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S))
-            isSleep = !isSleep;
+            isNoSleep = !isNoSleep;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.T))
             textShow = !textShow;
 
-        if (isSleep)
+        if (isNoSleep)
             mdT = Math.min(Gdx.graphics.getDeltaTime() / 0.016f, 2f);
         else
             sleep(1);
         ///
     }
-
-    boolean isSleep = true, textShow = true;
 
     private long diff, start = System.currentTimeMillis();
     public void sleep(int fps) {
@@ -111,7 +113,7 @@ public class Gm extends ApplicationAdapter {
 
     private void debugMethod1(){
         debugBatch.begin();
-        String mmm = (!isSleep) ? "IS SLEEEEEEEPING" : "";
+        String mmm = (!isNoSleep) ? "IS SLEEEEEEEPING" : "";
         bf.draw(debugBatch, "LOLOG    " + mmm + "\n-------------\n" +
                         "KEYSETS: SLEEP - 'S',\nDebugValueChanger - 'C',\nEnable text - 'T' " + "\n" +
                         "FPS:" + Gdx.graphics.getFramesPerSecond() + "\n" +
@@ -127,7 +129,7 @@ public class Gm extends ApplicationAdapter {
         if (showDebugValChanger)
             debugValueChanger.draw();
     }
-    boolean showDebugValChanger = false;
+
 	
 	@Override
 	public void dispose () {

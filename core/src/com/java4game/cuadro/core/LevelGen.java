@@ -9,7 +9,6 @@ import com.java4game.cuadro.objects.Cube;
 import com.java4game.cuadro.objects.LevelSquare;
 import com.java4game.cuadro.objects.NumberObj;
 import com.java4game.cuadro.utils.Atalas;
-import com.sun.org.apache.xpath.internal.operations.Number;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:16.
@@ -32,7 +31,7 @@ public class LevelGen {
 
     public static int SCORE = 0;
 
-    float fulledCff = 0.4f; //степень заполненности
+    float fulledCff = 0.8f; //степень заполненности
 
     final float levSize = Gm.WIDTH - 0.5f; // размер поля
 
@@ -53,6 +52,9 @@ public class LevelGen {
         //устанавливаем игровое поле в центр экрана /\
 
         /// инициализируем игровые объекты
+        NumberObj.pXii = 2f;
+        NumberObj.pYii = 18f;
+
         objectsGen = new ObjectsGen(Cube.SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
         ///
 

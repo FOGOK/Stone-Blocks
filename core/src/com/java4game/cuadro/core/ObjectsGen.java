@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.objects.GameObject;
 import com.java4game.cuadro.objects.NumberObj;
-import com.java4game.cuadro.utils.Pos;
+import com.java4game.cuadro.objects.SquareObject;
 
 import java.util.Random;
 
@@ -23,7 +23,7 @@ public class ObjectsGen {
     }
 
     ObjType[] types = new ObjType[ObjType.values().length];
-    NumberObj[] numberObjs;
+    SquareObject[] allObjects;
 
 
 
@@ -35,7 +35,7 @@ public class ObjectsGen {
 
         //generate
         int cQ = (edge_lenght + 1) * (edge_lenght + 1);
-        numberObjs = new NumberObj[cQ];
+        allObjects = new SquareObject[cQ];
         types = new ObjType[cQ];
 
 
@@ -43,8 +43,14 @@ public class ObjectsGen {
             for (int yQ = 0; yQ < edge_lenght; yQ++) {
                 if (((rnd.nextInt(10) + 1) < (int) (10 * fulledCff))){
                     types[iters] = ObjType.Number;
-                    int rnnn = rnd.nextInt(9) + 1;
-                    numberObjs[iters] = new NumberObj(textureGen.getSprite("num" + rnnn), xQ, yQ, sqBounds, rnnn);
+                    switch (types[iters]){
+                        case Number:
+                            //  если выпал тип цифры
+                            int rnnn = rnd.nextInt(9) + 1;
+                            allObjects[iters] = new NumberObj(textureGen.getSprite("num" + rnnn), xQ, yQ, sqBounds, rnnn);
+
+                            break;
+                    }
                     iters++;
                 }
             }
@@ -55,12 +61,9 @@ public class ObjectsGen {
 
     public void draw(SpriteBatch batch){
         for (int i = 0; i < iters; i++) {
-            switch (types[i]){
-                case Number:
-                    if (!numberObjs[i].isDestroyed())
-                        numberObjs[i].draw(batch);
-                    break;
-            }
+            if (!allObjects[i].isEndedAnim())
+                allObjects[i].draw(batch);
+
         }
     }
 
@@ -72,19 +75,12 @@ public class ObjectsGen {
         return types[i];
     }
 
-    public GameObject getObjects(int i){
-        switch (types[i]){
-            case Number:    return numberObjs[i];
-        }
-        return null;
+    public SquareObject getObjects(int i){
+        return allObjects[i];
     }
 
     public void collectObject(int i){
-        switch (types[i]){
-            case Number:
-                numberObjs[i].collect();
-                break;
-        }
+        allObjects[i].collect();
     }
 
 

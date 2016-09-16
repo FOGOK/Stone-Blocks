@@ -94,7 +94,9 @@ public class DebugValueChanger{
     }
 
     public static float getFloatObj(int i){
-        return values[i];
+        try {
+            return values[i];
+        }catch (Exception e){return 0f;}
     }
 
 
