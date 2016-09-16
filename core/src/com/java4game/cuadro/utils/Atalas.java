@@ -46,10 +46,20 @@ public class Atalas {
     public static final String squareT1 = "squareT1";
     public static final String squareT2 = "squareT2";
     public static final String squareT3 = "squareT3";
+    public static final String num1 = "num1";
+    public static final String num2 = "num2";
+    public static final String num3 = "num3";
+    public static final String num4 = "num4";
+    public static final String num5 = "num5";
+    public static final String num6 = "num6";
+    public static final String num7 = "num7";
+    public static final String num8 = "num8";
+    public static final String num9 = "num9";
 
 
 
-    public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3};
+    public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3,
+    num1, num2, num3, num4, num5, num6, num7, num8, num9};
 
     public static int textsCount;
 

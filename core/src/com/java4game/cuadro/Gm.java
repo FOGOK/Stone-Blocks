@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.utils.DebugDrawer;
 import com.java4game.cuadro.utils.DebugValueChanger;
 
 public class Gm extends ApplicationAdapter {
@@ -23,6 +24,7 @@ public class Gm extends ApplicationAdapter {
 
 
     DebugValueChanger debugValueChanger;
+    DebugDrawer debugDrawer;
 
 	
 	@Override
@@ -37,6 +39,7 @@ public class Gm extends ApplicationAdapter {
         bf.setColor(Color.BLACK);
         debugBatch = new SpriteBatch();
         debugValueChanger = new DebugValueChanger(1, debugBatch);
+        debugDrawer = new DebugDrawer();
         ///
 
         //initAll Game
@@ -132,5 +135,6 @@ public class Gm extends ApplicationAdapter {
         debugBatch.dispose();
         handler.dispose();
         debugValueChanger.dispose();
+        debugDrawer.dispose();
 	}
 }

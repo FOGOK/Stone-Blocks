@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.TextureGen;
+import com.java4game.cuadro.utils.DebugDrawer;
 
 import java.util.Random;
 
@@ -35,7 +36,7 @@ public class LevelSquare{            //игровое поле
         sizOneSq = size / sqCount - otst * 2;
 
         float mmmq = sizOneSq + otst * 2;
-        bounds = new Rectangle(pX + mmmq, pY + mmmq, size - mmmq * 2f, size - mmmq * 2f);
+        bounds = new Rectangle(pX + mmmq, pY + mmmq, size - mmmq * 2f - otst, size - mmmq * 2f - otst);
 
         sprites = new Sprite[sqCount][sqCount];
         for (int i = 0; i <  sqCount; i++) {
@@ -59,7 +60,10 @@ public class LevelSquare{            //игровое поле
         for (int i = 0; i <  sqCount; i++) {
             for (int i2 = 0; i2 < sqCount; i2++) {
                 sprites[i][i2].draw(batch);
+//                DebugDrawer.drawRect(batch, sprites[i][i2].getBoundingRectangle());
             }
         }
+
+//        DebugDrawer.drawRect(batch, bounds);
     }
 }

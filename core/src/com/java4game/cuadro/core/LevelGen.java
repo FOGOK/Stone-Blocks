@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.objects.Cube;
 import com.java4game.cuadro.objects.LevelSquare;
+import com.java4game.cuadro.objects.NumberObj;
 import com.java4game.cuadro.utils.Atalas;
+import com.sun.org.apache.xpath.internal.operations.Number;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:16.
@@ -18,7 +20,7 @@ import com.java4game.cuadro.utils.Atalas;
 public class LevelGen {
 
     /**
-     * Класс, который отвечает за всё, что связанно с игрой
+     * Класс, который отвечае*т за всё, что связанно с игрой
      * тут инициализируется игровое поле, кубик, препятствия и т.д.
      *
      * */
@@ -26,6 +28,13 @@ public class LevelGen {
     Cube cube;
     LevelSquare levelSquare;
     Sprite background;
+    ObjectsGen objectsGen;
+
+    public static int SCORE = 0;
+
+    float fulledCff = 0.4f; //степень заполненности
+
+    final float levSize = Gm.WIDTH - 0.5f; // размер поля
 
     //ссылки
     TextureGen textureGen;
@@ -37,14 +46,21 @@ public class LevelGen {
         ///
 
         //инициализация кубика и игрового поля
-        float levSize = Gm.WIDTH - 1.5f;
 
-        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, (Gm.HEIGHT - levSize) / 2f, levSize);
+
+        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, 3f, levSize);
         //устанавливаем размер игрового поля ширина - 2 размера кубика - небольшой отступ   /\
         //устанавливаем игровое поле в центр экрана /\
 
-        cube = new Cube(textureGen.getSprite(Atalas.squareT1), levelSquare);  ///инициализируем кубик и устанавливаем размер кубика
+        /// инициализируем игровые объекты
+        objectsGen = new ObjectsGen(Cube.SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
         ///
+
+        ///инициализируем кубик и устанавливаем размер кубика
+        cube = new Cube(textureGen.getSprite(Atalas.squareT1), levelSquare, objectsGen);
+        ///
+
+
 
         //инициализируем фон
         background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
@@ -56,7 +72,9 @@ public class LevelGen {
     public void draw(SpriteBatch batch){
         background.draw(batch);
         levelSquare.draw(batch);
+        objectsGen.draw(batch);
         cube.draw(batch);
+        Gm.DEBUG_VALUE1 = "Score: " + SCORE;
     }
 
     public void dispose() {

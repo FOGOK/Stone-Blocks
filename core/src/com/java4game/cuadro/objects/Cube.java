@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.ObjectsGen;
 
 import java.math.BigDecimal;
 import java.util.Random;
@@ -33,11 +34,17 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
     Rectangle levSqBounds;
 
-    public Cube(Sprite sprite, LevelSquare levelSquare) {
+    //ссылки
+    ObjectsGen objectsGen;
+    ////
+
+    public Cube(Sprite sprite, LevelSquare levelSquare, ObjectsGen objectsGen) {
         super(sprite);
 
-        setSize(LevelSquare.sizOneSq * 0.9f);
-        this.otst = LevelSquare.otst * 2f;
+        this.objectsGen = objectsGen;
+
+        setSize(LevelSquare.sizOneSq * 0.85f);
+        this.otst = LevelSquare.otst  + (LevelSquare.sizOneSq - getW()) / 2f;
         this.sprite.setOriginCenter();
         levSqBounds = levelSquare.getBounds();
         sizeSquareF = LevelSquare.sizOneSq + LevelSquare.otst * 2;
@@ -83,6 +90,9 @@ public class Cube extends GameObject{           ///класс кубика, ко
     boolean inmCHD = false, lockCHD = false;
     private void mathPosition(){
 
+        lastpSQX = getSQX();
+        lastpSQY = getSQY();
+
         switch (dir){
             case RIGHT:     ///если движемся вправо
                 chngX = true;                                       //указываем, двигаемся по x или y
@@ -118,15 +128,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
                 break;
         }
 
-        if (inmCHD){         ///если должны повернуть раньше края
-            dir = nextDir;
-            if (chngX) setSQX(getSQPosX()); else setSQY(getSQPosY());
-            pX = pY = 0f;
-            inmCHD = false;
-            povorot = true;
-        }
-
-        int k = (chngX) ? getSQPosX() : getSQPosY();
+        int k = (chngX) ? getSQX() : getSQY();
         setPosition(getX() + pX, getY() + pY);
         if (k == chgVal){
             povorot = true;
@@ -143,41 +145,72 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 
         if (povorot){
-            float delt = -95f * speed * Gm.mdT;
+            float delt = -105f * speed * Gm.mdT;
             if (revers) delt *= -1;
             sprite.rotate(delt);
             if (Math.abs(sprite.getRotation() + delt) > limRot){
                 sprite.setRotation(0);
                 povorot = false;
             }else if (Math.abs(sprite.getRotation() + delt) > limRot / 2f){
-                if ((getSQPosX() == -1 || getSQPosX() == SQSIZE + 1 || getSQPosY() == -1 || getSQPosY() == SQSIZE + 1) &&
-                        !((getSQPosX() == -1) && (getSQPosY() == SQSIZE + 1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == SQSIZE + 1)) &&
-                        !((getSQPosX() == -1) && (getSQPosY() == -1)) && !((getSQPosX() == SQSIZE + 1) && (getSQPosY() == -1)))
-                    lockCHD = false;
+
             }
         }
 
-
-        if (Gdx.input.justTouched() && !lockCHD){
-            lockCHD = inmCHD = true;
-            lastpSQX = getSQPosX();
-            lastpSQY = getSQPosY();
+        if (lastpSQX != getSQX() || lastpSQY != getSQY()){
+            boolean qb = (chngX) ? lastPosInXY == getSQY() : lastPosInXY == getSQX();
+            if ((((getSQX() == -1 || getSQX() == SQSIZE + 1) && getSQY() > -1 && getSQY() < SQSIZE + 1) ||
+                    ((getSQY() == -1 || getSQY() == SQSIZE + 1) && getSQX() > -1 && getSQX() < SQSIZE + 1)) && !qb){
+                lockCHD = false;
+                lastPosInXY = -50;
+            }
+            else
+                lockCHD = true;
+            checkCollisionInObjects();
         }
 
-        Gm.DEBUG_VALUE1 = "x" + getSQPosX() + "y" + getSQPosY();
+
+//        inLastInSquare = (getSQX() > -1 && getSQX() < SQSIZE + 1 && getSQY() > -1 && getSQY() < SQSIZE + 1);
+
+        if (Gdx.input.justTouched() && !lockCHD/*&& !bq*/){
+            inmCHD = true;
+            lockCHD = true;
+        }
+
+        if (inmCHD){         ///если должны повернуть раньше края
+            dir = nextDir;
+            if (chngX) setSQX(getSQX()); else setSQY(getSQY());
+            lastPosInXY = (chngX) ? getSQX() : getSQY();
+            pX = pY = 0f;
+            inmCHD = false;
+            povorot = true;
+        }
+
+
+
+//        Gm.DEBUG_VALUE1 = "x" + getSQX() + " y" + getSQY() + "lockCHD " + lockCHD ;
+//        Gm.DEBUG_VALUE2 = "lastPosInXY " + lastPosInXY;
     }
     float limRot = 180;     /// на сколько поворачивать кубик
+    int lastPosInXY;
 
-
+    private void checkCollisionInObjects(){
+        for (int i = 0; i < objectsGen.getObjCount(); i++) {
+            if (objectsGen.getObjects(i).getBounds().overlaps(getBounds()))
+                objectsGen.collectObject(i);
+        }
+    }
 
     //получить координаты кубика в клетках
     BigDecimal bigDecimal;
-    public int getSQPosX(){
-        bigDecimal = new BigDecimal((getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (SQSIZE + 1))).setScale(0, BigDecimal.ROUND_FLOOR);
+    float posXiiP, posYiiP;
+    public int getSQX(){
+        posXiiP = (getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (SQSIZE + 1));
+        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
-    public int getSQPosY() {
-        bigDecimal = new BigDecimal((getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (SQSIZE + 1))).setScale(0, BigDecimal.ROUND_FLOOR);
+    public int getSQY() {
+        posYiiP = (getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (SQSIZE + 1));
+        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
     ///
@@ -252,7 +285,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 //    }catch (Exception e){}
 
 
-//    Gm.DEBUG_VALUE1 = "x" + getSQPosX() + "y" + getSQPosY() + ";" + " mmm " + mmmm;
+//    Gm.DEBUG_VALUE1 = "x" + getSQX() + "y" + getSQY() + ";" + " mmm " + mmmm;
 //    Gm.DEBUG_VALUE2 = "" + revers + " " + upDown + " " +  rigLef  + " " + rigDown + "\n" + m;
     //двигаем кубик
 //        switch (dir){
