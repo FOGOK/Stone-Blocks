@@ -16,7 +16,16 @@ public class Handler {
      * */
 
     Atalas atls;
+
+    //game
     LevelGen levelGen;
+    ///
+
+    //ui
+    UI ui;
+    ///
+
+
     TextureGen textureGen;
     State state;
 
@@ -28,29 +37,19 @@ public class Handler {
         atls = new Atalas();
         textureGen = new TextureGen(atls);
         levelGen = new LevelGen(textureGen);
+        ui = new UI();
         state = State.Game;
     }
 
     public void draw(SpriteBatch batch){
-        switch (state){ ////обработка экрана
-            case Game:
-            case Pause:
-
-                levelGen.draw(batch);
-
-                if (state.equals(State.Pause)){
-                    //pause
-                }
-
-                break;
-            case Menu:
-                //menu
-                break;
-        }
+        if (state == State.Game || state == State.Pause)
+        levelGen.draw(batch);
+        ui.draw();
     }
 
     public void dispose() {
         atls.dispose();
         levelGen.dispose();
+        ui.dispose();
     }
 }

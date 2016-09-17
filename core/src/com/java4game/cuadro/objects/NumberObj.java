@@ -31,7 +31,7 @@ public class NumberObj extends SquareObject {
         distToPXY = GMUtils.getDist(firstX, firstY, pXii, pYii);
         degrToPXY = (int) GMUtils.getDeg(firstX, firstY, pXii, pYii);
         //инициализируем аниматор
-        floatAnimator = new FloatAnimator(0f, 1f, 0.92f, Interpolation.swingIn);
+        floatAnimator = new FloatAnimator(0f, 1f, 0.72f + 0.2f * (number / 10f), Interpolation.swingIn);
         ///
     }
 
