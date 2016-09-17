@@ -20,7 +20,7 @@ public class Gm extends ApplicationAdapter {
     /***/
 
 	SpriteBatch batch;
-    OrthographicCamera camera;
+    static OrthographicCamera camera;
     Handler handler;
     SpriteBatch debugBatch;
     BitmapFont bf;
@@ -128,6 +128,10 @@ public class Gm extends ApplicationAdapter {
 
         if (showDebugValChanger)
             debugValueChanger.draw();
+    }
+
+    public static OrthographicCamera getCamera(){
+        return camera;
     }
 
 	

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.utils.DebugValueChanger;
 import com.java4game.cuadro.utils.FloatAnimator;
@@ -40,14 +41,13 @@ public class NumberObj extends SquareObject {
     protected void collectAnimation() {
         super.collectAnimation();
 
-        setPosition(firstX + GMUtils.getNextX(distToPXY * floatAnimator.current, degrToPXY),
-                firstY + GMUtils.getNextY(distToPXY * floatAnimator.current, degrToPXY));
-
         if (!floatAnimator.isNeedToUpdate()){
             LevelGen.SCORE += number;
             isEndedAnim = true;
         }
-        else
+        else if (!Handler.ISPAUSE){
             floatAnimator.update(Gdx.graphics.getDeltaTime());
+            setPosition(firstX + GMUtils.getNextX(distToPXY * floatAnimator.current, degrToPXY), firstY + GMUtils.getNextY(distToPXY * floatAnimator.current, degrToPXY));
+        }
     }
 }

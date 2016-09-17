@@ -19,6 +19,9 @@ public class Handler {
 
     //game
     LevelGen levelGen;
+
+    public static boolean ISPAUSE;
+    public static boolean ISRESTART;
     ///
 
     //ui
@@ -34,17 +37,27 @@ public class Handler {
     }
 
     public Handler() {
+        ISPAUSE = ISRESTART = false;
+
         atls = new Atalas();
         textureGen = new TextureGen(atls);
         levelGen = new LevelGen(textureGen);
-        ui = new UI();
+        ui = new UI(textureGen);
         state = State.Game;
     }
 
     public void draw(SpriteBatch batch){
         if (state == State.Game || state == State.Pause)
-        levelGen.draw(batch);
-        ui.draw();
+              levelGen.draw(batch);
+
+        ui.draw(batch);
+
+        if (ISRESTART) restart();
+    }
+
+    public void restart(){
+        levelGen = new LevelGen(textureGen);
+        ISRESTART = false;
     }
 
     public void dispose() {

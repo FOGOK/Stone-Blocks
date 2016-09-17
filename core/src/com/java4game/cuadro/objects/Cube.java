@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.ObjectsGen;
 
 import java.math.BigDecimal;
@@ -27,8 +29,6 @@ public class Cube extends GameObject{           ///класс кубика, ко
     float otst; //отступ от поля
     boolean povorot = false;
     Random rnd = new Random();
-
-    public static int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
 
     float sizeSquareF; //размер клетки поля
 
@@ -96,7 +96,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
         switch (dir){
             case RIGHT:     ///если движемся вправо
                 chngX = true;                                       //указываем, двигаемся по x или y
-                chgVal = SQSIZE + 1;                                //указываем на какой клетке начать поворачивать
+                chgVal = LevelGen.SQSIZE + 1;                       //указываем на какой клетке начать поворачивать
                 cngTR = true;                                       //указываем, ставить кубик при достижении края (наверх | направо(в зависимости от chngX))
                 nextDir = (revers) ? Dir.UP : Dir.DOWN;             //в зависимости от переменной revers говорим, куда двигатсья при достижении края
                 pX = speed * Gm.mdT;                                ///указываем скорость x
@@ -120,7 +120,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
                 break;
             case UP:
                 chngX = false;
-                chgVal = SQSIZE + 1;
+                chgVal = LevelGen.SQSIZE + 1;
                 cngTR = true;
                 nextDir = (revers) ? Dir.LEFT : Dir.RIGHT;
                 pX = 0f;
@@ -129,7 +129,8 @@ public class Cube extends GameObject{           ///класс кубика, ко
         }
 
         int k = (chngX) ? getSQX() : getSQY();
-        setPosition(getX() + pX, getY() + pY);
+        if (!Handler.ISPAUSE)
+            setPosition(getX() + pX, getY() + pY);
         if (k == chgVal){
             povorot = true;
             if ((chngX) ? isXOUT(cngTR) : isYOUT(cngTR)){
@@ -147,19 +148,19 @@ public class Cube extends GameObject{           ///класс кубика, ко
         if (povorot){
             float delt = -105f * speed * Gm.mdT;
             if (revers) delt *= -1;
-            sprite.rotate(delt);
+            if (!Handler.ISPAUSE)
+                sprite.rotate(delt);
+
             if (Math.abs(sprite.getRotation() + delt) > limRot){
                 sprite.setRotation(0);
                 povorot = false;
-            }else if (Math.abs(sprite.getRotation() + delt) > limRot / 2f){
-
             }
         }
 
         if (lastpSQX != getSQX() || lastpSQY != getSQY()){
             boolean qb = (chngX) ? lastPosInXY == getSQY() : lastPosInXY == getSQX();
-            if ((((getSQX() == -1 || getSQX() == SQSIZE + 1) && getSQY() > -1 && getSQY() < SQSIZE + 1) ||
-                    ((getSQY() == -1 || getSQY() == SQSIZE + 1) && getSQX() > -1 && getSQX() < SQSIZE + 1)) && !qb){
+            if ((((getSQX() == -1 || getSQX() == LevelGen.SQSIZE + 1) && getSQY() > -1 && getSQY() < LevelGen.SQSIZE + 1) ||
+                    ((getSQY() == -1 || getSQY() == LevelGen.SQSIZE + 1) && getSQX() > -1 && getSQX() < LevelGen.SQSIZE + 1)) && !qb){
                 lockCHD = false;
                 lastPosInXY = -50;
             }
@@ -171,7 +172,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 //        inLastInSquare = (getSQX() > -1 && getSQX() < SQSIZE + 1 && getSQY() > -1 && getSQY() < SQSIZE + 1);
 
-        if (Gdx.input.justTouched() && !lockCHD/*&& !bq*/){
+        if (Gdx.input.justTouched() && !lockCHD && isYInDown()){
             inmCHD = true;
             lockCHD = true;
         }
@@ -193,10 +194,22 @@ public class Cube extends GameObject{           ///класс кубика, ко
     float limRot = 180;     /// на сколько поворачивать кубик
     int lastPosInXY;
 
+    private boolean isYInDown(){
+        return ((Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY()) < levSqBounds.getY() + levSqBounds.getHeight());
+    }
+
     private void checkCollisionInObjects(){
         for (int i = 0; i < objectsGen.getObjCount(); i++) {
-            if (objectsGen.getObjects(i).getBounds().overlaps(getBounds()) && !objectsGen.getObjects(i).isDestroyed())
+            if (objectsGen.getObjects(i).getBounds().overlaps(getBounds()) && !objectsGen.getObjects(i).isEndedAnim())
                 objectsGen.collectObject(i);
+        }
+        checkOut();
+    }
+
+    private void checkOut(){
+        if (getSQX() > -1 && getSQX() < LevelGen.SQSIZE + 1 && getSQY() > -1 && getSQY() < LevelGen.SQSIZE + 1){
+            if (!LevelSquare.isTrue[getSQX() + 1][getSQY() + 1])
+                Handler.ISRESTART = true;
         }
     }
 
@@ -204,12 +217,12 @@ public class Cube extends GameObject{           ///класс кубика, ко
     BigDecimal bigDecimal;
     float posXiiP, posYiiP;
     public int getSQX(){
-        posXiiP = (getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (SQSIZE + 1));
+        posXiiP = (getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
     public int getSQY() {
-        posYiiP = (getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (SQSIZE + 1));
+        posYiiP = (getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }

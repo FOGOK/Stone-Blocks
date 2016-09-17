@@ -24,6 +24,8 @@ public class LevelGen {
      *
      * */
 
+    public static int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
+
     Cube cube;
     LevelSquare levelSquare;
     Sprite background;
@@ -31,7 +33,8 @@ public class LevelGen {
 
     public static int SCORE = 0;
 
-    float fulledCff = 0.8f; //степень заполненности
+    float fulledCff = 0.4f; //степень заполненности
+    float sttCff = 0.125f; //степень сетчатости поля (короче количество % дырок)
 
     final float levSize = Gm.WIDTH - 0.5f; // размер поля
 
@@ -47,7 +50,7 @@ public class LevelGen {
         //инициализация кубика и игрового поля
 
 
-        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, 3f, levSize);
+        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, 3f, levSize, sttCff);
         //устанавливаем размер игрового поля ширина - 2 размера кубика - небольшой отступ   /\
         //устанавливаем игровое поле в центр экрана /\
 
@@ -55,7 +58,7 @@ public class LevelGen {
         NumberObj.pXii = 2f;
         NumberObj.pYii = 18f;
 
-        objectsGen = new ObjectsGen(Cube.SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
+        objectsGen = new ObjectsGen(SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
         ///
 
         ///инициализируем кубик и устанавливаем размер кубика
