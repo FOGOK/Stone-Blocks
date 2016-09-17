@@ -1,5 +1,5 @@
-# CUADRO //todo: change name
+# CUADRO
 
-Короче игра, которая делается двумя людьми.
+Игра, которая делается двумя людьми.
 
 ![Иллюстрация к проекту](https://github.com/FOGOK/cuadro/raw/master/prodImages/1.jpg)
