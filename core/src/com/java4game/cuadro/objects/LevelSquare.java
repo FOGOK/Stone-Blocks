@@ -46,14 +46,15 @@ public class LevelSquare{            //игровое поле
 
         for (int i = 0; i <  sqCount; i++) {
             for (int i2 = 0; i2 < sqCount; i2++) {
-                boolean b = i == 0 || i == sqCount - 1 || i2 == 0 || i2 == sqCount - 1;
-                if (((rnd.nextInt(verCff) + 1) < (int) (verCff * (1f - sttCff))) || b){
+                boolean b = i == 0 || i == sqCount - 1 || i2 == 0 || i2 == sqCount - 1;//
+//                if (((rnd.nextInt(verCff) + 1) < (int) (verCff * (1f - sttCff))) || b){
                     int rn1 = b ? 0 : 6;
                     isTrue[i][i2] = true;
-                    sprites[i][i2] = textureGen.getSprite(String.valueOf(rn1 + rnd.nextInt(6)));
+//                    sprites[i][i2] = textureGen.getSprite(String.valueOf(rn1 + rnd.nextInt(6)));
+                    sprites[i][i2] = textureGen.getSprite("col1");
                     sprites[i][i2].setSize(sizOneSq, sizOneSq);
-                    sprites[i][i2].setPosition(pX + (sizOneSq + otst * 2) * i, pY + (sizOneSq + otst * 2) * i2);
-                }
+                    sprites[i][i2].setPosition(pX + (sizOneSq + otst * 2) * i, pY + (sizOneSq + otst * 2) * i2);//
+//                }
             }
         }
 //        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) (Gdx.graphics.getWidth() * (size / Gm.WIDTH)), (int) (Gdx.graphics.getWidth() * (size / Gm.WIDTH)), true);
@@ -67,12 +68,12 @@ public class LevelSquare{            //игровое поле
     public void draw(SpriteBatch batch){
         for (int i = 0; i <  sqCount; i++) {
             for (int i2 = 0; i2 < sqCount; i2++) {
-                if (isTrue[i][i2])
+                if (isTrue[i][i2])//
                     sprites[i][i2].draw(batch);
 //                DebugDrawer.drawRect(batch, sprites[i][i2].getBoundingRectangle());
             }
         }
 
-//        DebugDrawer.drawRect(batch, bounds);
+////        DebugDrawer.drawRect(batch, bounds);
     }
 }

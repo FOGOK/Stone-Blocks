@@ -2,8 +2,8 @@ package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.utils.FloatAnimator;
 
 /**
@@ -16,19 +16,33 @@ public class SquareObject  extends GameObject{
 
 
     /**
-     * Тип объекта, короче это типо все объекты на поле (его можно уничтожить)
+     * Тип объекта, короче это типо все объекты на поле
+     * (его можно уничтожить, задать анимацию и действия при уничтожении, а так же
+     * позиция объекта задаётся относительно координат поля в
+     * целых числах (тобишь округляются, (3 по x) и (7 по y) будет позиция в клетках)
+     *
     * */
 
+    float kindX, kindY;
+    int sqX, sqY;
+    Cube.Dir kindDir;
 
     boolean isCollect = false;
     boolean isDestroyed = false;
     boolean isEndedAnim = false;
+    int kindedHash; //хэш цветного, который будет вести наш кубик, если равен -1, значит им является кубик
+    int whoI = 0;
+    int hash;
     FloatAnimator floatAnimator;
-    public SquareObject(Sprite sprite, int x, int y, Rectangle sqBounds) {
+    public SquareObject(Sprite sprite, int x, int y, Rectangle sqBounds, int hash) {
         super(sprite);
-        //устанавливаем позицию на поле в клетках и размер объекта (он равен размеру клетки)
-        setPosition(sqBounds.x + (x * (LevelSquare.sizOneSq + LevelSquare.otst * 2)), sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)));
-        setSize(LevelSquare.sizOneSq);
+        this.hash = hash;
+        sqX = x;
+        sqY = y;
+        //устанавливаем позицию на поле в клетках и размер объекта
+        setPosition(sqBounds.x + (x * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
+                sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
+        setSize(LevelGen.sizeObjects);
         ///
     }
 
@@ -55,6 +69,10 @@ public class SquareObject  extends GameObject{
 
     public void collect(){
         isCollect = true;
+    }
+
+    public void setWhoI(int whoI){
+        this.whoI = whoI;
     }
 
 

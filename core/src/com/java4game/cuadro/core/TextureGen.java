@@ -31,7 +31,7 @@ public class TextureGen {
         this.atls = atls;
         ///
 
-        for (int i = 0; i < Atalas.textsCount; i++)
+        for (int i = 0; i < Atalas.NAMES.length; i++)
             objects.put(Atalas.NAMES[i], new Sprite(atls.getTG(i)));
 
     }

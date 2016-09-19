@@ -21,14 +21,19 @@ import java.util.Random;
 
 public class Cube extends GameObject{           ///класс кубика, который будет двигаться по игровому полю
 
-    Dir dir, nextDir;
-    enum Dir{   //направление движения
+    static Dir dir;
+    Dir nextDir;
+    public enum Dir{   //направление движения
         RIGHT, DOWN, LEFT, UP
     }
     float speed = 0.16f;
     float otst; //отступ от поля
     boolean povorot = false;
     Random rnd = new Random();
+
+    static float X, Y, SIZE;
+//    static boolean IVERSEDIR;
+    static boolean ISMOVECOLORCUBES;
 
     float sizeSquareF; //размер клетки поля
 
@@ -43,12 +48,13 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
         this.objectsGen = objectsGen;
 
-        setSize(LevelSquare.sizOneSq * 0.85f);
-        this.otst = LevelSquare.otst  + (LevelSquare.sizOneSq - getW()) / 2f;
+        setSize(LevelGen.sizeObjects);
+        this.otst = LevelSquare.otst  + (LevelSquare.sizOneSq - SIZE) / 2f;
         this.sprite.setOriginCenter();
         levSqBounds = levelSquare.getBounds();
         sizeSquareF = LevelSquare.sizOneSq + LevelSquare.otst * 2;
 
+        ISMOVECOLORCUBES = false;
 
         dir = (rnd.nextBoolean()) ? ((rnd.nextBoolean()) ? Dir.RIGHT : Dir.LEFT) : ((rnd.nextBoolean()) ? Dir.UP : Dir.DOWN);
         revers = rnd.nextBoolean();
@@ -73,6 +79,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 
 
+
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
@@ -87,7 +94,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
     boolean revers = false;
 
-    boolean inmCHD = false, lockCHD = false;
+    public static boolean inmCHD = false, lockCHD = false;
     private void mathPosition(){
 
         lastpSQX = getSQX();
@@ -172,9 +179,14 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 //        inLastInSquare = (getSQX() > -1 && getSQX() < SQSIZE + 1 && getSQY() > -1 && getSQY() < SQSIZE + 1);
 
-        if (Gdx.input.justTouched() && !lockCHD && isYInDown()){
-            inmCHD = true;
-            lockCHD = true;
+        if (Gdx.input.justTouched() && (!lockCHD || ISMOVECOLORCUBES) && isYInDown()){
+            if (ISMOVECOLORCUBES){
+                inverseDir();
+                ISMOVECOLORCUBES = false;
+            }else{
+                inmCHD = true;
+                lockCHD = true;
+            }
         }
 
         if (inmCHD){         ///если должны повернуть раньше края
@@ -217,12 +229,12 @@ public class Cube extends GameObject{           ///класс кубика, ко
     BigDecimal bigDecimal;
     float posXiiP, posYiiP;
     public int getSQX(){
-        posXiiP = (getX() + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        posXiiP = (getX() + SIZE / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
     public int getSQY() {
-        posYiiP = (getY() + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        posYiiP = (getY() + SIZE / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
@@ -231,10 +243,10 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
     //устанавливаем позицию по x | y в клетках
     private void setSQX(int iX){        //устанавливаем x на определённую клетку внутри поля
-        setPosition(levSqBounds.getX() + iX * sizeSquareF + (sizeSquareF - getW()) / 2f, getY());
+        setPosition(levSqBounds.getX() + iX * sizeSquareF + (sizeSquareF - SIZE) / 2f, getY());
     }
     private void setSQY(int iY){    //устанавливаем y  на определённую клетку внутри поля
-        setPosition(getX(), levSqBounds.getY() + iY * sizeSquareF + (sizeSquareF - getW()) / 2f);
+        setPosition(getX(), levSqBounds.getY() + iY * sizeSquareF + (sizeSquareF - SIZE) / 2f);
     }
     ///
 
@@ -244,27 +256,85 @@ public class Cube extends GameObject{           ///класс кубика, ко
         if (right)
             setPosition(levSqBounds.getX() + levSqBounds.getWidth() + otst, getY());
         else
-            setPosition(levSqBounds.getX() - getW() - otst, getY());
+            setPosition(levSqBounds.getX() - SIZE - otst, getY());
     }
     private void setYZA(boolean top){     //устанавливаем кубик за поле по y
         if (top)
             setPosition(getX(), levSqBounds.getY() + levSqBounds.getHeight() + otst);
         else
-            setPosition(getX(), levSqBounds.getY() - getW() - otst);
+            setPosition(getX(), levSqBounds.getY() - SIZE - otst);
     }
     ///
 
 
     //проверяем, находится ли кубик за полем по x | y
     private boolean isXOUT(boolean right){
-        return (right) ? getX() > levSqBounds.getX() + levSqBounds.getWidth() + otst : getX() < levSqBounds.getX() - getW() - otst;
+        return (right) ? getX() > levSqBounds.getX() + levSqBounds.getWidth() + otst : getX() < levSqBounds.getX() - SIZE - otst;
     }
     private boolean isYOUT(boolean top){
-        return (top) ? getY() > levSqBounds.getY() + levSqBounds.getHeight() + otst : getY() < levSqBounds.getY() - getW() - otst;
+        return (top) ? getY() > levSqBounds.getY() + levSqBounds.getHeight() + otst : getY() < levSqBounds.getY() - SIZE - otst;
     }
     ////
 
 
+
+
+
+    @Override
+    public void setSize(float size) {
+        super.setSize(size);
+        SIZE = size;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        X = x;
+        Y = y;
+    }
+
+    public static void MOVEDCOLOR() {
+        ISMOVECOLORCUBES = true;
+    }
+
+    public static boolean ISMOVEDCOLOR() {
+        return ISMOVECOLORCUBES;
+    }
+
+
+
+    public static float getSX(){
+        return X;
+    }
+
+    public static float getSY(){
+        return Y;
+    }
+
+    public static float getSSIZE(){
+        return SIZE;
+    }
+
+    public static Dir getDir(){
+        return dir;
+    }
+
+    public void inverseDir() {        ///меняем направление на противоположное (если лево то право или если вниз то вверх)
+        if (chngX)
+            setXZA(cngTR);
+        else
+            setYZA(cngTR);
+
+
+        if (dir == Dir.LEFT)
+            dir = Dir.RIGHT;
+        else if (dir == Dir.RIGHT)
+            dir = Dir.LEFT;
+        else if (dir == Dir.UP)
+            dir = Dir.DOWN;
+        else if (dir == Dir.DOWN)
+            dir = Dir.UP;
+    }
 
 
 
@@ -352,7 +422,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 //            }
 //            break;
 //        case DOWN:
-//            sprite.setOrigin(0f, getH());
+//            sprite.setOrigin(0f, SIZE);
 //            if (sprite.getRotation() == 270f) sprite.setRotation(360); /// нормализуем поворот кубика из-за смены точки поворота
 //            sprite.rotate(-speed * Gm.mdT * 50f);
 //            if (sprite.getRotation() < 271f){

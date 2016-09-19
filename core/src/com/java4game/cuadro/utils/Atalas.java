@@ -55,11 +55,15 @@ public class Atalas {
     public static final String num7 = "num7";
     public static final String num8 = "num8";
     public static final String num9 = "num9";
+    public static final String col1 = "col1";
+    public static final String col2 = "col2";
+    public static final String col3 = "col3";
+    public static final String col4 = "col4";
 
 
 
     public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3,
-    num1, num2, num3, num4, num5, num6, num7, num8, num9};
+    num1, num2, num3, num4, num5, num6, num7, num8, num9, col1, col2, col3, col4};
 
     public static int textsCount;
 

@@ -38,6 +38,9 @@ public class LevelGen {
 
     final float levSize = Gm.WIDTH - 0.5f; // размер поля
 
+    public static float sizeObjects;
+    public static float otstObjects;
+
     //ссылки
     TextureGen textureGen;
     ///
@@ -57,6 +60,8 @@ public class LevelGen {
         /// инициализируем игровые объекты
         NumberObj.pXii = 2f;
         NumberObj.pYii = 18f;
+        sizeObjects = LevelSquare.sizOneSq * 0.85f;
+        otstObjects = LevelSquare.sizOneSq - sizeObjects;
 
         objectsGen = new ObjectsGen(SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
         ///
@@ -79,7 +84,7 @@ public class LevelGen {
         levelSquare.draw(batch);
         objectsGen.draw(batch);
         cube.draw(batch);
-        Gm.DEBUG_VALUE1 = "Score: " + SCORE;
+//        Gm.DEBUG_VALUE1 = "Score: " + SCORE;
     }
 
     public void dispose() {

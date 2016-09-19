@@ -56,6 +56,7 @@ public class Handler {
     }
 
     public void restart(){
+        levelGen.dispose();
         levelGen = new LevelGen(textureGen);
         ISRESTART = false;
     }
