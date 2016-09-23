@@ -187,19 +187,7 @@ public class ColoredCube extends SquareObject{
         setPosition(toKindX, toKindY);
     }
 
-    //получить координаты кубика в клетках
-    BigDecimal bigDecimal;
-    float posXiiP, posYiiP;
-    public int getSQX(float x){
-        posXiiP = (x + getW() / 2 - levSqBounds.getX()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
-        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
-    }
-    public int getSQY(float y) {
-        posYiiP = (y + getW() / 2 - levSqBounds.getY()) / (levSqBounds.getWidth() / (LevelGen.SQSIZE + 1));
-        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
-    }
+
 
 
 

@@ -8,6 +8,7 @@ import com.java4game.cuadro.objects.LevelSquare;
 import com.java4game.cuadro.objects.NumberObj;
 import com.java4game.cuadro.objects.SquareObject;
 import com.java4game.cuadro.utils.Atalas;
+import com.java4game.cuadro.utils.DebugDrawer;
 
 import java.util.Random;
 
@@ -78,7 +79,7 @@ public class ObjectsGen {
             }
         }
 
-        colorCubeMover = new ColorCubeMover(allObjects);
+        colorCubeMover = new ColorCubeMover(allObjects, levSqBounds);
         ///
     }
 
@@ -107,8 +108,10 @@ public class ObjectsGen {
 
     public void draw(SpriteBatch batch){
         for (int i = 0; i < iters; i++) {
-            if (!allObjects[i].isEndedAnim())
+            if (!allObjects[i].isEndedAnim()){
                 allObjects[i].draw(batch);
+                DebugDrawer.drawRect(batch, allObjects[i].getBounds());
+            }
         }
 
         colorCubeMover.match(batch);

@@ -319,11 +319,11 @@ public class Cube extends GameObject{           ///класс кубика, ко
         return dir;
     }
 
-    public void inverseDir() {        ///меняем направление на противоположное (если лево то право или если вниз то вверх)
-        if (chngX)
-            setXZA(cngTR);
-        else
-            setYZA(cngTR);
+    public static void inverseDir() {        ///меняем направление на противоположное (если лево то право или если вниз то вверх)
+//        if (chngX)
+//            setXZA(cngTR);
+//        else
+//            setYZA(cngTR);
 
 
         if (dir == Dir.LEFT)

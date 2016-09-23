@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.utils.FloatAnimator;
 
+import java.math.BigDecimal;
+
 /**
  * Created by FOGOK on 16.09.2016 21:33.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -30,13 +32,25 @@ public class SquareObject  extends GameObject{
     boolean isCollect = false;
     boolean isDestroyed = false;
     boolean isEndedAnim = false;
-    int kindedHash; //хэш цветного, который будет вести наш кубик, если равен -1, значит им является кубик
+
+    boolean isWired = false;
+
+
+    int kindedHash; //если 0, значит ни к чему не прикреплён, если >0, значит прикреплён к кубику и позиция равна этому числу в клетках
+
     int whoI = 0;
     int hash;
     FloatAnimator floatAnimator;
+
+
+    //ссылки
+    Rectangle sqBounds;
+    ///
     public SquareObject(Sprite sprite, int x, int y, Rectangle sqBounds, int hash) {
         super(sprite);
         this.hash = hash;
+        kindedHash = 0;
+        this.sqBounds = sqBounds;
         sqX = x;
         sqY = y;
         //устанавливаем позицию на поле в клетках и размер объекта
@@ -58,6 +72,32 @@ public class SquareObject  extends GameObject{
         isDestroyed = true;
     }
 
+    public void setKindedHash(int i){
+        kindedHash = i;
+    }
+
+    public int getKindedHash(){
+        return kindedHash;
+    }
+
+    public void setWired(boolean b){
+        isWired = b;
+    }
+
+    public boolean isWired(){
+        return isWired;
+    }
+
+    public boolean isNormalPos(){
+        int x = getSQX(getX()), y = getSQY(getY());
+        return (x > -1 && x < LevelGen.SQSIZE + 1 && y > -1 && y < LevelGen.SQSIZE + 1);
+    }
+
+    public void normalizePos(){
+        setPosition(sqBounds.x + (getSQX(getX()) * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
+                sqBounds.y + (getSQY(getY()) * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
+    }
+
     public boolean isDestroyed(){
         return isDestroyed;
     }
@@ -73,6 +113,20 @@ public class SquareObject  extends GameObject{
 
     public void setWhoI(int whoI){
         this.whoI = whoI;
+    }
+
+    //получить координаты кубика в клетках
+    BigDecimal bigDecimal;
+    float posXiiP, posYiiP;
+    public int getSQX(float x){
+        posXiiP = (x + getW() / 2 - sqBounds.getX()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+        return bigDecimal.intValue();
+    }
+    public int getSQY(float y) {
+        posYiiP = (y + getW() / 2 - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+        return bigDecimal.intValue();
     }
 
 
