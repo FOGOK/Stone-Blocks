@@ -33,6 +33,8 @@ public class SquareObject  extends GameObject{
     boolean isDestroyed = false;
     boolean isEndedAnim = false;
 
+    boolean isEndedCorrectPos = false;
+
     boolean isWired = false;
 
 
@@ -66,6 +68,7 @@ public class SquareObject  extends GameObject{
         if (isCollect)
             collectAnimation();
     }
+
 
     protected void collectAnimation() {
         ///здесь реализовываем анимацию сбора предметов
@@ -106,6 +109,14 @@ public class SquareObject  extends GameObject{
         return isEndedAnim;
     }
 
+    public boolean isEndedCorrectPos(){
+        return isEndedCorrectPos;
+    }
+
+    public void setEndedCorrectPos(boolean b){
+        isEndedCorrectPos = b;
+    }
+
 
     public void collect(){
         isCollect = true;
@@ -125,6 +136,17 @@ public class SquareObject  extends GameObject{
     }
     public int getSQY(float y) {
         posYiiP = (y + getW() / 2 - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+        return bigDecimal.intValue();
+    }
+
+    public int getSQX(){
+        posXiiP = (getX() + getW() / 2 - sqBounds.getX()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+        return bigDecimal.intValue();
+    }
+    public int getSQY() {
+        posYiiP = (getY() + getW() / 2 - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }

@@ -67,8 +67,8 @@ public class ObjectsGen {
                                 break;
                             case Colored:
                                 //если выпал тип цвета
-                                int rnnn2 = rnd.nextInt(4) + 1;
-                                allObjects[iters] = new ColoredCube(textureGen.getSprite(Atalas.squareT3), xQ, yQ, levSqBounds, false, allObjects, iters);
+                                int rnnn2 = rnd.nextInt(2) + 1;
+                                allObjects[iters] = new ColoredCube(textureGen.getSprite("squareT" + rnnn2), xQ, yQ, levSqBounds, false, allObjects, iters);
 
                                 break;
                         }
@@ -110,7 +110,7 @@ public class ObjectsGen {
         for (int i = 0; i < iters; i++) {
             if (!allObjects[i].isEndedAnim()){
                 allObjects[i].draw(batch);
-                DebugDrawer.drawRect(batch, allObjects[i].getBounds());
+//                DebugDrawer.drawRect(batch, allObjects[i].getBounds());
             }
         }
 

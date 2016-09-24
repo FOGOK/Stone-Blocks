@@ -20,6 +20,7 @@ public class ColoredCube extends SquareObject{
     float toKindX, toKindY;
     boolean deleteAllFirstes = false;
 
+
     public static int[] hashsKinded = new int[ObjectsGen.edge_lenght + 1];
     public static int globalSt = 0;
 
@@ -137,6 +138,8 @@ public class ColoredCube extends SquareObject{
 
         return ret;
     }
+
+
 
     private SquareObject getObjectFromHash(int hash){
         return allObjects[hash];

@@ -50,8 +50,8 @@ public class LevelSquare{            //игровое поле
 //                if (((rnd.nextInt(verCff) + 1) < (int) (verCff * (1f - sttCff))) || b){
                     int rn1 = b ? 0 : 6;
                     isTrue[i][i2] = true;
-//                    sprites[i][i2] = textureGen.getSprite(String.valueOf(rn1 + rnd.nextInt(6)));
-                    sprites[i][i2] = textureGen.getSprite("col1");
+                    sprites[i][i2] = textureGen.getSprite(String.valueOf(rn1 + rnd.nextInt(6)));
+//                    sprites[i][i2] = textureGen.getSprite("col1");
                     sprites[i][i2].setSize(sizOneSq, sizOneSq);
                     sprites[i][i2].setPosition(pX + (sizOneSq + otst * 2) * i, pY + (sizOneSq + otst * 2) * i2);//
 //                }
