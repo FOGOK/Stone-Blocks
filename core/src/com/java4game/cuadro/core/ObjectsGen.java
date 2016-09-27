@@ -1,5 +1,6 @@
 package com.java4game.cuadro.core;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.objects.ColoredCube;
@@ -31,6 +32,8 @@ public class ObjectsGen {
 
     ColorCubeMover colorCubeMover;
 
+    protected static Sprite[] holes;
+
 
     public static int edge_lenght;
     public static int iters = 0;
@@ -47,6 +50,12 @@ public class ObjectsGen {
         verCff = edge_lenght * edge_lenght;
         malPlus = 0;
         iters = 0;
+
+        holes = new Sprite[2];
+        holes[0] = textureGen.getSprite(Atalas.squareT1);
+        holes[1] = textureGen.getSprite(Atalas.squareT3);
+
+
 
 
         for (int xQ = 0; xQ < edge_lenght; xQ++) {
@@ -67,8 +76,8 @@ public class ObjectsGen {
                                 break;
                             case Colored:
                                 //если выпал тип цвета
-                                int rnnn2 = rnd.nextInt(2) + 1;
-                                allObjects[iters] = new ColoredCube(textureGen.getSprite("squareT" + rnnn2), xQ, yQ, levSqBounds, false, allObjects, iters);
+                                int rnnn2 = rnd.nextBoolean() ? 1 : 3;
+                                allObjects[iters] = new ColoredCube(textureGen.getSprite("squareT" + rnnn2), xQ, yQ, levSqBounds, false, allObjects, iters, (rnnn2 == 1) ? 0 : 1);
 
                                 break;
                         }
@@ -115,6 +124,7 @@ public class ObjectsGen {
         }
 
         colorCubeMover.match(batch);
+        colorCubeMover.drawHoles(batch);
     }
 
     public int getObjCount(){
@@ -135,6 +145,8 @@ public class ObjectsGen {
 
 
     public void dispose() {
-
+        for (int i = 0; i < holes.length; i++) {
+            holes[i] = null;    //т.к. статик, освобождаем явно
+        }
     }
 }

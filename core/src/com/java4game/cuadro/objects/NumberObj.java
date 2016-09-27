@@ -25,7 +25,7 @@ public class NumberObj extends SquareObject {
     float distToPXY;
     int number, degrToPXY;
     public NumberObj(Sprite sprite, int x, int y, Rectangle sqBounds, int number, int hash) {
-        super(sprite, x, y, sqBounds, hash);
+        super(sprite, x, y, sqBounds, hash, 0);
         this.number = number;
         firstX = getX();
         firstY = getY();

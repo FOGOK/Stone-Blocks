@@ -67,7 +67,7 @@ public class LevelGen {
         ///
 
         ///инициализируем кубик и устанавливаем размер кубика
-        cube = new Cube(textureGen.getSprite(Atalas.squareT1), levelSquare, objectsGen);
+        cube = new Cube(textureGen.getSprite(Atalas.squareT2), levelSquare, objectsGen);
         ///
 
 
@@ -89,5 +89,6 @@ public class LevelGen {
 
     public void dispose() {
         background.getTexture().dispose();
+        objectsGen.dispose();
     }
 }

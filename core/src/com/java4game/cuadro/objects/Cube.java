@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.ColorCubeMover;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.ObjectsGen;
@@ -26,9 +27,9 @@ public class Cube extends GameObject{           ///класс кубика, ко
     public enum Dir{   //направление движения
         RIGHT, DOWN, LEFT, UP
     }
-    float speed = 0.16f;
+    float speed = 0.11f;
     float otst; //отступ от поля
-    boolean povorot = false;
+    static boolean povorot;
     Random rnd = new Random();
 
     static float X, Y, SIZE;
@@ -55,6 +56,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
         sizeSquareF = LevelSquare.sizOneSq + LevelSquare.otst * 2;
 
         ISMOVECOLORCUBES = false;
+        povorot = false;
 
         dir = (rnd.nextBoolean()) ? ((rnd.nextBoolean()) ? Dir.RIGHT : Dir.LEFT) : ((rnd.nextBoolean()) ? Dir.UP : Dir.DOWN);
         revers = rnd.nextBoolean();
@@ -153,7 +155,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 
         if (povorot){
-            float delt = -105f * speed * Gm.mdT;
+            float delt = -120f * speed * Gm.mdT;
             if (revers) delt *= -1;
             if (!Handler.ISPAUSE)
                 sprite.rotate(delt);
@@ -181,7 +183,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
         if (Gdx.input.justTouched() && (!lockCHD || ISMOVECOLORCUBES) && isYInDown()){
             if (ISMOVECOLORCUBES){
-                inverseDir();
+                ColorCubeMover.isPregInv = true;
                 ISMOVECOLORCUBES = false;
             }else{
                 inmCHD = true;
@@ -198,10 +200,6 @@ public class Cube extends GameObject{           ///класс кубика, ко
             povorot = true;
         }
 
-
-
-//        Gm.DEBUG_VALUE1 = "x" + getSQX() + " y" + getSQY() + "lockCHD " + lockCHD ;
-//        Gm.DEBUG_VALUE2 = "lastPosInXY " + lastPosInXY;
     }
     float limRot = 180;     /// на сколько поворачивать кубик
     int lastPosInXY;
@@ -276,10 +274,6 @@ public class Cube extends GameObject{           ///класс кубика, ко
     }
     ////
 
-
-
-
-
     @Override
     public void setSize(float size) {
         super.setSize(size);
@@ -293,14 +287,9 @@ public class Cube extends GameObject{           ///класс кубика, ко
         Y = y;
     }
 
-    public static void MOVEDCOLOR() {
-        ISMOVECOLORCUBES = true;
+    public static void setMovedControl(boolean b) {
+        ISMOVECOLORCUBES = b;
     }
-
-    public static boolean ISMOVEDCOLOR() {
-        return ISMOVECOLORCUBES;
-    }
-
 
 
     public static float getSX(){
@@ -311,21 +300,11 @@ public class Cube extends GameObject{           ///класс кубика, ко
         return Y;
     }
 
-    public static float getSSIZE(){
-        return SIZE;
-    }
-
     public static Dir getDir(){
         return dir;
     }
 
     public static void inverseDir() {        ///меняем направление на противоположное (если лево то право или если вниз то вверх)
-//        if (chngX)
-//            setXZA(cngTR);
-//        else
-//            setYZA(cngTR);
-
-
         if (dir == Dir.LEFT)
             dir = Dir.RIGHT;
         else if (dir == Dir.RIGHT)
@@ -334,6 +313,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
             dir = Dir.DOWN;
         else if (dir == Dir.DOWN)
             dir = Dir.UP;
+        povorot = true;
     }
 
 

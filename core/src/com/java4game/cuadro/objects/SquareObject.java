@@ -34,8 +34,9 @@ public class SquareObject  extends GameObject{
     boolean isEndedAnim = false;
 
     boolean isEndedCorrectPos = false;
-
     boolean isWired = false;
+    boolean isCollected = false;
+    int colorType;
 
 
     int kindedHash; //если 0, значит ни к чему не прикреплён, если >0, значит прикреплён к кубику и позиция равна этому числу в клетках
@@ -48,11 +49,12 @@ public class SquareObject  extends GameObject{
     //ссылки
     Rectangle sqBounds;
     ///
-    public SquareObject(Sprite sprite, int x, int y, Rectangle sqBounds, int hash) {
+    public SquareObject(Sprite sprite, int x, int y, Rectangle sqBounds, int hash, int colorType) {
         super(sprite);
         this.hash = hash;
         kindedHash = 0;
         this.sqBounds = sqBounds;
+        this.colorType = colorType;
         sqX = x;
         sqY = y;
         //устанавливаем позицию на поле в клетках и размер объекта
@@ -81,6 +83,18 @@ public class SquareObject  extends GameObject{
 
     public int getKindedHash(){
         return kindedHash;
+    }
+
+    public int getColorType(){
+        return colorType;
+    }
+
+    public boolean isCollected(){
+        return isCollected;
+    }
+
+    public void setCollected(boolean b){
+        isCollected = b;
     }
 
     public void setWired(boolean b){
