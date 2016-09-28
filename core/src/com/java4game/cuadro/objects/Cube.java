@@ -90,17 +90,26 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 
     int lastpSQX, lastpSQY; ///позиция в клетках относительно левого нижнего угла поля
+    static int sqX, sqY;
     boolean chngX, cngTR;
     int chgVal;
     float pX, pY;
 
     boolean revers = false;
 
+    public static int getSqX(){
+        return sqX;
+    }
+
+    public static int getSqY(){
+        return sqY;
+    }
+
     public static boolean inmCHD = false, lockCHD = false;
     private void mathPosition(){
 
-        lastpSQX = getSQX();
-        lastpSQY = getSQY();
+        sqX = lastpSQX = getSQX();
+        sqY = lastpSQY = getSQY();
 
         switch (dir){
             case RIGHT:     ///если движемся вправо
