@@ -1,5 +1,6 @@
 package com.java4game.cuadro.core;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.utils.Atalas;
 
@@ -36,13 +37,13 @@ public class Handler {
         Game, Pause, Menu
     }
 
-    public Handler() {
+    public Handler(Camera camera) {
         ISPAUSE = ISRESTART = false;
 
         atls = new Atalas();
         textureGen = new TextureGen(atls);
         levelGen = new LevelGen(textureGen);
-        ui = new UI(textureGen);
+        ui = new UI(textureGen, camera);
         state = State.Game;
     }
 

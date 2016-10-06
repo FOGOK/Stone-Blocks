@@ -17,19 +17,16 @@ public class Gm extends ApplicationAdapter {
 
     /**THIS VARS IN DEBUG**/
     boolean isNoSleep = true, textShow = false, showDebugValChanger = false;
+    SpriteBatch debugBatch;
+    BitmapFont bf;
+    public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
+    DebugValueChanger debugValueChanger;
+    DebugDrawer debugDrawer;
     /***/
 
 	SpriteBatch batch;
     static OrthographicCamera camera;
     Handler handler;
-    SpriteBatch debugBatch;
-    BitmapFont bf;
-    public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
-
-
-    DebugValueChanger debugValueChanger;
-    DebugDrawer debugDrawer;
-
 	
 	@Override
 	public void create () {
@@ -42,12 +39,12 @@ public class Gm extends ApplicationAdapter {
         bf = new BitmapFont();
         bf.setColor(Color.BLACK);
         debugBatch = new SpriteBatch();
-        debugValueChanger = new DebugValueChanger(1, debugBatch);
+        debugValueChanger = new DebugValueChanger(3, debugBatch);
         debugDrawer = new DebugDrawer();
         ///
 
         //initAll Game
-        handler = new Handler();
+        handler = new Handler(camera);
         ///
 	}
 

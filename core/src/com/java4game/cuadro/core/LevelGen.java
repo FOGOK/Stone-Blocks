@@ -33,6 +33,8 @@ public class LevelGen {
 
     public static int SCORE = 0;
 
+    public static float backHDivH;
+
     float fulledCff = 0.4f; //степень заполненности
     float sttCff = 0.125f; //степень сетчатости поля (короче количество % дырок)
 
@@ -55,6 +57,7 @@ public class LevelGen {
         background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
+        backHDivH = background.getHeight() / Gm.HEIGHT;
         background.setPosition(0f, Gm.HEIGHT - background.getHeight());
         ///
 
@@ -69,8 +72,8 @@ public class LevelGen {
         //устанавливаем игровое поле в центр экрана /\
 
         /// инициализируем игровые объекты
-        NumberObj.pXii = 2f;
-        NumberObj.pYii = 18f;
+        NumberObj.pXii = 5f;
+        NumberObj.pYii = 16f;
         sizeObjects = LevelSquare.sizOneSq * 0.85f;
         otstObjects = LevelSquare.sizOneSq - sizeObjects;
 

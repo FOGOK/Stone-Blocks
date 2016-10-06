@@ -9,7 +9,7 @@ package com.java4game.cuadro.utils;
 public class Localization {
 
     public class RUS{
-        public static final String SCORE = "SCORES:";
+        public static final String SCORE = "SCORES";
     }
 
 }
