@@ -123,6 +123,9 @@ public class Gm extends ApplicationAdapter {
                 20, Gdx.graphics.getHeight() - 20);
 
         debugBatch.end();
+
+        DebugDrawer.drawRect(batch, true);
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.C))
             showDebugValChanger = !showDebugValChanger;
 

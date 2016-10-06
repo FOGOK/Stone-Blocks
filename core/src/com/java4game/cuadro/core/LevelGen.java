@@ -50,10 +50,21 @@ public class LevelGen {
         this.textureGen = textureGen;
         ///
 
+        //инициализируем фон
+        background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
+        background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        final float hDivW = 1.7777f;
+        background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
+        background.setPosition(0f, Gm.HEIGHT - background.getHeight());
+        ///
+
         //инициализация кубика и игрового поля
 
 
-        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, 3f, levSize, sttCff);
+        final float levSqOtst = 0.22f;
+        final float posSqInMacketCFF = 0.22f; /// на 22 проценте находится фон поля как бы
+        final float levSqPos = (Gm.HEIGHT - background.getY()) * posSqInMacketCFF + background.getY();
+        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, levSqPos + levSqOtst, levSize, sttCff);
         //устанавливаем размер игрового поля ширина - 2 размера кубика - небольшой отступ   /\
         //устанавливаем игровое поле в центр экрана /\
 
@@ -68,15 +79,7 @@ public class LevelGen {
 
         ///инициализируем кубик и устанавливаем размер кубика
         cube = new Cube(textureGen.getSprite(Atalas.squareT2), levelSquare, objectsGen);
-        ///
-
-
-
-        //инициализируем фон
-        background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
-        background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        background.setSize(Gm.WIDTH, Gm.HEIGHT);
-        ///
+        //
     }
 
     public void draw(SpriteBatch batch){
@@ -84,7 +87,7 @@ public class LevelGen {
         levelSquare.draw(batch);
         objectsGen.draw(batch);
         cube.draw(batch);
-//        Gm.DEBUG_VALUE1 = "Score: " + SCORE;
+        UI.setAllValues(SCORE);
     }
 
     public void dispose() {

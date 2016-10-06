@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.objects.ColoredCube;
 import com.java4game.cuadro.objects.Cube;
+import com.java4game.cuadro.objects.Cube.Dir;
 import com.java4game.cuadro.objects.LevelSquare;
 import com.java4game.cuadro.objects.SquareObject;
 import com.java4game.cuadro.utils.DebugDrawer;
@@ -56,16 +57,19 @@ public class ColorCubeMover {
     ///всё, что относится к лункам
     HolesCords[] holesCords;
     class HolesCords{       //координаты лунок
-        int x, y;
-        int type;
-        protected HolesCords(int x, int y, int type){    //в зависимости от направления выставляется кубик на определённную грань
-            set(x, y, type);
+        protected int x, y;
+        protected int type;
+        protected Dir dir;
+        
+        protected HolesCords(int x, int y, int type, Dir dir){    //в зависимости от направления выставляется кубик на определённную грань
+            set(x, y, type, dir);
         }
 
-        protected void set(int x, int y, int type){
+        protected void set(int x, int y, int type, Dir dir){
             this.x = x;
             this.y = y;
             this.type = type;
+            this.dir = dir;
         }
 
         protected int getX(){
@@ -79,6 +83,10 @@ public class ColorCubeMover {
         protected int getType(){
             return type;
         }
+
+        protected Dir getDir(){
+            return dir;
+        }
     }
     Rectangle[] holesEnters;        //точки входа типо для определённых типов
 
@@ -87,7 +95,7 @@ public class ColorCubeMover {
         holesCords = new HolesCords[count];
         holesEnters = new Rectangle[count];
         for (int i = 0; i < count; i++) {
-//            Cube.Dir qd = (i < 2) ? (i == 0 ? Cube.Dir.DOWN : Cube.Dir.UP) : (i == 2 ? Cube.Dir.LEFT : Cube.Dir.RIGHT);
+//            Dir qd = (i < 2) ? (i == 0 ? Dir.DOWN : Dir.UP) : (i == 2 ? Dir.LEFT : Dir.RIGHT);
             int xyq = rnd.nextInt(LevelGen.SQSIZE + 1);
             holesEnters[i] = new Rectangle();
 
@@ -97,7 +105,7 @@ public class ColorCubeMover {
             int minX = (i < 2) ? xyq : (i == 2) ? 0 : LevelGen.SQSIZE;
             int minY = (i > 1) ? xyq : (i == 0) ? 0 : LevelGen.SQSIZE;
 
-            holesCords[i] = new HolesCords(x, y, i);
+            holesCords[i] = new HolesCords(x, y, i, (i == 0) ? Dir.DOWN : Dir.UP);
 
             ObjectsGen.holes[i].setPosition(sqBounds.x + (x * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
                     sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
@@ -124,19 +132,19 @@ public class ColorCubeMover {
         colorChecker.setSize(LevelGen.sizeObjects);
         float cffP = 0.1f;
 
-        if (Cube.getDir() == Cube.Dir.RIGHT){
+        if (Cube.getDir() == Dir.RIGHT){
             colorChecker.setWidth(sizCubL * (stackCount));
             colorChecker.setX(colorChecker.getX() + colorChecker.getHeight() + cffP);
         }
-        else if (Cube.getDir() == Cube.Dir.LEFT){
+        else if (Cube.getDir() == Dir.LEFT){
             colorChecker.setWidth(sizCubL * (stackCount));
             colorChecker.setX(colorChecker.getX() - sizCubL * (stackCount) - cffP);
         }
-        else if (Cube.getDir() == Cube.Dir.UP){
+        else if (Cube.getDir() == Dir.UP){
             colorChecker.setHeight(sizCubL * (stackCount));
             colorChecker.setY(colorChecker.getY() + colorChecker.getWidth() + cffP);
         }
-        else if (Cube.getDir() == Cube.Dir.DOWN){
+        else if (Cube.getDir() == Dir.DOWN){
             colorChecker.setHeight(sizCubL * (stackCount));
             colorChecker.setY(colorChecker.getY() - sizCubL * (stackCount) - cffP);
         }
@@ -145,16 +153,16 @@ public class ColorCubeMover {
 
     private void resetMoveBounds(){     //ставим проверяющий прямоугольник в кубик
 
-        if (Cube.getDir() == Cube.Dir.RIGHT){
+        if (Cube.getDir() == Dir.RIGHT){
             colorChecker.setPosition(Cube.getSX() + LevelGen.sizeObjects * 0.5f, Cube.getSY());
             colorChecker.setSize(LevelGen.sizeObjects * 0.5f, LevelGen.sizeObjects);
-        } else if (Cube.getDir() == Cube.Dir.LEFT){
+        } else if (Cube.getDir() == Dir.LEFT){
             colorChecker.setPosition(Cube.getSX(), Cube.getSY());
             colorChecker.setSize(LevelGen.sizeObjects * 0.5f, LevelGen.sizeObjects);
-        } else if (Cube.getDir() == Cube.Dir.UP){
+        } else if (Cube.getDir() == Dir.UP){
             colorChecker.setPosition(Cube.getSX(), Cube.getSY() + LevelGen.sizeObjects * 0.5f);
             colorChecker.setSize(LevelGen.sizeObjects, LevelGen.sizeObjects * 0.5f);
-        } else if (Cube.getDir() == Cube.Dir.DOWN){
+        } else if (Cube.getDir() == Dir.DOWN){
             colorChecker.setPosition(Cube.getSX(), Cube.getSY());
             colorChecker.setSize(LevelGen.sizeObjects, LevelGen.sizeObjects * 0.5f);
         }
@@ -197,6 +205,8 @@ public class ColorCubeMover {
                     setChecker();
                 }
 
+
+                //   \/ если короче мы касаемся краёв
                 if (allObjects[i].getSQX() < 0 || allObjects[i].getSQX() > LevelGen.SQSIZE  || allObjects[i].getSQY() < 0 || allObjects[i].getSQY() > LevelGen.SQSIZE){
                     allObjects[i].setCollected(true);
                     allObjects[i].normalizePos();
@@ -243,10 +253,10 @@ public class ColorCubeMover {
 
                             int x = Cube.getSqX();
                             int y = Cube.getSqY();
-                            int kindedHash = (Cube.getDir() == Cube.Dir.RIGHT || Cube.getDir() == Cube.Dir.UP) ? allObjects[q].getKindedHash() : -allObjects[q].getKindedHash();
+                            int kindedHash = (Cube.getDir() == Dir.RIGHT || Cube.getDir() == Dir.UP) ? allObjects[q].getKindedHash() : -allObjects[q].getKindedHash();
 
-                            x += (Cube.getDir() == Cube.Dir.DOWN || Cube.getDir() == Cube.Dir.UP) ? 0 : kindedHash;
-                            y += (Cube.getDir() == Cube.Dir.DOWN || Cube.getDir() == Cube.Dir.UP) ? kindedHash : 0;
+                            x += (Cube.getDir() == Dir.DOWN || Cube.getDir() == Dir.UP) ? 0 : kindedHash;
+                            y += (Cube.getDir() == Dir.DOWN || Cube.getDir() == Dir.UP) ? kindedHash : 0;
                             allObjects[q].setPosition(sqBounds.x + (x * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
                                     sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
 
@@ -254,8 +264,8 @@ public class ColorCubeMover {
                             allObjects[q].setWired(false);      //разрываем связь
                             allObjects[q].setKindedHash(0);     //говорим, что положение относительно кубика равно нулю
                             allObjects[q].setEndedCorrectPos(false);    ///говорим, что при первом
-                            // соприкосновении с краем он не будет останавливаться, т.к. он может
-                            // находится на этом крае при начале движения
+                                            // соприкосновении с краем он не будет останавливаться, т.к. он может
+                                                // находится на этом крае при начале движения
                             stackCount = 0;
                             inv = true;
                         }
@@ -271,13 +281,13 @@ public class ColorCubeMover {
 
                     if (allObjects[i] instanceof ColoredCube && !allObjects[i].isCollected()){
                         if (allObjects[i].isWired()){
-                            if (Cube.getDir() == Cube.Dir.RIGHT){
+                            if (Cube.getDir() == Dir.RIGHT){
                                 allObjects[i].setPosition(colorChecker.getX() + mnR + ottt * (allObjects[i].getKindedHash() - 1), allObjects[i].getY());
-                            } else if (Cube.getDir() == Cube.Dir.LEFT){
+                            } else if (Cube.getDir() == Dir.LEFT){
                                 allObjects[i].setPosition(colorChecker.getX() + colorChecker.getWidth() - LevelGen.sizeObjects - mnR - ottt * (allObjects[i].getKindedHash() - 1), allObjects[i].getY());
-                            } else if (Cube.getDir() == Cube.Dir.UP){
+                            } else if (Cube.getDir() == Dir.UP){
                                 allObjects[i].setPosition(allObjects[i].getX(), colorChecker.getY() + mnR + ottt * (allObjects[i].getKindedHash() - 1));
-                            } else if (Cube.getDir() == Cube.Dir.DOWN){
+                            } else if (Cube.getDir() == Dir.DOWN){
                                 allObjects[i].setPosition(allObjects[i].getX(), colorChecker.getY() + colorChecker.getHeight() - LevelGen.sizeObjects - mnR - ottt * (allObjects[i].getKindedHash() - 1));
                             }
                         }
@@ -293,14 +303,14 @@ public class ColorCubeMover {
 //            DebugDrawer.drawRect(batch, holesEnters[i]);
 //        }
 //
-        DebugDrawer.drawRect(batch, colorChecker);
+//        DebugDrawer.drawRect(batch, colorChecker);
 
         Gm.DEBUG_VALUE1 = "" + isPregInv + " " + stackCount;
     }
 
     private boolean isTouchedPHole(int i){
         for (int q = 0; q < holesEnters.length; q++) {
-            if (holesEnters[q].overlaps(allObjects[i].getBounds()) && holesCords[q].getType() == allObjects[i].getColorType()){
+            if (holesEnters[q].overlaps(allObjects[i].getBounds()) && holesCords[q].getType() == allObjects[i].getColorType() && holesCords[q].getDir() == Cube.getDir()){
                 return true;
             }
         }
@@ -310,14 +320,14 @@ public class ColorCubeMover {
 //    boolean isTouchedPredHole = false;
     private boolean isCorrectPos(int i){        //если касаемся краёв, то значит true, иначе false
         boolean isTouchedSpecificBound = false;
-        if (Cube.getDir() == Cube.Dir.RIGHT)
-            isTouchedSpecificBound = allObjects[i].getSQX() > LevelGen.SQSIZE;
-        else if (Cube.getDir() == Cube.Dir.LEFT)
-            isTouchedSpecificBound = allObjects[i].getSQX() < 0;
-        else if (Cube.getDir() == Cube.Dir.UP)
-            isTouchedSpecificBound = allObjects[i].getSQY() > LevelGen.SQSIZE;
-        else if (Cube.getDir() == Cube.Dir.DOWN)
-            isTouchedSpecificBound = allObjects[i].getSQY() < 0;
+        if (Cube.getDir() == Dir.RIGHT)
+            isTouchedSpecificBound = allObjects[i].getSSQX() > LevelGen.SQSIZE;
+        else if (Cube.getDir() == Dir.LEFT)
+            isTouchedSpecificBound = allObjects[i].getSSQX() < 0;
+        else if (Cube.getDir() == Dir.UP)
+            isTouchedSpecificBound = allObjects[i].getSSQY() > LevelGen.SQSIZE;
+        else if (Cube.getDir() == Dir.DOWN)
+            isTouchedSpecificBound = allObjects[i].getSSQY() < 0;
 
 
         return !isTouchedSpecificBound;

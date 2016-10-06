@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.LevelGen;
+import com.java4game.cuadro.utils.DebugDrawer;
 import com.java4game.cuadro.utils.FloatAnimator;
 
 import java.math.BigDecimal;
@@ -106,13 +107,13 @@ public class SquareObject  extends GameObject{
     }
 
     public boolean isNormalPos(){
-        int x = getSQX(getX()), y = getSQY(getY());
+        int x = getSQX(), y = getSQY();
         return (x > -1 && x < LevelGen.SQSIZE + 1 && y > -1 && y < LevelGen.SQSIZE + 1);
     }
 
     public void normalizePos(){
-        setPosition(sqBounds.x + (getSQX(getX()) * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
-                sqBounds.y + (getSQY(getY()) * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
+        setPosition(sqBounds.x + (getSQX() * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
+                sqBounds.y + (getSQY() * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
     }
 
     public boolean isDestroyed(){
@@ -143,27 +144,66 @@ public class SquareObject  extends GameObject{
     //получить координаты кубика в клетках
     BigDecimal bigDecimal;
     float posXiiP, posYiiP;
-    public int getSQX(float x){
-        posXiiP = (x + getW() / 2 - sqBounds.getX()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
-        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
-    }
-    public int getSQY(float y) {
-        posYiiP = (y + getW() / 2 - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
-        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
+
+
+
+
+
+    //берём позициию объекта в клетках относительно всего объекта (параметр направления - направление кубика)
+    public int getSSQX(){
+        return getSQX(Cube.getDir());
     }
 
+    public int getSSQY(){
+        return getSQY(Cube.getDir());
+    }
+    ///
+
+    //берём позициию объекта в клетках относительно всего объекта (параметр направления - направление движения кубика)
+    public int getSQX(Cube.Dir dir){
+        float dotMatch;    ///точка, относительно которой нужно отчситывать позицию, ставим её на грань объекта, относительно данного направления
+        switch (dir){
+            case LEFT:  dotMatch = 0f; break;
+            case RIGHT: dotMatch = getW(); break;
+            default:    dotMatch = getW() / 2f; break;
+        }
+
+        return getSQX(dotMatch);
+    }
+    public int getSQY(Cube.Dir dir) {
+        float dotMatch;    ///точка, относительно которой нужно отчситывать позицию, ставим её на грань объекта, относительно данного направления
+        switch (dir){
+            case UP:  dotMatch = getW(); break;
+            case DOWN: dotMatch = 0; break;
+            default:    dotMatch = getW() / 2f; break;
+        }
+        DebugDrawer.drawRect(getX() + dotMatch, getY() + dotMatch);
+        return getSQY(dotMatch);
+    }
+    ///
+
+    //берём позицию объекта в клетках относительно центра
     public int getSQX(){
-        posXiiP = (getX() + getW() / 2 - sqBounds.getX()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+        return getSQX(getW() / 2);
+    }
+
+    public int getSQY(){
+        return getSQY(getW() / 2);
+    }
+    ///
+
+    //берём позицию объекта в клетках относительно точки, на этом объекте
+    public int getSQX(float dotMatch){
+        posXiiP = (getX() + dotMatch - sqBounds.getX()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
-    public int getSQY() {
-        posYiiP = (getY() + getW() / 2 - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
+    public int getSQY(float dotMatch) {
+        posYiiP = (getY() + dotMatch - sqBounds.getY()) / (sqBounds.getWidth() / (LevelGen.SQSIZE + 1));
         bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
+    ///
 
 
 }
