@@ -24,7 +24,7 @@ public class LevelGen {
      *
      * */
 
-    public static int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
+    public static final int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
 
     Cube cube;
     LevelSquare levelSquare;
@@ -51,7 +51,6 @@ public class LevelGen {
         //инициализация ссылок
         this.textureGen = textureGen;
         ///
-
         //инициализируем фон
         background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
         background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

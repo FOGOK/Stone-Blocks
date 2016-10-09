@@ -1,7 +1,6 @@
 package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,15 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.utils.Atalas;
-import com.java4game.cuadro.utils.DebugValueChanger;
 import com.java4game.cuadro.utils.Localization;
 
 /**
@@ -49,7 +41,7 @@ public class UI {
     final int SIZE_CHAR_FONT = 32;
 
 
-    static Stage stage;
+    private static Stage stage;
 
     int WIDTH, HEIGHT;
     BitmapFont textFont;
@@ -72,7 +64,9 @@ public class UI {
 
         textFont = new BitmapFont(Gdx.files.internal(pathToFont));
         textFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         textStyle = new LabelStyle(textFont, textColor);
+
         ///
 
 
@@ -86,8 +80,8 @@ public class UI {
     }
 
 
-    static Label scoreTextBlock;
-    static String scoreText;
+    private static Label scoreTextBlock;
+    private static String scoreText;
     private void addScoreTextBlock(){
         scoreText = Localization.RUS.SCORE + "\n";
         scoreTextBlock = new Label(scoreText + "0", textStyle);
@@ -107,6 +101,10 @@ public class UI {
 
         stage.addActor(scoreTextBlock);
     }
+
+
+
+
 
 
     private void setViewPort(){
@@ -150,5 +148,6 @@ public class UI {
     public void dispose() {
         stage.dispose();
         textFont.dispose();
+        scoreTextBlock = null;
     }
 }
