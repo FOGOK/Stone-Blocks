@@ -44,7 +44,7 @@ public class Gm extends ApplicationAdapter {
         ///
 
         //initAll Game
-        handler = new Handler(camera);
+        handler = new Handler(camera, batch);
         ///
 	}
 

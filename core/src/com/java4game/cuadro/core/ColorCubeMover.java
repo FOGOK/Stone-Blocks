@@ -209,6 +209,7 @@ public class ColorCubeMover {
                 //   \/ если короче мы касаемся краёв
                 if (allObjects[i].getSQX() < 0 || allObjects[i].getSQX() > LevelGen.SQSIZE  || allObjects[i].getSQY() < 0 || allObjects[i].getSQY() > LevelGen.SQSIZE){
                     allObjects[i].setCollected(true);
+                    LevelGen.SCORE += 100;
                     allObjects[i].normalizePos();
                     Cube.setMovedControl(false);
                     bIters = 0f;

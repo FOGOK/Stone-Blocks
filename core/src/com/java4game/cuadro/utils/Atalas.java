@@ -13,12 +13,12 @@ public class Atalas {
      * Вспомогательный класс, хранящий в себе все регионы текстур
      * */
 
-	Texture mn;
+	Texture mainTexture;
 
-    ArrayList<Integer> q1q = new ArrayList<Integer>(120);
-    ArrayList<Integer> q2q = new ArrayList<Integer>(120);
-    ArrayList<Integer> q3q = new ArrayList<Integer>(120);
-    ArrayList<Integer> q4q = new ArrayList<Integer>(120);
+    ArrayList<Integer> reg1Coords = new ArrayList<Integer>(120);
+    ArrayList<Integer> reg2Coords = new ArrayList<Integer>(120);
+    ArrayList<Integer> reg3Coords = new ArrayList<Integer>(120);
+    ArrayList<Integer> reg4Coords = new ArrayList<Integer>(120);
 
 
     //инструкция по добавлению новой текстуры
@@ -59,87 +59,76 @@ public class Atalas {
     public static final String col2 = "col2";
     public static final String col3 = "col3";
     public static final String col4 = "col4";
+    public static final String starSq = "starSq";
+    public static final String gemSq = "gemSq";
 
 
 
     public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3,
-    num1, num2, num3, num4, num5, num6, num7, num8, num9, col1, col2, col3, col4};
+    num1, num2, num3, num4, num5, num6, num7, num8, num9, col1, col2, col3, col4, starSq, gemSq};
 
     public static int textsCount;
 
+    private final static int X = 0, Y = 1, W = 2, H = 3, NEXTELEMENT = 4;
 
 	public Atalas() {
-        String file;
+        String fileName = "atls1.png";
         float cff;
-
-
-        file = "atls1.png";
         cff = 1f;
 
-        mn = new Texture(file);
+        mainTexture = new Texture(fileName);
 
 
 
 
-		mn.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		mainTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-		ArrayList<Integer> numb = new ArrayList<Integer>();
+		ArrayList<Integer> allValues = new ArrayList<Integer>();
+		String allElementsString, currentElementString = "";
 
-		String str, str2 = "";
+		Integer elementIteration[], currentElement = 0;
+		elementIteration = new Integer[6];
 
-		Integer hq[], jd = 0;
-
-		hq = new Integer[6];
-
-        str = Gdx.files.internal("atls1.txt").readString();
+        allElementsString = Gdx.files.internal("atls1.txt").readString();
 
 
-		for (char element : str.toCharArray()) {
-			if (element != ' ') {
-				str2 = str2 + String.valueOf(element);
+		for (char currentElementChar : allElementsString.toCharArray()) {
+			if (currentElementChar != ' ') {
+				currentElementString = currentElementString + String.valueOf(currentElementChar);
 			} else {
-				numb.add(Integer.parseInt(str2));
-				str2 = "";
+				allValues.add(Integer.parseInt(currentElementString));
+				currentElementString = "";
 			}
 		}
 
-		for (int i = 0; i < numb.size() - 1; i++) {
-			hq[jd] = numb.get(i);
-			jd++;
-			if (jd == 4) {
-				jd = 0;
+		for (int i = 0; i < allValues.size() - 1; i++) {
+			elementIteration[currentElement] = allValues.get(i);
+			currentElement++;
+			if (currentElement == NEXTELEMENT) {
+				reg1Coords.add((int) (elementIteration[X] * cff));
+				reg2Coords.add((int) (elementIteration[Y] * cff));
+				reg3Coords.add((int) (elementIteration[W] * cff));
+				reg4Coords.add((int) (elementIteration[H] * cff));
 
-
-
-				q1q.add((int) (hq[0] * cff));
-				q2q.add((int) (hq[1] * cff));
-				q3q.add((int) (hq[2] * cff));
-				q4q.add((int) (hq[3] * cff));
-
+                currentElement = X;
 			}
 
 		}
-		hq[3] = numb.get(numb.size() - 1);
+		elementIteration[3] = allValues.get(allValues.size() - 1);
 
-        q1q.add((int) (hq[0] * cff));
-        q2q.add((int) (hq[1] * cff));
-        q3q.add((int) (hq[2] * cff));
-        q4q.add((int) (hq[3] * cff));
-        textsCount = q1q.size();
-
-        numb = null;
+        reg1Coords.add((int) (elementIteration[0] * cff));
+        reg2Coords.add((int) (elementIteration[1] * cff));
+        reg3Coords.add((int) (elementIteration[2] * cff));
+        reg4Coords.add((int) (elementIteration[3] * cff));
+        textsCount = reg1Coords.size();
 	}
 	
 	public void dispose(){
-        q1q = null;
-        q2q = null;
-        q3q = null;
-        q4q = null;
-		mn.dispose();
+		mainTexture.dispose();
 	}
 
-	public TextureRegion getTG(int wg) {
-		return new TextureRegion(mn, q1q.get(wg), q2q.get(wg), q3q.get(wg),
-				q4q.get(wg));
+	public TextureRegion getTG(int numTexture) {
+		return new TextureRegion(mainTexture, reg1Coords.get(numTexture), reg2Coords.get(numTexture), reg3Coords.get(numTexture),
+				reg4Coords.get(numTexture));
 	}
 }

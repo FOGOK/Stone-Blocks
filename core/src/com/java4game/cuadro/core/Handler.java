@@ -37,12 +37,12 @@ public class Handler {
         Game, Pause, Menu
     }
 
-    public Handler(Camera camera) {
+    public Handler(Camera camera, SpriteBatch batch){
         ISPAUSE = ISRESTART = false;
 
         atls = new Atalas();
         textureGen = new TextureGen(atls);
-        levelGen = new LevelGen(textureGen);
+        levelGen = new LevelGen(textureGen, batch);
         ui = new UI(textureGen, camera);
         state = State.Game;
     }
@@ -53,12 +53,12 @@ public class Handler {
 
         ui.draw(batch);
 
-        if (ISRESTART) restart();
+        if (ISRESTART) restart(batch);
     }
 
-    public void restart(){
+    public void restart(SpriteBatch batch){
         levelGen.dispose();
-        levelGen = new LevelGen(textureGen);
+        levelGen = new LevelGen(textureGen, batch);
         ISRESTART = false;
     }
 

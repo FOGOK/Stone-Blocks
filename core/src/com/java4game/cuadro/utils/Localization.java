@@ -10,6 +10,9 @@ public class Localization {
 
     public class RUS{
         public static final String SCORE = "SCORES";
+        public static final String TIME = "TIME";
+        public static final String STAGE = "STAGE";
+        public static final String WORLD = "WORLD";
     }
 
 }

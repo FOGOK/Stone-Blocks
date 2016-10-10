@@ -34,6 +34,7 @@ public class LevelGen {
     public static int SCORE = 0;
 
     public static float backHDivH;
+    ComboVombo comboVombo;
 
     float fulledCff = 0.4f; //степень заполненности
     float sttCff = 0.125f; //степень сетчатости поля (короче количество % дырок)
@@ -47,7 +48,7 @@ public class LevelGen {
     TextureGen textureGen;
     ///
 
-    public LevelGen(TextureGen textureGen) {
+    public LevelGen(TextureGen textureGen, SpriteBatch batch) {
         //инициализация ссылок
         this.textureGen = textureGen;
         ///
@@ -77,6 +78,8 @@ public class LevelGen {
         otstObjects = LevelSquare.sizOneSq - sizeObjects;
 
         objectsGen = new ObjectsGen(SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
+
+        comboVombo = new ComboVombo();
         ///
 
         ///инициализируем кубик и устанавливаем размер кубика
@@ -89,11 +92,13 @@ public class LevelGen {
         levelSquare.draw(batch);
         objectsGen.draw(batch);
         cube.draw(batch);
-        UI.setAllValues(SCORE);
+        comboVombo.draw(batch);
+        UI.setScore(SCORE);
     }
 
     public void dispose() {
         background.getTexture().dispose();
         objectsGen.dispose();
+        comboVombo.dispose();
     }
 }
