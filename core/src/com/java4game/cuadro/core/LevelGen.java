@@ -1,6 +1,8 @@
 package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,15 +28,17 @@ public class LevelGen {
 
     public static final int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
 
-    Cube cube;
-    LevelSquare levelSquare;
-    Sprite background;
-    ObjectsGen objectsGen;
+    private Cube cube;
+    private LevelSquare levelSquare;
+    private Sprite background;
+    private ObjectsGen objectsGen;
 
     public static int SCORE = 0;
 
     public static float backHDivH;
-    ComboVombo comboVombo;
+    private static ComboVombo comboVombo;
+
+    static float centerXLEVSQ, centerYLEVSQ;
 
     float fulledCff = 0.4f; //степень заполненности
     float sttCff = 0.125f; //степень сетчатости поля (короче количество % дырок)
@@ -45,7 +49,7 @@ public class LevelGen {
     public static float otstObjects;
 
     //ссылки
-    TextureGen textureGen;
+    private TextureGen textureGen;
     ///
 
     public LevelGen(TextureGen textureGen, SpriteBatch batch) {
@@ -68,6 +72,8 @@ public class LevelGen {
         final float posSqInMacketCFF = 0.22f; /// на 22 проценте находится фон поля как бы
         final float levSqPos = (Gm.HEIGHT - background.getY()) * posSqInMacketCFF + background.getY();
         levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, levSqPos + levSqOtst, levSize, sttCff);
+        centerXLEVSQ = Gm.WIDTH / 2f;
+        centerYLEVSQ = levSqPos + levSqOtst + levSize / 2f;
         //устанавливаем размер игрового поля ширина - 2 размера кубика - небольшой отступ   /\
         //устанавливаем игровое поле в центр экрана /\
 
@@ -79,7 +85,7 @@ public class LevelGen {
 
         objectsGen = new ObjectsGen(SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
 
-        comboVombo = new ComboVombo();
+        comboVombo = new ComboVombo(textureGen);
         ///
 
         ///инициализируем кубик и устанавливаем размер кубика
@@ -94,6 +100,11 @@ public class LevelGen {
         cube.draw(batch);
         comboVombo.draw(batch);
         UI.setScore(SCORE);
+
+    }
+
+    public static void PUSHCOMBOOOOO(){
+        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ, centerYLEVSQ, Color.RED);
     }
 
     public void dispose() {
