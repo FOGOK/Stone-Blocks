@@ -166,6 +166,14 @@ public class ComboVombo {
 
     }
 
+    public float getW(){
+        return WIDTH_COMBOTEXT;
+    }
+
+    public float getH(){
+        return HEIGHT_COMBOTEXT + SIZE_COMBONUM + 0.4f;
+    }
+
     public void PUSHCOMBOOOOO(float posX, float posY, Color color){
         PUSHCOMBOOOOO(posX, posY, comboC, color);
     }

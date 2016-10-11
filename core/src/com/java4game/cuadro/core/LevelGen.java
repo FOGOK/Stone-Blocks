@@ -12,6 +12,8 @@ import com.java4game.cuadro.objects.LevelSquare;
 import com.java4game.cuadro.objects.NumberObj;
 import com.java4game.cuadro.utils.Atalas;
 
+import java.util.Random;
+
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:16.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -103,8 +105,10 @@ public class LevelGen {
 
     }
 
+
+    private static Random rnd = new Random();
     public static void PUSHCOMBOOOOO(){
-        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ, centerYLEVSQ, Color.RED);
+        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ - 3f + rnd.nextInt(6), centerYLEVSQ - 3f + rnd.nextInt(6), Color.RED);
     }
 
     public void dispose() {
