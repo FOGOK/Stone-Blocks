@@ -1,17 +1,8 @@
 package com.java4game.cuadro.core;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector3;
-import com.java4game.cuadro.utils.DebugValueChanger;
-import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Atalas;
 
 /**
  * Created by FOGOK on 10.10.2016 16:37.
@@ -20,37 +11,26 @@ import com.java4game.cuadro.utils.GameUtils;
  * лавочке возле остановки автобуса номер 985
  */
 public class ComboVombo {
-//
-//    int posX = Gdx.graphics.getWidth() / 2;
-//    int posY = Gdx.graphics.getHeight() / 2 + 20;
-//    int angle = 20;
-    String text = "COMBO 1";
-    BitmapFont comboText;
 
-    SpriteBatch batch;
-    OrthographicCamera camera;
+    final static float WIDTH_COMBOTEXT = 6;
+    final static float HEIGHT_COMBOTEXT = WIDTH_COMBOTEXT * 0.286f;
 
-    public ComboVombo() {
-        final String pathToFont = "font/font.fnt";
-        comboText = new BitmapFont(Gdx.files.internal(pathToFont), true);
-        comboText.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        comboText.setColor(Color.BLACK);
-        comboText.getData().setScale(GameUtils.FINAL_FONT_SCALE * 2f);
+    final static float SIZE_COMBONUM = HEIGHT_COMBOTEXT;
 
 
-        camera = new OrthographicCamera();
-        camera.rotate(45);
-        batch = new SpriteBatch(10);
+
+    Sprite comboText;
+    Sprite[] numbCombos = new Sprite[10];
+    public ComboVombo(TextureGen textureGen) {
+        comboText = textureGen.getSprite(Atalas.comboText);
+        for (int i = 0; i < numbCombos.length; i++){
+            numbCombos[i] = new Sprite(textureGen.getSprite("comboText" + i));
+            numbCombos[i].setSize(SIZE_COMBONUM, SIZE_COMBONUM);
+        }
+
+        comboText.setSize(WIDTH_COMBOTEXT, HEIGHT_COMBOTEXT);
 
 
-//        oldTransformMatrix = batch.getTransformMatrix().cpy();
-//
-//
-//
-//        mx4Font = new Matrix4(oldTransformMatrix);
-//        mx4Font.setToRotation(new Vector3(200, 200, 0), 45);
-
-//        mx4Font.trn(posX, posY, 0);
 
     }
 
@@ -58,22 +38,12 @@ public class ComboVombo {
 
     }
 
-    public void draw(SpriteBatch oldBatch){
-
-
-//        oldBatch.end();
-////        batch.setProjectionMatrix(mx4Font);
-//        batch.begin();
-//        comboText.draw(batch, text, 0, 0);
-//        batch.end();
-////        batch.setProjectionMatrix(oldTransformMatrix);
-//        oldBatch.begin();
+    public void draw(SpriteBatch batch){
 
 
     }
 
     public void dispose() {
-        comboText.dispose();
-        batch.dispose();
+
     }
 }
