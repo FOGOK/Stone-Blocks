@@ -1,12 +1,12 @@
 package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.usie.GameUI;
 import com.java4game.cuadro.objects.Cube;
 import com.java4game.cuadro.objects.LevelSquare;
 import com.java4game.cuadro.objects.NumberObj;
@@ -101,14 +101,14 @@ public class LevelGen {
         objectsGen.draw(batch);
         cube.draw(batch);
         comboVombo.draw(batch);
-        UI.setScore(SCORE);
+        GameUI.setScore(SCORE);
 
     }
 
-
+    final private static Color comboColor = Color.valueOf("ff0000");
     private static Random rnd = new Random();
     public static void PUSHCOMBOOOOO(){
-        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ - 3f + rnd.nextInt(6), centerYLEVSQ - 3f + rnd.nextInt(6), Color.RED);
+        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ - 2f + rnd.nextInt(4), centerYLEVSQ - 2f + rnd.nextInt(4), comboColor);
     }
 
     public void dispose() {

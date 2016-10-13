@@ -32,6 +32,7 @@ public class ComboVombo {
         private int whoCombo;   ///какое число отображать
         private FloatAnimator floatAnimator;    //для анимации
         boolean isExist;    ///активно ли
+        boolean triggerAlpha;
 
         private Color color;
 
@@ -57,6 +58,7 @@ public class ComboVombo {
             floatAnimator = new FloatAnimator(0f, 1f, 0.4f, Interpolation.swingOut);
             isExist = whoCombo >= 0;    //если комбо меньше 0, значит мы первоначально инициализируем переменную, иначе делаем сразу её активной
 
+            triggerAlpha = false;
             currentIt = 0f;
             alpha = 0f;
         }
@@ -70,7 +72,7 @@ public class ComboVombo {
                 if (!floatAnimator.isNeedToUpdate())
                     currentIt += Gdx.graphics.getDeltaTime();
 
-                if (alpha < 1f && currentIt < SECOND_POST)
+                if (alpha < 1f && currentIt < SECOND_POST && !triggerAlpha)
                     alpha += Gdx.graphics.getDeltaTime() * ALPHA_SPEED_CHANGE;
 
 
@@ -87,8 +89,10 @@ public class ComboVombo {
                     }
                 }
 
-                if (alpha > 1f)
+                if (alpha > 1f){
                     alpha = 1f;
+                    triggerAlpha = true;
+                }
 
                 if (alpha < 0f)
                     alpha = 0f;
@@ -99,6 +103,14 @@ public class ComboVombo {
             }
 
 
+        }
+
+        protected void setColor(Color color){
+            this.color = color;
+        }
+
+        protected void downComboC(){
+            alpha -= 0.05f;
         }
 
         protected float getAlpha(){
@@ -181,9 +193,18 @@ public class ComboVombo {
     public void PUSHCOMBOOOOO(float posX, float posY, int comboX, Color color){
         if (comboX < 1 || comboX > MAX_COMBO_OBJECTS) throw new IllegalArgumentException("1 <= comboX <= " + MAX_COMBO_OBJECTS);
 
+
+        for (int i = 0; i < MAX_COMBO_OBJECTS; i++) {
+            if (combosObjects[i].isExist)
+                combosObjects[i].setColor(Color.GRAY);
+
+        }
+
         combosObjects[comboC - 1].set(new PosF(posX, posY), comboX, color);
         comboC++;
-        D.S("setNewComboObject" + comboX);
+
+
+
 
     }
 

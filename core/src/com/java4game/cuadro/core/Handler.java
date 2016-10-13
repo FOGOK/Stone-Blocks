@@ -1,7 +1,12 @@
 package com.java4game.cuadro.core;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.core.usie.GameUI;
+import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.core.usie.PauseUI;
 import com.java4game.cuadro.utils.Atalas;
 
 /**
@@ -16,6 +21,8 @@ public class Handler {
      *
      * */
 
+    public static boolean isBackPressed;
+
     Atalas atls;
 
     //game
@@ -26,45 +33,75 @@ public class Handler {
     ///
 
     //ui
-    UI ui;
+    GameUI gameUi;
+    PauseUI pauseUI;
+    MenuUI menuUI;
     ///
 
 
     TextureGen textureGen;
-    State state;
+    public static State state;
 
-    enum State{
+    public enum State{
         Game, Pause, Menu
     }
 
     public Handler(Camera camera, SpriteBatch batch){
         ISPAUSE = ISRESTART = false;
 
+        isBackPressed = false;
         atls = new Atalas();
         textureGen = new TextureGen(atls);
         levelGen = new LevelGen(textureGen, batch);
-        ui = new UI(textureGen, camera);
-        state = State.Game;
+        gameUi = new GameUI(textureGen);
+        pauseUI = new PauseUI(textureGen);
+        menuUI = new MenuUI(textureGen);
+        state = State.Menu;
     }
 
     public void draw(SpriteBatch batch){
-        if (state == State.Game || state == State.Pause)
-              levelGen.draw(batch);
+        if (state == State.Game || state == State.Pause){
+            levelGen.draw(batch);
+            gameUi.draw(batch);
+            if (state == State.Pause)
+               pauseUI.draw(batch);
 
-        ui.draw(batch);
+
+
+        }else if (state == State.Menu){
+            menuUI.draw(batch);
+        }
+
 
         if (ISRESTART) restart(batch);
+
+
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P) || isBackPressed){
+            isBackPressed = false;
+
+            if (Handler.state == Handler.State.Pause)
+                Handler.state = State.Game;
+            else
+                Handler.state = State.Pause;
+
+            ISPAUSE = !ISPAUSE;
+        }
+
     }
 
     public void restart(SpriteBatch batch){
         levelGen.dispose();
         levelGen = new LevelGen(textureGen, batch);
+        LevelGen.SCORE = 0;
         ISRESTART = false;
     }
 
     public void dispose() {
         atls.dispose();
         levelGen.dispose();
-        ui.dispose();
+        menuUI.dispose();
+        gameUi.dispose();
+        pauseUI.dispose();
     }
 }

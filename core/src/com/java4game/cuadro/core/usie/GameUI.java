@@ -1,26 +1,22 @@
-package com.java4game.cuadro.core;
+package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.utils.Atalas;
 import com.java4game.cuadro.utils.GameUtils;
 import com.java4game.cuadro.utils.Localization;
@@ -30,13 +26,16 @@ import com.java4game.cuadro.utils.Localization;
  * Если ты это читаешь, то знай, что этот код хуже
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985
+ *
+ * StageREALISZTION
  */
-public class UI {
+public class GameUI {
 
 
     //ссылки
 //    Handler handler;
     ///
+
 
     TextureRegionDrawable normImage, touchedImage;
 
@@ -51,7 +50,7 @@ public class UI {
 
     public static int WIDTH, HEIGHT;
     BitmapFont textFont;
-    public UI(final TextureGen textureGen, Camera camera) {
+    public GameUI(final TextureGen textureGen) {
         stage = new Stage();
 
 
@@ -97,7 +96,10 @@ public class UI {
 
     float finalFontScale;
     public static void setScore(int score){
+//        scoreTextBlock.addAction(Actions.fadeIn(3));
         scoreTextBlock.setText(scoreText + score);
+//        scoreTextBlock.getActions().get(0).restart();
+//        scoreTextBlock.getActions().get(1).restart();
     }
 
     public static void setStarCount(int current, int max){
@@ -114,7 +116,7 @@ public class UI {
     private static Label scoreTextBlock;
     private static String scoreText;
     private void addScoreTextBlock(){
-        scoreText = Localization.RUS.SCORE + "\n";
+        scoreText = Localization.ENG.SCORE + "\n";
         scoreTextBlock = new Label(scoreText + "0", textStyle);
 
         float centerScoreBlockY = scoreTextBlock.getHeight() / 2f;
@@ -160,7 +162,7 @@ public class UI {
     private static Label timerTextBlock;
     private static String timerS;
     private void addTimerTextBlock(){
-        timerS = Localization.RUS.TIME + " ";
+        timerS = Localization.ENG.TIME + " ";
         timerTextBlock = new Label(timerS + "59:59", textStyle);
 
         float centerScoreBlockY = timerTextBlock.getHeight() / 2f;
@@ -173,7 +175,7 @@ public class UI {
     private static Label stageTextBlock;
     private static String stageS;
     private void addStageTextBlock(){
-        stageS = Localization.RUS.STAGE + "\n";
+        stageS = Localization.ENG.STAGE + "\n";
         stageTextBlock = new Label(stageS + "1", textStyle);
 
         float centerScoreBlockY = stageTextBlock.getHeight() / 2f;
@@ -186,7 +188,7 @@ public class UI {
     private static Label worldTextBlock;
     private static String worldS;
     private void addWorldTextBlock(){
-        worldS = Localization.RUS.WORLD + "\n";
+        worldS = Localization.ENG.WORLD + "\n";
         worldTextBlock = new Label(worldS + "1", textStyle);
 
         float centerScoreBlockY = worldTextBlock.getHeight() / 2f;
@@ -206,7 +208,7 @@ public class UI {
         label.setAlignment(Align.center);
         label.setFontScale(finalFontScale * sizeCff);
         label.setPosition(posX, posY);
-        label.addAction(Actions.fadeIn(100f, Interpolation.bounce));
+//        label.addAction(Actions.fadeIn(100f, Interpolation.bounce));
         stage.addActor(label);
     }
 
@@ -231,35 +233,17 @@ public class UI {
     }
 
 
-    private void addButtonRestart(){    //notEnded
-        final Button restartB = new Button(normImage, touchedImage, normImage);
-        restartB.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Handler.ISRESTART = true;
-            }
-        });
 
-        final int sizeWButton = 50,
-                  sizeHButton = 50;
-
-        final int posXButton = 50,
-                  posYButton = HEIGHT - 50;
-
-
-        restartB.setSize(sizeWButton, sizeHButton);
-        restartB.setPosition(posXButton, posYButton);
-        stage.addActor(restartB);
-    }
 
 
     public void draw(SpriteBatch batch){
         batch.end();
-
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         batch.begin();
+
+
+
     }
 
     public void dispose() {
@@ -269,3 +253,27 @@ public class UI {
         gemTextBlock = null;
     }
 }
+
+//button
+//    private void addButtonRestart(){    //notEnded
+//        final Button restartB = new Button(normImage, touchedImage, normImage);
+//        restartB.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Handler.ISRESTART = true;
+//            }
+//        });
+//
+//        final int sizeWButton = 50,
+//                sizeHButton = 50;
+//
+//        final int posXButton = 50,
+//                posYButton = HEIGHT - 50;
+//
+//
+//        restartB.setSize(sizeWButton, sizeHButton);
+//        restartB.setPosition(posXButton, posYButton);
+//        stage.addActor(restartB);
+//    }
+////
+

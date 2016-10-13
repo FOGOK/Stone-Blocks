@@ -72,12 +72,16 @@ public class Atalas {
     public static final String combNum7 = "comboText7";
     public static final String combNum8 = "comboText8";
     public static final String combNum9 = "comboText9";
+    public static final String startB = "startB";
+    public static final String startBAct = "startBAct";
+    public static final String upBarMenu = "upBarMenu";
+    public static final String gameNameT = "gameNameT";
 
 
 
     public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3,
     num1, num2, num3, num4, num5, num6, num7, num8, num9, col1, col2, col3, col4, starSq, gemSq, comboText, combNum0, combNum1,
-            combNum2, combNum3, combNum4, combNum5, combNum6, combNum7, combNum8, combNum9};
+            combNum2, combNum3, combNum4, combNum5, combNum6, combNum7, combNum8, combNum9, startB, startBAct, upBarMenu, gameNameT};
 
     public static int textsCount;
 

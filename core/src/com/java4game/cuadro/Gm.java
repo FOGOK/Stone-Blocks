@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.DebugDrawer;
 import com.java4game.cuadro.utils.DebugValueChanger;
+import com.java4game.cuadro.utils.GameUtils;
 
 public class Gm extends ApplicationAdapter {
 
@@ -44,6 +46,9 @@ public class Gm extends ApplicationAdapter {
         ///
 
         //initAll Game
+        GameUtils.initializate();
+        UI.initializate();
+
         handler = new Handler(camera, batch);
         ///
 	}
@@ -66,6 +71,7 @@ public class Gm extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         ///
+
 
 
         handler.draw(batch);
@@ -137,10 +143,14 @@ public class Gm extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
+        UI.dispose();
+        batch.dispose();
         debugBatch.dispose();
         handler.dispose();
         debugValueChanger.dispose();
         debugDrawer.dispose();
+
+
+        super.dispose();
 	}
 }

@@ -190,7 +190,7 @@ public class Cube extends GameObject{           ///класс кубика, ко
 
 //        inLastInSquare = (getSQX() > -1 && getSQX() < SQSIZE + 1 && getSQY() > -1 && getSQY() < SQSIZE + 1);
 
-        if (Gdx.input.justTouched() && (!lockCHD || ISMOVECOLORCUBES) && isYInDown()){
+        if (Gdx.input.justTouched() && (!lockCHD || ISMOVECOLORCUBES) && isYInDown() && !Handler.ISPAUSE){
             if (ISMOVECOLORCUBES){
                 ColorCubeMover.isPregInv = true;
                 ISMOVECOLORCUBES = false;
@@ -214,7 +214,8 @@ public class Cube extends GameObject{           ///класс кубика, ко
     int lastPosInXY;
 
     private boolean isYInDown(){
-        return ((Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY()) < levSqBounds.getY() + levSqBounds.getHeight());
+//        return ((Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY()) < levSqBounds.getY() + levSqBounds.getHeight());
+        return true;
     }
 
     private void checkCollisionInObjects(){
