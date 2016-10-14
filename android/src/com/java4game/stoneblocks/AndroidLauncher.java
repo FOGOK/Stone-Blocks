@@ -1,4 +1,4 @@
-package com.java4game.cuadro;
+package com.java4game.stoneblocks;
 
 import android.os.Bundle;
 
