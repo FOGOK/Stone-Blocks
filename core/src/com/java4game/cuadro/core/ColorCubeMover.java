@@ -111,9 +111,11 @@ public class ColorCubeMover {
                     sqBounds.y + (y * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
             ObjectsGen.holes[i].setSize(LevelGen.sizeObjects, LevelGen.sizeObjects);
 
-            holesEnters[i].setPosition(sqBounds.x + (minX * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f,
-                    sqBounds.y + (minY * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - LevelGen.sizeObjects) / 2f);
-            holesEnters[i].setSize(LevelGen.sizeObjects);
+            float sizeHE = LevelGen.sizeObjects * 0.3f;
+
+            holesEnters[i].setPosition(sqBounds.x + (minX * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - sizeHE) / 2f,
+                    sqBounds.y + (minY * (LevelSquare.sizOneSq + LevelSquare.otst * 2)) + (LevelSquare.sizOneSq - sizeHE) / 2f);
+            holesEnters[i].setSize(sizeHE);
         }
     }
 

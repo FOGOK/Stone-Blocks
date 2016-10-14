@@ -173,8 +173,10 @@ public class ComboVombo {
             }
         }
 
-        if (need)
+        if (need && comboC > 1){
             comboC = 1;
+            nextTwo = false;
+        }
 
     }
 
@@ -186,8 +188,13 @@ public class ComboVombo {
         return HEIGHT_COMBOTEXT + SIZE_COMBONUM + 0.4f;
     }
 
+    boolean nextTwo = false;
     public void PUSHCOMBOOOOO(float posX, float posY, Color color){
-        PUSHCOMBOOOOO(posX, posY, comboC, color);
+        if (nextTwo){
+            PUSHCOMBOOOOO(posX, posY, comboC, color);
+        }else{
+            nextTwo = true;
+        }
     }
 
     public void PUSHCOMBOOOOO(float posX, float posY, int comboX, Color color){
@@ -228,7 +235,7 @@ public class ComboVombo {
         comboText.setRotation((oneComboObject.getAlpha() * whDegr));
         comboText.draw(batch);
 
-        Sprite numbCombo = numbCombos[oneComboObject.getCombo()];
+        Sprite numbCombo = numbCombos[oneComboObject.getNextCombo()];
 
         numbCombo.setAlpha(oneComboObject.getAlpha());
         numbCombo.setOriginCenter();
