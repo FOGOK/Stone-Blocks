@@ -149,7 +149,7 @@ public class ComboVombo {
     public ComboVombo(TextureGen textureGen) {
         comboText = textureGen.getSprite(Atalas.comboText);
         for (int i = 0; i < numbCombos.length; i++){
-            numbCombos[i] = new Sprite(textureGen.getSprite("comboText" + i));
+            numbCombos[i] = new Sprite(textureGen.getSprite(31 + i));
             numbCombos[i].setSize(SIZE_COMBONUM, SIZE_COMBONUM);
         }
         comboText.setSize(WIDTH_COMBOTEXT, HEIGHT_COMBOTEXT);

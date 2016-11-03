@@ -1,12 +1,11 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.java4game.cuadro.utils.GameUtils;
-import com.java4game.cuadro.utils.Pos;
 
 /**
  * Created by FOGOK on 12.10.2016 16:46.
@@ -17,52 +16,21 @@ import com.java4game.cuadro.utils.Pos;
 
 public class UI {
 
-    public class UIText{
-        private String text;
-        private Pos position;
-
-        public UIText(boolean isTitle){
-            this.isTitle = isTitle;
-        }
-
-        private boolean isTitle;
-
-        public GlyphLayout getSize(){
-            glyphLayout.setText((isTitle) ? titleFont : contentFont, text);
-            return glyphLayout;
-        }
-
-        public String getText(){
-            return text;
-        }
-
-        public Pos getPosition(){
-            return position;
-        }
-
-        public void setText(String text){
-            this.text = text;
-        }
-
-        public void setPosition(Pos position){
-            this.position = position;
-        }
-
-
-    }
+    private static final float CFFMAIN = 0.013f, CFFMAINDOTCONTENT = 0.5f;
 
     private static BitmapFont titleFont;
     private static BitmapFont contentFont;
     private static GlyphLayout glyphLayout;
 
     public static void initializate(){
-        final float cffMain = 0.02f;
-        final float cffContentDown = 0.7f;
+        final float cffMain = CFFMAIN;
+        final float cffContentDown = CFFMAINDOTCONTENT;
 
         final String pathToFont = "font/font.fnt";
         titleFont = new BitmapFont(Gdx.files.internal(pathToFont));
         titleFont.setUseIntegerPositions(false);
         titleFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         titleFont.getData().setScale(cffMain);
 
         contentFont = new BitmapFont(Gdx.files.internal(pathToFont));
@@ -74,11 +42,32 @@ public class UI {
         glyphLayout = new GlyphLayout();
     }
 
-
-    public static void drawText(SpriteBatch batch, boolean isTitle, String text, float x, float y){
+    public static float getSize(boolean isTitle, boolean wh, String text){
         BitmapFont textBF = isTitle ? titleFont : contentFont;
         glyphLayout.setText(textBF, text);
-        textBF.draw(batch, glyphLayout, x - glyphLayout.width / 2f, y + glyphLayout.height / 2f);
+        return wh ? glyphLayout.width : glyphLayout.height;
+    }
+
+    public static void setCff(boolean isTitle, float cff){
+        BitmapFont textBF = isTitle ? titleFont : contentFont;
+        textBF.getData().setScale(cff);
+    }
+
+    public static void setDefaultCff(){
+        titleFont.getData().setScale(CFFMAIN);
+        contentFont.getData().setScale(CFFMAIN * CFFMAINDOTCONTENT);
+    }
+
+
+
+    public static void setColor(final Color color, final boolean isTitle){
+        BitmapFont textBF = isTitle ? titleFont : contentFont;
+        textBF.setColor(color);
+    }
+
+    public static void drawText(final SpriteBatch batch, final boolean isTitle, final String text, final float x, final float y){
+        BitmapFont textBF = isTitle ? titleFont : contentFont;
+        textBF.draw(batch, text, x, y);
     }
 
 

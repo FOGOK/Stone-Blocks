@@ -1,6 +1,7 @@
 package com.java4game.cuadro.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -40,7 +41,8 @@ public class DebugDrawer {
             batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
-        Gdx.gl.glLineWidth(0.5f);
+        Gdx.gl.glLineWidth(3f);
+        shapeRenderer.setColor(Color.RED);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         Rectangle rect = (isCust) ? DebugDrawer.rect : rect2;
         shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);

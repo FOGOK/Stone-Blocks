@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
-import com.java4game.cuadro.core.uiwidgets.Button;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
+import com.java4game.cuadro.core.uiwidgets.TextButton;
 import com.java4game.cuadro.utils.Atalas;
 import com.java4game.cuadro.utils.GameUtils;
 import com.java4game.cuadro.utils.Localization;
@@ -20,7 +20,7 @@ public class PauseUI {
 
     Sprite blackScreen;
 
-    Button continueB, restartB, settB, inMainMenu;
+    TextButton continueB, restartB, settB, inMainMenu;
 
     public PauseUI(TextureGen textureGen) {
         blackScreen = new Sprite(GameUtils.generateBlackPic());
@@ -31,17 +31,30 @@ public class PauseUI {
     }
 
     private void addButtons(TextureGen textureGen){
-        continueB = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 13f, ButtonActions.CONTINUE_PAUSE_ACTION);
-        continueB.setText(Localization.ENG.CONTINUEPAUSETEXT);
+        continueB = new TextButton(textureGen, ButtonActions.All.CONTINUE_PAUSE_ACTION, Gm.WIDTH / 2f, 13f, 1.43f, Atalas.startB, Atalas.startBAct,
+                Localization.getText(Localization.LettersKey.CONTINUEPAUSETEXT));
+        continueB.setPositionToCenter();
 
-        restartB = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 11f, ButtonActions.RESTART_PAUSE_ACTION);
-        restartB.setText(Localization.ENG.RESTARTPAUSETEXT);
+        restartB = new TextButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, Gm.WIDTH / 2f, 11f, 1.43f, Atalas.startB, Atalas.startBAct,
+                Localization.getText(Localization.LettersKey.RESTARTPAUSETEXT));
+        restartB.setPositionToCenter();
 
-        settB = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 9f, ButtonActions.OPTION_PAUSE_ACTION);
-        settB.setText(Localization.ENG.OPTIONPAUSETEXT);
+        settB = new TextButton(textureGen, ButtonActions.All.SETTINGS_PAUSE_ACTION, Gm.WIDTH / 2f, 9f, 1.43f, Atalas.startB, Atalas.startBAct,
+                Localization.getText(Localization.LettersKey.SETTINGSPAUSETEXT));
+        settB.setPositionToCenter();
 
-        inMainMenu = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 7f, ButtonActions.TOMAINMENU_PAUSE_ACTION);
-        inMainMenu.setText(Localization.ENG.EXITMENUPAUSETEXT);
+        inMainMenu = new TextButton(textureGen, ButtonActions.All.TOMAINMENU_PAUSE_ACTION, Gm.WIDTH / 2f, 7f, 1.43f, Atalas.startB, Atalas.startBAct,
+                Localization.getText(Localization.LettersKey.EXITMENUPAUSETEXT));
+        inMainMenu.setPositionToCenter();
+
+//        restartB = new TextButton(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 11f, ButtonActions.RESTART_PAUSE_ACTION);
+//        restartB.setText(Localization.ENG.RESTARTPAUSETEXT);
+//
+//        settB = new TextButton(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 9f, ButtonActions.OPTION_PAUSE_ACTION);
+//        settB.setText(Localization.ENG.OPTIONPAUSETEXT);
+//
+//        inMainMenu = new TextButton(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, 7f, ButtonActions.TOMAINMENU_PAUSE_ACTION);
+//        inMainMenu.setText(Localization.ENG.EXITMENUPAUSETEXT);
     }
 
     private void drawButtons(SpriteBatch batch){

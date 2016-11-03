@@ -1,17 +1,23 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
-import com.java4game.cuadro.core.uiwidgets.Button;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
+import com.java4game.cuadro.core.uiwidgets.List;
+import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.uiwidgets.TextButton;
 import com.java4game.cuadro.utils.Atalas;
 import com.java4game.cuadro.utils.FloatAnimator;
 import com.java4game.cuadro.utils.Localization;
+
+import java.util.Random;
 
 /**
  * Created by FOGOK on 13.10.2016 0:55.
@@ -27,14 +33,24 @@ public class MenuUI {
     public static boolean RESETANIMATION;
 
 
-    private Button startButton;
-    private Sprite background, upBarMenu, gameNameTex;
+    private TextButton startButton;
+    private Sprite backMain, backGrdnt, upBarMenu, downBarMenu, gameNameTex;
+
+    private int isMenuState;
+    private final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
+
+    private List stageList;
+    private TextBlock stageText;
+
+    private StageButton[] stageButtons;
 
     FloatAnimator[] objectAnimations;
     float[] posYs;
 
     public MenuUI(TextureGen textureGen) {
         setBackground();
+
+        isMenuState = 0;
 
         RESETANIMATION = false;
         final int objCount = 2;     ///2 объекта, название игры и кнопка
@@ -45,9 +61,42 @@ public class MenuUI {
         }
 
         setUpBarMenu(textureGen);
+        setDownBarMenu(textureGen);
 
         setGameNameTex(textureGen);
         setStartButton(textureGen);
+
+        stageText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTSTAGETEXT));
+        stageText.setPositionToCenter();
+
+        setStageList(textureGen);
+    }
+
+    private Random rnd = new Random();
+    private void setStageList(TextureGen textureGen){
+        final float widthList = stageText.getBounds().width;
+        final float heightList = stageText.getBounds().y - downBarMenu.getHeight() * 0.7f;
+        final int columns = 3, rows = 14;
+        final int countOpened = 6;
+        stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, downBarMenu.getHeight() * 0.7f, widthList, heightList, columns, rows);
+
+        stageButtons = new StageButton[columns * rows];
+        for (int i = 0; i < columns * rows; i++) {
+            stageButtons[i] = new StageButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1);
+            stageButtons[i].setLockedStage(i >= countOpened);
+            if (i < countOpened)
+                stageButtons[i].setStarCount(rnd.nextInt(4));
+        }
+
+        int i = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                stageList.set(stageButtons[i], column, row);
+                i++;
+            }
+        }
+        stageList.calculatePadding(0, 0);
+        stageList.setToCenter(0);
     }
 
     private void setGameNameTex(TextureGen textureGen){
@@ -62,34 +111,58 @@ public class MenuUI {
     }
     private void setUpBarMenu(TextureGen textureGen){
         upBarMenu = new Sprite(textureGen.getSprite(Atalas.upBarMenu));
-        final float hDivW = 0.2481f;
+        final float hDivW = 0.2861f;
         upBarMenu.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
         upBarMenu.setPosition(0f, Gm.HEIGHT - upBarMenu.getHeight());
     }
+    private void setDownBarMenu(TextureGen textureGen){
+        downBarMenu = textureGen.getSprite(Atalas.downBarMenu);
+        final float hDivW = 0.4046f;
+        downBarMenu.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
+    }
+
     private void setStartButton(TextureGen textureGen){
-        final float otstTop = 11f;
-        startButton = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, ButtonActions.START_MENU_ACTION);;
-        startButton.setText(Localization.ENG.STARTGAMETEXT);
+        final float otstTop = 14f;
+//        startButton = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, );;
+        startButton = new TextButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, 2.43f, Atalas.startB, Atalas.startBAct,
+                Localization.getText(Localization.LettersKey.STARTGAMETEXT));
+        startButton.setPositionToCenter();
+
         posYs[1] = otstTop;
     }
     private void setBackground(){
-        background = new Sprite(new Texture(Gdx.files.internal("bgMenu.png")));
-        background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backMain = new Sprite(new Texture(Gdx.files.internal("bg_menu.png")));
+        backMain.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         final float wDivH = 0.5625f;
-        background.setSize(Gm.HEIGHT * wDivH, Gm.HEIGHT);
-        background.setPosition((Gm.WIDTH - background.getWidth()) / 2f, 0f);
+        backMain.setSize(Gm.HEIGHT * wDivH, Gm.HEIGHT);
+        backMain.setPosition((Gm.WIDTH - backMain.getWidth()) / 2f, 0f);
+
+        backGrdnt = new Sprite(new Texture(Gdx.files.internal("bg_gradient.png")));
+        backGrdnt.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backGrdnt.setSize(Gm.HEIGHT * wDivH, Gm.HEIGHT);
+        backGrdnt.setPosition((Gm.WIDTH - backMain.getWidth()) / 2f, 0f);
     }
     public void draw(SpriteBatch batch){
 
-        calcAnim();
+        switch (isMenuState){
+            case GAMEMAIN:
+                calcAnim();
 
-        background.draw(batch);
+                backMain.draw(batch);
 
-        gameNameTex.draw(batch);    // 1 объект
-        startButton.draw(batch);        // 2 объект
+                gameNameTex.draw(batch);    // 1 объект
+                startButton.draw(batch);        // 2 объект
 
+                break;
+            case SELECTSTAGE:
+                backGrdnt.draw(batch);
+                stageList.draw(batch);
+                stageText.draw(batch);
+                break;
+        }
 
         upBarMenu.draw(batch);
+        downBarMenu.draw(batch);
     }
 
     private void calcAnim(){
@@ -121,6 +194,6 @@ public class MenuUI {
     }
 
     public void dispose() {
-        background.getTexture().dispose();
+        backMain.getTexture().dispose();
     }
 }

@@ -18,30 +18,30 @@ public class TextureGen {
      *
      * */
 
-    HashMap<String, Sprite> objects;
+//    HashMap<String, Sprite> objects;
 
     //cсылки
     Atalas atls;
     ///
 
     public TextureGen(Atalas atls) {
-        objects = new HashMap<String, Sprite>(Atalas.textsCount);
+//        objects = new HashMap<String, Sprite>(Atalas.textsCount);
 
         //инициализация ссылок
         this.atls = atls;
         ///
 
-        for (int i = 0; i < Atalas.NAMES.length; i++)
-            objects.put(Atalas.NAMES[i], new Sprite(atls.getTG(i)));
+//        for (int i = 0; i < Atalas.NAMES.length; i++)
+//            objects.put(Atalas.NAMES[i], new Sprite(atls.getTG(i)));
 
     }
 
-    public Sprite getSprite(String s){
-        return new Sprite(objects.get(s));
+    public Sprite getSprite(int i){
+        return new Sprite(atls.getTG(i));
     }
 
-    public TextureRegion getTextureRG(String s){
-        return new TextureRegion(objects.get(s));
+    public TextureRegion getTextureRG(int i){
+        return atls.getTG(i);
     }
 
     public void dispose() {

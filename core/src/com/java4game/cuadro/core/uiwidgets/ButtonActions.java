@@ -12,16 +12,12 @@ import com.java4game.cuadro.utils.D;
  */
 public class ButtonActions {
 
-    public static final int START_MENU_ACTION = 0;
+    public enum All{
+        START_MENU_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION
+    }
 
-    public static final int CONTINUE_PAUSE_ACTION = 1;
-    public static final int RESTART_PAUSE_ACTION = 2;
-    public static final int OPTION_PAUSE_ACTION = 3;
-    public static final int TOMAINMENU_PAUSE_ACTION = 4;
-
-
-    public static void activateAction(int i){
-        switch (i){
+    public static void activateAction(All action){
+        switch (action){
             case START_MENU_ACTION:
                 Handler.state = Handler.State.Game;
                 break;
@@ -37,7 +33,7 @@ public class ButtonActions {
                 Handler.state = Handler.State.Game;
                 break;
 
-            case OPTION_PAUSE_ACTION:
+            case SETTINGS_PAUSE_ACTION:
                 D.S("OPT");
                 break;
 

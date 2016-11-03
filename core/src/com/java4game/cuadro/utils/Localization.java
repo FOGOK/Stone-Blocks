@@ -8,21 +8,45 @@ package com.java4game.cuadro.utils;
  */
 public class Localization {
 
-    public class ENG {
-        public static final String SCORE = "SCORE";
-        public static final String TIME = "TIME";
-        public static final String STAGE = "STAGE";
-        public static final String WORLD = "WORLD";
+    public enum Lang {
+        RUS, ENG
+    }
+    private static Lang lang = Lang.ENG;
 
-        public static final String STARTGAMETEXT = "START";
-
-        public static final String CONTINUEPAUSETEXT = "CONTINUE";
-        public static final String RESTARTPAUSETEXT = "RESTART";
-        public static final String OPTIONPAUSETEXT = "OPTIONS";
-        public static final String EXITMENUPAUSETEXT = "MENU";
-
+    public enum LettersKey{
+        SCORE, TIME, STAGE, WORLD, STARTGAMETEXT, CONTINUEPAUSETEXT, RESTARTPAUSETEXT, SETTINGSPAUSETEXT, EXITMENUPAUSETEXT, SELECTSTAGETEXT
 
     }
+
+    //RUS
+    private static String[] rusLetters = new String[]{
+            "ОЧКИ", "ВРЕМЯ", "УРОВЕНЬ", "МИР", "НАЧАТЬ ИГРУ", "ПРОДОЛЖИТЬ", "НАЧАТЬ ЗАНОВО", "НАСТРОЙКИ", "ГЛАВНОЕ МЕНЮ", "ВЫБЕРЕТЕ УРОВЕНЬ"
+    };
+    ///
+
+    //ENG
+    private static String[] engLetters = new String[]{
+            "SCORE", "TIME", "STAGE", "WORLD", "START", "CONTINUE", "RESTART", "SETTINGS", "MENU", "SELECT STAGE"
+    };
+    ///
+
+    public static Lang getCurrentLang(){
+        return lang;
+    }
+
+
+    public static String getText(LettersKey key){
+        switch (lang){
+            case RUS:
+                return rusLetters[key.ordinal()];
+            case ENG:
+                return engLetters[key.ordinal()];
+
+            default: return null;
+        }
+    }
+
+
 
 
 }

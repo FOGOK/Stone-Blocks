@@ -31,59 +31,68 @@ public class Atalas {
     * */
 
 
-    public static final String sq00 = "0";
-    public static final String sq01 = "1";
-    public static final String sq02 = "2";
-    public static final String sq03 = "3";
-    public static final String sq04 = "4";
-    public static final String sq05 = "5";
-    public static final String sq06 = "6";
-    public static final String sq07 = "7";
-    public static final String sq08 = "8";
-    public static final String sq09 = "9";
-    public static final String sq10 = "10";
-    public static final String sq11 = "11";
-    public static final String squareT1 = "squareT1";
-    public static final String squareT2 = "squareT2";
-    public static final String squareT3 = "squareT3";
-    public static final String num1 = "num1";
-    public static final String num2 = "num2";
-    public static final String num3 = "num3";
-    public static final String num4 = "num4";
-    public static final String num5 = "num5";
-    public static final String num6 = "num6";
-    public static final String num7 = "num7";
-    public static final String num8 = "num8";
-    public static final String num9 = "num9";
-    public static final String col1 = "col1";
-    public static final String col2 = "col2";
-    public static final String col3 = "col3";
-    public static final String col4 = "col4";
-    public static final String starSq = "starSq";
-    public static final String gemSq = "gemSq";
-    public static final String comboText = "comboText";
-    public static final String combNum0 = "comboText0";
-    public static final String combNum1 = "comboText1";
-    public static final String combNum2 = "comboText2";
-    public static final String combNum3 = "comboText3";
-    public static final String combNum4 = "comboText4";
-    public static final String combNum5 = "comboText5";
-    public static final String combNum6 = "comboText6";
-    public static final String combNum7 = "comboText7";
-    public static final String combNum8 = "comboText8";
-    public static final String combNum9 = "comboText9";
-    public static final String startB = "startB";
-    public static final String startBAct = "startBAct";
-    public static final String upBarMenu = "upBarMenu";
-    public static final String gameNameT = "gameNameT";
-
-
-
-    public static final String[] NAMES = new String[] {sq00, sq01, sq02, sq03, sq04, sq05, sq06, sq07, sq08, sq09, sq10, sq11, squareT1, squareT2, squareT3,
-    num1, num2, num3, num4, num5, num6, num7, num8, num9, col1, col2, col3, col4, starSq, gemSq, comboText, combNum0, combNum1,
-            combNum2, combNum3, combNum4, combNum5, combNum6, combNum7, combNum8, combNum9, startB, startBAct, upBarMenu, gameNameT};
-
-    public static int textsCount;
+    public static final int sq00 = 0;
+    public static final int sq01 = 1;
+    public static final int sq02 = 2;
+    public static final int sq03 = 3;
+    public static final int sq04 = 4;
+    public static final int sq05 = 5;
+    public static final int sq06 = 6;
+    public static final int sq07 = 7;
+    public static final int sq08 = 8;
+    public static final int sq09 = 9;
+    public static final int sq10 = 10;
+    public static final int sq11 = 11;
+    public static final int squareT1 = 12;
+    public static final int squareT2 = 13;
+    public static final int squareT3 = 14;
+    public static final int num1 = 15;
+    public static final int num2 = 16;
+    public static final int num3 = 17;
+    public static final int num4 = 18;
+    public static final int num5 = 19;
+    public static final int num6 = 20;
+    public static final int num7 = 21;
+    public static final int num8 = 22;
+    public static final int num9 = 23;
+    public static final int col1 = 24;
+    public static final int col2 = 25;
+    public static final int col3 = 26;
+    public static final int col4 = 27;
+    public static final int starSq = 28;
+    public static final int gemSq = 29;
+    public static final int comboText = 30;
+    public static final int combNum0 = 31;
+    public static final int combNum1 = 32;
+    public static final int combNum2 = 33;
+    public static final int combNum3 = 34;
+    public static final int combNum4 = 35;
+    public static final int combNum5 = 36;
+    public static final int combNum6 = 37;
+    public static final int combNum7 = 38;
+    public static final int combNum8 = 39;
+    public static final int combNum9 = 40;
+    public static final int startB = 41;
+    public static final int startBAct = 42;
+    public static final int upBarMenu = 43;
+    public static final int gameNameT = 44;
+    public static final int downBarMenu = 45;
+    public static final int btnStage = 46;
+    public static final int btnStageLock = 47;
+    public static final int btnStageAct = 48;
+    public static final int worldBtn1 = 49;
+    public static final int worldBtn2 = 50;
+    public static final int worldBtn3 = 51;
+    public static final int worldBtn4 = 52;
+    public static final int worldBtn5 = 53;
+    public static final int worldBtnLock = 54;
+    public static final int star = 55;
+    public static final int starNotAct = 56;
+    public static final int star1 = 57;
+    public static final int star2 = 58;
+    public static final int star3 = 59;
+    public static final int noStar = 60;
+    public static final int listCover = 61;
 
     private final static int X = 0, Y = 1, W = 2, H = 3, NEXTELEMENT = 4;
 
@@ -136,7 +145,6 @@ public class Atalas {
         reg2Coords.add((int) (elementIteration[1] * cff));
         reg3Coords.add((int) (elementIteration[2] * cff));
         reg4Coords.add((int) (elementIteration[3] * cff));
-        textsCount = reg1Coords.size();
 	}
 	
 	public void dispose(){

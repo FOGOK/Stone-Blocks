@@ -70,14 +70,14 @@ public class ObjectsGen {
                         switch (types[iters]){
                             case Number:
                                 //  если выпал тип цифры
-                                int rnnn = rnd.nextInt(9) + 1;
-                                allObjects[iters] = new NumberObj(textureGen.getSprite("num" + rnnn), xQ, yQ, levSqBounds, rnnn, iters);
+                                int rnnn = rnd.nextInt(8) + 1;
+                                allObjects[iters] = new NumberObj(textureGen.getSprite(15 + rnnn), xQ, yQ, levSqBounds, rnnn, iters);
 
                                 break;
                             case Colored:
                                 //если выпал тип цвета
                                 int rnnn2 = rnd.nextBoolean() ? 1 : 3;
-                                allObjects[iters] = new ColoredCube(textureGen.getSprite("squareT" + rnnn2), xQ, yQ, levSqBounds, false, allObjects, iters, (rnnn2 == 1) ? 0 : 1);
+                                allObjects[iters] = new ColoredCube(textureGen.getSprite(11 + rnnn2), xQ, yQ, levSqBounds, false, allObjects, iters, (rnnn2 == 1) ? 0 : 1);
 
                                 break;
                         }

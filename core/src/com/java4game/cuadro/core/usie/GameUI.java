@@ -41,7 +41,7 @@ public class GameUI {
 
     LabelStyle textStyle;
 
-    public static final int SIZE_CHAR_FONT = 32;
+    public static final int SIZE_CHAR_FONT = 96;
 
     Image gemImg, starImg;
 
@@ -71,7 +71,7 @@ public class GameUI {
         final String pathToFont = "font/font.fnt";
 
         textFont = new BitmapFont(Gdx.files.internal(pathToFont));
-        textFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        textFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         textStyle = new LabelStyle(textFont, textColor);
 
@@ -116,7 +116,7 @@ public class GameUI {
     private static Label scoreTextBlock;
     private static String scoreText;
     private void addScoreTextBlock(){
-        scoreText = Localization.ENG.SCORE + "\n";
+        scoreText = Localization.getText(Localization.LettersKey.SCORE) + "\n";
         scoreTextBlock = new Label(scoreText + "0", textStyle);
 
         float centerScoreBlockY = scoreTextBlock.getHeight() / 2f;
@@ -162,7 +162,7 @@ public class GameUI {
     private static Label timerTextBlock;
     private static String timerS;
     private void addTimerTextBlock(){
-        timerS = Localization.ENG.TIME + " ";
+        timerS = Localization.getText(Localization.LettersKey.TIME) + " ";
         timerTextBlock = new Label(timerS + "59:59", textStyle);
 
         float centerScoreBlockY = timerTextBlock.getHeight() / 2f;
@@ -175,7 +175,7 @@ public class GameUI {
     private static Label stageTextBlock;
     private static String stageS;
     private void addStageTextBlock(){
-        stageS = Localization.ENG.STAGE + "\n";
+        stageS = Localization.getText(Localization.LettersKey.STAGE) + "\n";
         stageTextBlock = new Label(stageS + "1", textStyle);
 
         float centerScoreBlockY = stageTextBlock.getHeight() / 2f;
@@ -188,7 +188,7 @@ public class GameUI {
     private static Label worldTextBlock;
     private static String worldS;
     private void addWorldTextBlock(){
-        worldS = Localization.ENG.WORLD + "\n";
+        worldS = Localization.getText(Localization.LettersKey.WORLD) + "\n";
         worldTextBlock = new Label(worldS + "1", textStyle);
 
         float centerScoreBlockY = worldTextBlock.getHeight() / 2f;

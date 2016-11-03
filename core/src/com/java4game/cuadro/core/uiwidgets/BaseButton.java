@@ -1,0 +1,127 @@
+package com.java4game.cuadro.core.uiwidgets;
+
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.TextureGen;
+
+abstract class BaseButton extends BaseObject{
+
+    /**
+     * Класс чистой кнопки с двумя текстурами - нажатой и ненажатой, а так же при нажатии выполняется действияе
+     * */
+
+    private boolean isTouched;
+    private ButtonActions.All action;
+
+    //must
+    private Sprite normalTex;       ///ненажатая кнопка
+    private Sprite touchedTex;      //нажатая кнопка
+    ///
+
+
+    //proporties
+    private boolean isEnabled;
+    ///
+
+
+
+    public BaseButton(final TextureGen textureGen, final ButtonActions.All action, float x, float y, float h, int back, int front){
+        super(x, y, h, h);
+        this.action = action;
+        Sprite firstTexture = new Sprite(textureGen.getSprite(back));
+        final float wCff = firstTexture.getWidth() /firstTexture.getHeight();
+        final float w = h * wCff;
+        bounds.setWidth(w);
+
+        setFirstTexture(firstTexture, x, y);
+        setSecondTexture(new Sprite(textureGen.getSprite(front)), x, y);
+        isEnabled = true;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    protected void setFirstTexture(Sprite sprite, float x, float y){
+        normalTex = sprite;
+        normalTex.setBounds(x, y, bounds.width, bounds.height);
+    }
+    protected void setSecondTexture(Sprite sprite, float x, float y){
+        touchedTex = sprite;
+        touchedTex.setBounds(x, y, bounds.width, bounds.height);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        normalTex.setPosition(x, y);
+        touchedTex.setPosition(x, y);
+    }
+
+    public void setAlpha(float alpha){
+        normalTex.setAlpha(alpha);
+        touchedTex.setAlpha(alpha);
+    }
+
+    public void setScale(float scaleXY){
+        normalTex.setScale(scaleXY);
+        touchedTex.setScale(scaleXY);
+    }
+
+    public void setOrigin(float x, float y){
+        normalTex.setOrigin(x, y);
+        touchedTex.setOrigin(x, y);
+    }
+
+    public void setRotation(float rotation){
+        normalTex.setRotation(rotation);
+        touchedTex.setRotation(rotation);
+    }
+
+    public float getX(){
+        return bounds.getX();
+    }
+
+    public float getY(){
+        return bounds.getY();
+    }
+
+
+    public void draw(SpriteBatch batch){
+        if (isEnabled) calcM(); else isTouched = false;
+        drawButtonTexture(batch);
+    }
+
+    protected void drawButtonTexture(SpriteBatch batch){      //отрисовываем тесктуру кнопки, в зависимости от того, нажата ли она или нет
+        Sprite drawingTexture = isTouched ? touchedTex : normalTex;
+        drawingTexture.draw(batch);
+    }
+
+//    private void drawButtonText(SpriteBatch batch){
+//        UI.getTitleFont().setColor(Color.DARK_GRAY);
+//        UI.drawText(batch, true, text, bounds.x + bounds.width / 2f, bounds.y + bounds.height / 2f);
+//    }
+
+    private void calcM(){
+        if (Gdx.input.isTouched()){ //если на экран нажимает палец
+            isTouched = bounds.contains(
+                    (Gm.WIDTH / Gdx.graphics.getWidth()) * Gdx.input.getX(),
+                    (Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY())
+            );  ///определяем,  касается ли палец кнопки или нет
+
+        }else{              //при отпускании кнопки
+            if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
+                ButtonActions.activateAction(action);
+
+            isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
+        }
+    }
+
+
+    public void dispose(){
+
+    }
+}
