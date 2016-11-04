@@ -13,12 +13,42 @@ import com.java4game.cuadro.utils.D;
 public class ButtonActions {
 
     public enum All{
-        START_MENU_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION
+        START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT
     }
 
     public static void activateAction(All action){
         switch (action){
-            case START_MENU_ACTION:
+            case WORLD1ACT:
+                MenuUI.SELECTEDWORLD = 0;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE++;
+                break;
+            case WORLD2ACT:
+                MenuUI.SELECTEDWORLD = 1;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE++;
+                break;
+            case WORLD3ACT:
+                MenuUI.SELECTEDWORLD = 2;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE++;
+                break;
+            case WORLD4ACT:
+                MenuUI.SELECTEDWORLD = 3;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE++;
+                break;
+            case WORLD5ACT:
+                MenuUI.SELECTEDWORLD = 4;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE++;
+                break;
+
+            case NEXT_MENU_OPTION:
+                MenuUI.MENUSTATE++;
+                break;
+            case START_GAME_ACTION:
                 Handler.state = Handler.State.Game;
                 break;
 
@@ -43,6 +73,7 @@ public class ButtonActions {
                 Handler.ISPAUSE = false;
 
                 MenuUI.RESETANIMATION = true;
+                MenuUI.MENUSTATE = 0;
                 break;
         }
     }

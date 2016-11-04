@@ -14,19 +14,22 @@ public class Localization {
     private static Lang lang = Lang.ENG;
 
     public enum LettersKey{
-        SCORE, TIME, STAGE, WORLD, STARTGAMETEXT, CONTINUEPAUSETEXT, RESTARTPAUSETEXT, SETTINGSPAUSETEXT, EXITMENUPAUSETEXT, SELECTSTAGETEXT
+        SCORE, TIME, STAGE, WORLD, STARTGAMETEXT, CONTINUEPAUSETEXT, RESTARTPAUSETEXT, SETTINGSPAUSETEXT, EXITMENUPAUSETEXT,
+        SELECTSTAGETEXT, SELECTWORLD, SAND, ICE_SITY, SUMMER, RAINBOW, DARK_SIDE
 
     }
 
     //RUS
     private static String[] rusLetters = new String[]{
-            "ОЧКИ", "ВРЕМЯ", "УРОВЕНЬ", "МИР", "НАЧАТЬ ИГРУ", "ПРОДОЛЖИТЬ", "НАЧАТЬ ЗАНОВО", "НАСТРОЙКИ", "ГЛАВНОЕ МЕНЮ", "ВЫБЕРЕТЕ УРОВЕНЬ"
+            "ОЧКИ", "ВРЕМЯ", "УРОВЕНЬ", "МИР", "НАЧАТЬ ИГРУ", "ПРОДОЛЖИТЬ", "НАЧАТЬ ЗАНОВО", "НАСТРОЙКИ", "ГЛАВНОЕ МЕНЮ",
+            "ВЫБЕРЕТЕ УРОВЕНЬ", "ВЫБЕРЕТЕ МИР", "ПУСТЫНЯ", "ЛЕДЯНОЙ ГОРОД", "ЛЕТО", "РАДУГА", "НОЧЬ"
     };
     ///
 
     //ENG
     private static String[] engLetters = new String[]{
-            "SCORE", "TIME", "STAGE", "WORLD", "START", "CONTINUE", "RESTART", "SETTINGS", "MENU", "SELECT STAGE"
+            "SCORE", "TIME", "STAGE", "WORLD", "START", "CONTINUE", "RESTART", "SETTINGS", "MENU", "SELECT STAGE",
+            "SELECT WORLD", "SAND", "ICE SITY", "SUMMER", "RAINBOW", "DARK SIDE"
     };
     ///
 

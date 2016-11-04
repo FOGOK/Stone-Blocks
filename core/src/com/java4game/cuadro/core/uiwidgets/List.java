@@ -63,7 +63,7 @@ public class List extends BaseObject {
 
     @Override
     public void draw(final SpriteBatch batch) {
-        chControl();
+        matchControl();
         drawObjects(batch);
     }
 
@@ -72,13 +72,12 @@ public class List extends BaseObject {
             for (int row = 0; row < rows; row++) {
                 float x = positions[column][row].x, y = positions[column][row].y + currentPos;
                 if (y + objects[column][row].getBounds().getHeight() > bounds.y && y < bounds.y + bounds.height){
+                    objects[column][row].setPosition(x, y);
+                    objects[column][row].draw(batch);
                     if (objects[column][row] instanceof StageButton){
                         if (!((StageButton)objects[column][row]).isLockedStage())
                             ((StageButton)objects[column][row]).setEnabled(!moveSp && isTouchedList);
                     }
-
-                    objects[column][row].setPosition(x, y);
-                    objects[column][row].draw(batch);
                 }
             }
         }
@@ -87,10 +86,13 @@ public class List extends BaseObject {
 
     public void setToCenter(int row){
         final float sizeOneO = (padding + objects[0][0].getBounds().height);
-        final float abstDYY = sizeOneO * row - objects[0][0].getBounds().height - bounds.height / 2f + sizeOneO / 2f;
+        final float abstDYY = sizeOneO * row + paddingTop - bounds.height / 2f + sizeOneO / 2f;
 
-        if (abstDYY > 0f && abstDYY < abstSizeList)
+        if (abstDYY > 0f && abstDYY < Math.abs(abstSizeList))
             dYY = (int) (abstDYY * (Gdx.graphics.getHeight() / Gm.HEIGHT));
+        else if (abstDYY >= Math.abs(abstSizeList))
+            dYY = sizeSpisAll;
+
     }
 
     private void setPositionAllObjects(){
@@ -125,7 +127,7 @@ public class List extends BaseObject {
     private int dYY = 0, dYYd = 0, lastDYY = 0;
     private int posX, posY, w, h, sizeSpisAll;
     private boolean isTouchedList;
-    private void chControl() {
+    private void matchControl() {
         isTouchedList = Gdx.input.isTouched() && Gdx.input.getX() > posX && Gdx.input.getX() < posX + w && Gdx.graphics.getHeight() - Gdx.input.getY() > posY && Gdx.graphics.getHeight() - Gdx.input.getY() < posY + h;
         if (isTouchedList){
 

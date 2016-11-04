@@ -54,13 +54,14 @@ public class Gm extends ApplicationAdapter {
 	}
 
     public static float aspectR, WIDTH, HEIGHT, mdT;     ///размеры экрана статичны (высота всегда равна 20, ширина 20 * отнощение ширины на высоту, mdT - delta / 0.016 = ~1
+
     private void initCamera(){
         aspectR =  (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         camera = new OrthographicCamera(20f * aspectR, 20f);
         camera.position.set(new Vector3(20f * aspectR / 2f, 10f, 0f));
         WIDTH = camera.viewportWidth;
         HEIGHT = camera.viewportHeight;
-    }
+      }
 
 	@Override
 	public void render () {

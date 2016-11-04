@@ -62,10 +62,10 @@ public class StageButton extends TextButton {
     }
     private void refreshState(){
         if (isLockedStage){
-            setFirstTexture(lockedTexture, bounds.x, bounds.y);
+            setFirstTexture(lockedTexture);
             setEnabled(false);
         }else{
-            setFirstTexture(normalTexture, bounds.x, bounds.y);
+            setFirstTexture(normalTexture);
             setEnabled(true);
         }
     }

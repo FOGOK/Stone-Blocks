@@ -17,7 +17,7 @@ abstract class BaseButton extends BaseObject{
     private ButtonActions.All action;
 
     //must
-    private Sprite normalTex;       ///ненажатая кнопка
+    protected Sprite normalTex;       ///ненажатая кнопка
     private Sprite touchedTex;      //нажатая кнопка
     ///
 
@@ -36,22 +36,26 @@ abstract class BaseButton extends BaseObject{
         final float w = h * wCff;
         bounds.setWidth(w);
 
-        setFirstTexture(firstTexture, x, y);
-        setSecondTexture(new Sprite(textureGen.getSprite(front)), x, y);
+        setFirstTexture(firstTexture);
+        setSecondTexture(new Sprite(textureGen.getSprite(front)));
         isEnabled = true;
+    }
+
+    public void setAction(ButtonActions.All action) {
+        this.action = action;
     }
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
 
-    protected void setFirstTexture(Sprite sprite, float x, float y){
+    protected void setFirstTexture(Sprite sprite){
         normalTex = sprite;
-        normalTex.setBounds(x, y, bounds.width, bounds.height);
+        normalTex.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
     }
-    protected void setSecondTexture(Sprite sprite, float x, float y){
+    protected void setSecondTexture(Sprite sprite){
         touchedTex = sprite;
-        touchedTex.setBounds(x, y, bounds.width, bounds.height);
+        touchedTex.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     @Override
@@ -91,7 +95,7 @@ abstract class BaseButton extends BaseObject{
 
 
     public void draw(SpriteBatch batch){
-        if (isEnabled) calcM(); else isTouched = false;
+        calcM();
         drawButtonTexture(batch);
     }
 
@@ -105,19 +109,22 @@ abstract class BaseButton extends BaseObject{
 //        UI.drawText(batch, true, text, bounds.x + bounds.width / 2f, bounds.y + bounds.height / 2f);
 //    }
 
-    private void calcM(){
-        if (Gdx.input.isTouched()){ //если на экран нажимает палец
-            isTouched = bounds.contains(
-                    (Gm.WIDTH / Gdx.graphics.getWidth()) * Gdx.input.getX(),
-                    (Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY())
-            );  ///определяем,  касается ли палец кнопки или нет
+    protected void calcM(){
+        if (isEnabled){
+            if (Gdx.input.isTouched()){ //если на экран нажимает палец
+                isTouched = bounds.contains(
+                        (Gm.WIDTH / Gdx.graphics.getWidth()) * Gdx.input.getX(),
+                        (Gm.HEIGHT / Gdx.graphics.getHeight()) * (Gdx.graphics.getHeight() - Gdx.input.getY())
+                );  ///определяем,  касается ли палец кнопки или нет
 
-        }else{              //при отпускании кнопки
-            if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
-                ButtonActions.activateAction(action);
+            }else {              //при отпускании кнопки
+                if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
+                    ButtonActions.activateAction(action);
 
-            isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
-        }
+                isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
+            }
+        }else
+            isTouched = false;
     }
 
 

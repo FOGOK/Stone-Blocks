@@ -1,7 +1,6 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +9,7 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.List;
+import com.java4game.cuadro.core.uiwidgets.SelectWorldButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TextButton;
@@ -31,16 +31,29 @@ public class MenuUI {
     final static int START_BUTTON = 1;
 
     public static boolean RESETANIMATION;
+    public static boolean SETSTAGEPROP;
 
+    //proporties
 
+    private int OPENED_WORLDS;
+    public static int SELECTEDWORLD;
+    private int[][] STARS = new int[5][100];
+
+    private int[][] STARSINSTAGES = new int[5][2];
+
+    private int[] OPENEDSTAGESINWORLD;
+    private final int[] COUNTSTAGESINWORLD = new int[] {30, 30, 30, 30, 30};
+    ///
+
+    private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
     private TextButton startButton;
     private Sprite backMain, backGrdnt, upBarMenu, downBarMenu, gameNameTex;
 
-    private int isMenuState;
-    private final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
+    public static int MENUSTATE;
+    public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
 
     private List stageList;
-    private TextBlock stageText;
+    private TextBlock stageText, worldText;
 
     private StageButton[] stageButtons;
 
@@ -50,9 +63,10 @@ public class MenuUI {
     public MenuUI(TextureGen textureGen) {
         setBackground();
 
-        isMenuState = 0;
+        MENUSTATE = GAMEMAIN;
 
         RESETANIMATION = false;
+        SETSTAGEPROP = false;
         final int objCount = 2;     ///2 объекта, название игры и кнопка
         objectAnimations = new FloatAnimator[objCount];
         posYs = new float[objCount];
@@ -60,43 +74,93 @@ public class MenuUI {
             objectAnimations[i] = new FloatAnimator(0f, 1f, 1f + 0.3f * i, Interpolation.bounceOut);
         }
 
+        addTestedValues();
+
         setUpBarMenu(textureGen);
         setDownBarMenu(textureGen);
 
         setGameNameTex(textureGen);
         setStartButton(textureGen);
 
-        stageText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTSTAGETEXT));
-        stageText.setPositionToCenter();
+        initSelectWorldButtons(textureGen);
+
+        initStageAndWorldText();
 
         setStageList(textureGen);
     }
 
+    private void addTestedValues(){
+        SELECTEDWORLD = 4;
+        OPENED_WORLDS = 2;  ///количество открытых миров
+        OPENEDSTAGESINWORLD = new int[] {6, 12, 17, 18, 28};    ///количество уровней, открытых на каждых мирах
+
+        int addTo;
+        for (int i = 0; i < 5; i++) {
+            addTo = 0;
+            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
+                STARS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
+                addTo += STARS[i][i2];
+            }
+            STARSINSTAGES[i][0] = addTo;
+            STARSINSTAGES[i][1] = COUNTSTAGESINWORLD[i] * 3;
+        }
+    }
+
+    private void initSelectWorldButtons(final TextureGen textureGen){
+        final float otstf = 0.1f;
+        final float sizeB = Gm.HEIGHT * 0.101f;
+        for (int i = 0; i < selectWorldButtons.length; i++) {
+            selectWorldButtons[i] = new SelectWorldButton(textureGen, Gm.WIDTH / 2f, Gm.HEIGHT * 0.712f - (sizeB + otstf) * i, sizeB, i);
+            selectWorldButtons[i].setPositionToCenter();
+        }
+    }
+
+    private void initStageAndWorldText(){
+        stageText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTSTAGETEXT));
+        stageText.setPositionToCenter();
+
+        worldText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTWORLD));
+        worldText.setPositionToCenter();
+    }
     private Random rnd = new Random();
     private void setStageList(TextureGen textureGen){
         final float widthList = stageText.getBounds().width;
         final float heightList = stageText.getBounds().y - downBarMenu.getHeight() * 0.7f;
-        final int columns = 3, rows = 14;
-        final int countOpened = 6;
+        final int columns = 3, rows = 10;
         stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, downBarMenu.getHeight() * 0.7f, widthList, heightList, columns, rows);
-
         stageButtons = new StageButton[columns * rows];
+
         for (int i = 0; i < columns * rows; i++) {
             stageButtons[i] = new StageButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1);
-            stageButtons[i].setLockedStage(i >= countOpened);
-            if (i < countOpened)
-                stageButtons[i].setStarCount(rnd.nextInt(4));
         }
 
-        int i = 0;
+        setStageListPoperties();
+    }
+
+    private void setStageListPoperties(){
+        final int columns = 3, rows = 10;
+        final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
+        for (int i = 0; i < columns * rows; i++) {
+            stageButtons[i].setLockedStage(i >= countOpened);
+            if (i < countOpened)
+                stageButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+        }
+        int i = 0, selectedRow = 0;
+        boolean isSelectedRow = false;
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 stageList.set(stageButtons[i], column, row);
+                if (!isSelectedRow){
+                    if (stageButtons[i + 1].isLockedStage()){
+                        isSelectedRow = true;
+                        selectedRow = row;
+                    }
+                }
                 i++;
             }
         }
         stageList.calculatePadding(0, 0);
-        stageList.setToCenter(0);
+        stageList.setToCenter(selectedRow);
     }
 
     private void setGameNameTex(TextureGen textureGen){
@@ -124,7 +188,7 @@ public class MenuUI {
     private void setStartButton(TextureGen textureGen){
         final float otstTop = 14f;
 //        startButton = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, );;
-        startButton = new TextButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, 2.43f, Atalas.startB, Atalas.startBAct,
+        startButton = new TextButton(textureGen, ButtonActions.All.NEXT_MENU_OPTION, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, 2.43f, Atalas.startB, Atalas.startBAct,
                 Localization.getText(Localization.LettersKey.STARTGAMETEXT));
         startButton.setPositionToCenter();
 
@@ -144,7 +208,7 @@ public class MenuUI {
     }
     public void draw(SpriteBatch batch){
 
-        switch (isMenuState){
+        switch (MENUSTATE){
             case GAMEMAIN:
                 calcAnim();
 
@@ -153,6 +217,17 @@ public class MenuUI {
                 gameNameTex.draw(batch);    // 1 объект
                 startButton.draw(batch);        // 2 объект
 
+                break;
+            case SELECTWORLD:
+                backGrdnt.draw(batch);
+                worldText.draw(batch);
+
+                for (int i = 0; i < selectWorldButtons.length; i++) {
+                    selectWorldButtons[i].draw(batch);
+                }
+
+                if (SETSTAGEPROP)
+                    setStageListPoperties();
                 break;
             case SELECTSTAGE:
                 backGrdnt.draw(batch);
