@@ -41,7 +41,7 @@ public class GameUI {
 
     LabelStyle textStyle;
 
-    public static final int SIZE_CHAR_FONT = 96;
+    private static final int SIZE_CHAR_FONT = 96;
 
     Image gemImg, starImg;
 

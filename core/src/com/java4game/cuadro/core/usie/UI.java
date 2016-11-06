@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.Gm;
 
 /**
  * Created by FOGOK on 12.10.2016 16:46.
@@ -16,30 +17,38 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class UI {
 
-    private static final float CFFMAIN = 0.013f, CFFMAINDOTCONTENT = 0.5f;
+//    private static final float CFFMAIN = 0.013f, CFFMAINDOTCONTENT = 0.5f;
+
+    public static final int SIZE_CHAR_FONT = 96;
+    private static final float DIFFCONTENTFONT = 0.5f;
+    private static float CONVERTED_TO_ABSTRACT;
 
     private static BitmapFont titleFont;
     private static BitmapFont contentFont;
     private static GlyphLayout glyphLayout;
 
     public static void initializate(){
-        final float cffMain = CFFMAIN;
-        final float cffContentDown = CFFMAINDOTCONTENT;
+
+        float convertToAE = (Gm.HEIGHT / (float) Gdx.graphics.getHeight());
+        float cffMax = (float) Gdx.graphics.getHeight() / (float) SIZE_CHAR_FONT;
+
+        CONVERTED_TO_ABSTRACT = cffMax * convertToAE / Gm.HEIGHT;
 
         final String pathToFont = "font/font.fnt";
         titleFont = new BitmapFont(Gdx.files.internal(pathToFont));
         titleFont.setUseIntegerPositions(false);
         titleFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        titleFont.getData().setScale(cffMain);
+        titleFont.getData().setScale(CONVERTED_TO_ABSTRACT);
 
         contentFont = new BitmapFont(Gdx.files.internal(pathToFont));
         contentFont.setUseIntegerPositions(false);
         contentFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        contentFont.getData().setScale(cffMain * cffContentDown);
+        contentFont.getData().setScale(CONVERTED_TO_ABSTRACT * DIFFCONTENTFONT);
 
 
         glyphLayout = new GlyphLayout();
+
     }
 
     public static float getSize(boolean isTitle, boolean wh, String text){
@@ -50,12 +59,12 @@ public class UI {
 
     public static void setCff(boolean isTitle, float cff){
         BitmapFont textBF = isTitle ? titleFont : contentFont;
-        textBF.getData().setScale(cff);
+        textBF.getData().setScale(cff * CONVERTED_TO_ABSTRACT);
     }
 
     public static void setDefaultCff(){
-        titleFont.getData().setScale(CFFMAIN);
-        contentFont.getData().setScale(CFFMAIN * CFFMAINDOTCONTENT);
+        titleFont.getData().setScale(CONVERTED_TO_ABSTRACT);
+        contentFont.getData().setScale(CONVERTED_TO_ABSTRACT * DIFFCONTENTFONT);
     }
 
 

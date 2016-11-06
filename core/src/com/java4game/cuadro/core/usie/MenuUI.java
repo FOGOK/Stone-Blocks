@@ -34,15 +34,16 @@ public class MenuUI {
     public static boolean SETSTAGEPROP;
 
     //proporties
+    private Sprite starIco;
 
     private int OPENED_WORLDS;
     public static int SELECTEDWORLD;
     private int[][] STARS = new int[5][100];
 
-    private int[][] STARSINSTAGES = new int[5][2];
+    public static int[][] STARSINSTAGES = new int[5][2];
 
     private int[] OPENEDSTAGESINWORLD;
-    private final int[] COUNTSTAGESINWORLD = new int[] {30, 30, 30, 30, 30};
+    private static final int[] COUNTSTAGESINWORLD = new int[] {30, 30, 30, 30, 30};
     ///
 
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
@@ -53,7 +54,7 @@ public class MenuUI {
     public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
 
     private List stageList;
-    private TextBlock stageText, worldText;
+    private TextBlock stageText, worldText, starsText;
 
     private StageButton[] stageButtons;
 
@@ -74,6 +75,8 @@ public class MenuUI {
             objectAnimations[i] = new FloatAnimator(0f, 1f, 1f + 0.3f * i, Interpolation.bounceOut);
         }
 
+
+
         addTestedValues();
 
         setUpBarMenu(textureGen);
@@ -82,7 +85,7 @@ public class MenuUI {
         setGameNameTex(textureGen);
         setStartButton(textureGen);
 
-        initSelectWorldButtons(textureGen);
+        initSelectWorld(textureGen);
 
         initStageAndWorldText();
 
@@ -97,7 +100,7 @@ public class MenuUI {
         int addTo;
         for (int i = 0; i < 5; i++) {
             addTo = 0;
-            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
+            for (int i2 = 0; i2 < OPENEDSTAGESINWORLD[i]; i2++) {
                 STARS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
                 addTo += STARS[i][i2];
             }
@@ -106,20 +109,37 @@ public class MenuUI {
         }
     }
 
-    private void initSelectWorldButtons(final TextureGen textureGen){
+    private void initSelectWorld(final TextureGen textureGen){
+        starIco = textureGen.getSprite(Atalas.star);
+
         final float otstf = 0.1f;
         final float sizeB = Gm.HEIGHT * 0.101f;
         for (int i = 0; i < selectWorldButtons.length; i++) {
-            selectWorldButtons[i] = new SelectWorldButton(textureGen, Gm.WIDTH / 2f, Gm.HEIGHT * 0.712f - (sizeB + otstf) * i, sizeB, i);
+            selectWorldButtons[i] = new SelectWorldButton(textureGen, Gm.WIDTH / 2f, Gm.HEIGHT * 0.702f - (sizeB + otstf) * i, sizeB, i);
             selectWorldButtons[i].setPositionToCenter();
+            selectWorldButtons[i].setEnabled(i < OPENED_WORLDS);
         }
+        starIco.setBounds(selectWorldButtons[0].getX(), selectWorldButtons[0].getY() + selectWorldButtons[0].getBounds().getHeight() + otstf,
+        sizeB * 0.4f, sizeB * 0.4f);
+
+
+        int starsCount = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
+                starsCount += STARS[i][i2];
+            }
+        }
+        starsText = new TextBlock(starIco.getX() + starIco.getWidth() + otstf, starIco.getY() + 0.15f, true, "" + starsCount);
+        starsText.setCustomCff(starIco.getHeight() * 0.8f);
     }
 
     private void initStageAndWorldText(){
         stageText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTSTAGETEXT));
+        stageText.setCustomCff(1.2f);
         stageText.setPositionToCenter();
 
         worldText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - upBarMenu.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTWORLD));
+        worldText.setCustomCff(1.2f);
         worldText.setPositionToCenter();
     }
     private Random rnd = new Random();
@@ -133,7 +153,6 @@ public class MenuUI {
         for (int i = 0; i < columns * rows; i++) {
             stageButtons[i] = new StageButton(textureGen, ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1);
         }
-
         setStageListPoperties();
     }
 
@@ -190,6 +209,7 @@ public class MenuUI {
 //        startButton = new Button(textureGen, Atalas.startB, Atalas.startBAct, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, );;
         startButton = new TextButton(textureGen, ButtonActions.All.NEXT_MENU_OPTION, Gm.WIDTH / 2f, Gm.HEIGHT - otstTop, 2.43f, Atalas.startB, Atalas.startBAct,
                 Localization.getText(Localization.LettersKey.STARTGAMETEXT));
+        startButton.getTextBlock().setCustomCff(1.215f);
         startButton.setPositionToCenter();
 
         posYs[1] = otstTop;
@@ -221,6 +241,8 @@ public class MenuUI {
             case SELECTWORLD:
                 backGrdnt.draw(batch);
                 worldText.draw(batch);
+                starIco.draw(batch);
+                starsText.draw(batch);
 
                 for (int i = 0; i < selectWorldButtons.length; i++) {
                     selectWorldButtons[i].draw(batch);

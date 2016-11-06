@@ -24,6 +24,7 @@ public class StageButton extends TextButton {
         lockedTexture = textureGen.getSprite(Atalas.btnStageLock);
         normalTexture = textureGen.getSprite(Atalas.btnStage);
         initStars(textureGen);
+        getTextBlock().setCustomCff(h / 2f);
     }
 
     private void initStars(TextureGen textureGen){

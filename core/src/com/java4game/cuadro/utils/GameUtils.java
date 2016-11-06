@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.usie.GameUI;
+import com.java4game.cuadro.core.usie.UI;
 
 /**
  * Created by FOGOK on 09.10.2016 22:55.
@@ -51,7 +52,7 @@ public class GameUtils {
     public static void initializate(){
         ///какой базовый размер шрифта
         float heightCff = Gdx.graphics.getHeight() / 640f;
-        float fontCff = 64f / GameUI.SIZE_CHAR_FONT;
+        float fontCff = 64f / UI.SIZE_CHAR_FONT;
         //////                      \/start value to scale 0.33f, then optimal effect
         FINAL_FONT_SCALE = fontCff * 0.33f * heightCff;
         ///

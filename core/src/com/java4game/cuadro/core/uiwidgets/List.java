@@ -28,7 +28,7 @@ public class List extends BaseObject {
 
     //proporties
     private float padding = 0f;
-    private float paddingTop = 0.5f;
+    private float paddingTop = 1.2f;
     private float paddingBottom = 1f;
 
     ///
@@ -88,11 +88,14 @@ public class List extends BaseObject {
         final float sizeOneO = (padding + objects[0][0].getBounds().height);
         final float abstDYY = sizeOneO * row + paddingTop - bounds.height / 2f + sizeOneO / 2f;
 
+        dYY = 0;
         if (abstDYY > 0f && abstDYY < Math.abs(abstSizeList))
             dYY = (int) (abstDYY * (Gdx.graphics.getHeight() / Gm.HEIGHT));
         else if (abstDYY >= Math.abs(abstSizeList))
             dYY = sizeSpisAll;
 
+        currentPos = dYY * (Gm.HEIGHT / Gdx.graphics.getHeight());
+        lastDYY = dYY;
     }
 
     private void setPositionAllObjects(){
@@ -169,7 +172,6 @@ public class List extends BaseObject {
 
             if (dYY < 0){
                 dYY *= -1;
-
                 deltYYY = -1;
             }
 
