@@ -25,6 +25,8 @@ public class FloatAnimator {
 
     private boolean needToUpdate = true;
 
+    private float timer = 0f, endTime = 0f;
+
     public FloatAnimator() {
         this( 0.0f, 1.0f, 0.35f, Interpolation.fade );
     }
@@ -47,7 +49,11 @@ public class FloatAnimator {
         return this;
     }
 
-    public FloatAnimator setTo( final float to ) {
+    public void setTimer(float endTime) {
+        this.endTime = endTime;
+    }
+
+    public FloatAnimator setTo(final float to ) {
         this.to = to;
         return this;
     }
@@ -64,38 +70,59 @@ public class FloatAnimator {
 
     public FloatAnimator resetTime() {
         time = 0.0f;
+        timer = 0f;
+        current = from;
         needToUpdate = true;
         return this;
     }
 
     public void update( final float delta ) {
 
-        if ( !isNeedToUpdate() ) { return; }
+        timer += delta;
+        if (!isNeedToUpdate() || timer < endTime)
+            return;
+
 
         time += delta;
 
         current = interp.apply( from, to, time / animationTime );
 
         // Если "отведённое время" минус "прошедшее время" всё ещё больше нуля, то апдейтим
-        if ( animationTime - time > 0 ) { needToUpdate = true; }
-        else { needToUpdate = false; }
+        if (animationTime - time > 0) {
+            needToUpdate = true;
+
+        } else {
+            needToUpdate = false;
+            current = to;
+        }
     }
 
     /**
-     * Постоянное повторение петли из FROM в TO, и опять из FROM в TO
+     * Постоянное повторение петли из FROM в TO, и из TO в FROM
      * */
-    public void updateLoop( final float delta ) {
+    public boolean updateLoop( final float delta ) {
 
-        if ( !isNeedToUpdate() ) {
-            current = from;
-            resetTime();
-        }
+        timer += delta;
+        if (timer < endTime)
+            return false;
 
         time += delta;
         current = interp.apply( from, to, time / animationTime );
 
         if ( animationTime - time > 0 ) { needToUpdate = true; }
         else { needToUpdate = false; }
+
+
+        if ( !isNeedToUpdate() ) {
+            float ffrom = from;
+            from = to;
+            to = ffrom;
+            current = from;
+            resetTime();
+            return true;
+        }
+
+        return false;
     }
 
     public boolean isNeedToUpdate() {

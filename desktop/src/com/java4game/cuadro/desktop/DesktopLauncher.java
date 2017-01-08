@@ -13,7 +13,7 @@ public class DesktopLauncher {
 //        config.height = 320;
 
         config.samples = 8;
-        config.width = 320;
+        config.width = 360;
         config.height = 640;
         config.resizable = false;
         config.y = 768 / 2 - 20 - config.height / 2;

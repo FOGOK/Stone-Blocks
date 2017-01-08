@@ -2,8 +2,8 @@ package com.java4game.cuadro.core.uiwidgets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.java4game.cuadro.core.TextureGen;
-import com.java4game.cuadro.utils.Atalas;
+import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.utils.Assets;
 
 /**
  * Created by FOGOK on 03.11.2016 15:17.
@@ -13,94 +13,69 @@ import com.java4game.cuadro.utils.Atalas;
  */
 public class StageButton extends TextButton {
 
-    private int starCount;
-    private boolean isLockedStage;
-    private Sprite lockedTexture, normalTexture;
-    private Sprite nullStars, oneStars, twoStars, threeStars;
-    private float starsX, starsY, starsW, starsH;
+    public static int LEVEL;
 
-    public StageButton(TextureGen textureGen, ButtonActions.All action, float h, int stage) {
-        super(textureGen, action, 0f, 0f, h, Atalas.btnStage, Atalas.btnStageAct, stage + "");
-        lockedTexture = textureGen.getSprite(Atalas.btnStageLock);
-        normalTexture = textureGen.getSprite(Atalas.btnStage);
-        initStars(textureGen);
+    private int starCount;
+    private int stage;
+    private boolean isLockedStage;
+    private boolean isCompleteStage;
+
+    private Sprite lockedTexture, normalTexture, completeTexture;
+
+    public StageButton(ButtonActions.All action, float h, int stage) {
+        super(action, 0f, 0f, h, 25, 28, stage + "");
+        this.stage = stage;
+        lockedTexture = Assets.getNewSprite(26);
+        normalTexture = Assets.getNewSprite(25);
+        completeTexture = Assets.getNewSprite(27);
         getTextBlock().setCustomCff(h / 2f);
     }
 
-    private void initStars(TextureGen textureGen){
-        nullStars = textureGen.getSprite(Atalas.noStar);
-        oneStars = textureGen.getSprite(Atalas.star1);
-        twoStars = textureGen.getSprite(Atalas.star2);
-        threeStars = textureGen.getSprite(Atalas.star3);
+    @Override
+    protected void activateAction() {
+        super.activateAction();
+        LEVEL = stage;
+        MusicCore.play(MusicCore.GAME);
     }
-    private void setPositionStars(int starCount){
-        starsX = bounds.x + bounds.width * 0.294f;
-        starsY = bounds.y + bounds.height * 0.747f;
-        starsW = bounds.width * 0.7f;
-        starsH = starsW * 0.4955f;
 
-        switch (starCount){
-            case 0:
-                nullStars.setBounds(starsX, starsY, starsW, starsH);
-                break;
-            case 1:
-                oneStars.setBounds(starsX, starsY, starsW, starsH);
-                break;
-            case 2:
-                twoStars.setBounds(starsX, starsY, starsW, starsH);
-                break;
-            case 3:
-                threeStars.setBounds(starsX, starsY, starsW, starsH);
-                break;
-        }
-    }
     public void setLockedStage(boolean lockedStage) {
         isLockedStage = lockedStage;
         refreshState();
     }
+
+    public void setCompleteStage(boolean completeStage) {
+        isCompleteStage = completeStage;
+        refreshState();
+    }
+
     public boolean isLockedStage(){
         return isLockedStage;
     }
+
     private void refreshState(){
         if (isLockedStage){
             setFirstTexture(lockedTexture);
             setEnabled(false);
         }else{
-            setFirstTexture(normalTexture);
+            if (isCompleteStage)
+                setFirstTexture(completeTexture);
+            else
+                setFirstTexture(normalTexture);
+
             setEnabled(true);
         }
     }
+
     public void setStarCount(int starCount) {
         this.starCount = starCount;
     }
-
-
 
     @Override
     public void draw(final SpriteBatch batch) {
         if (!isLockedStage){
             super.draw(batch);
-            drawStars(batch);
         }
         else
             drawButtonTexture(batch);
-    }
-
-    private void drawStars(final SpriteBatch batch){
-        setPositionStars(starCount);
-        switch (starCount){
-            case 0:
-                nullStars.draw(batch);
-                break;
-            case 1:
-                oneStars.draw(batch);
-                break;
-            case 2:
-                twoStars.draw(batch);
-                break;
-            case 3:
-                threeStars.draw(batch);
-                break;
-        }
     }
 }

@@ -1,18 +1,15 @@
 package com.java4game.cuadro.core;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.usie.GameUI;
-import com.java4game.cuadro.objects.Cube;
-import com.java4game.cuadro.objects.LevelSquare;
-import com.java4game.cuadro.objects.NumberObj;
-import com.java4game.cuadro.utils.Atalas;
-
-import java.util.Random;
+import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.objects.FlyingStage;
+import com.java4game.cuadro.objects.MainBlock;
+import com.java4game.cuadro.utils.Assets;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:16.
@@ -23,97 +20,89 @@ import java.util.Random;
 public class LevelGen {
 
     /**
-     * Класс, который отвечае*т за всё, что связанно с игрой
+     * Класс, который отвечает за всё, что связанно с игрой
      * тут инициализируется игровое поле, кубик, препятствия и т.д.
      *
      * */
 
-    public static final int SQSIZE = 7;         // 8 - 1, т.к. последняя клетка равна 5 а первая 0
-
-    private Cube cube;
-    private LevelSquare levelSquare;
-    private Sprite background;
-    private ObjectsGen objectsGen;
-
-    public static int SCORE = 0;
-
+    public static final int SQSIZE = 7;
     public static float backHDivH;
-    private static ComboVombo comboVombo;
+    private Rectangle fieldBounds;
+    private Sprite background, field;
 
-    static float centerXLEVSQ, centerYLEVSQ;
+    private MainBlock mainBlock;
+    private BlockGenerator blockGenerator;
+    private FlyingStage flyingStage;
 
-    float fulledCff = 0.4f; //степень заполненности
-    float sttCff = 0.125f; //степень сетчатости поля (короче количество % дырок)
-
-    final float levSize = Gm.WIDTH - 0.5f; // размер поля
-
-    public static float sizeObjects;
-    public static float otstObjects;
-
-    //ссылки
-    private TextureGen textureGen;
-    ///
-
-    public LevelGen(TextureGen textureGen, SpriteBatch batch) {
-        //инициализация ссылок
-        this.textureGen = textureGen;
-        ///
+    public LevelGen() {
         //инициализируем фон
-        background = new Sprite(new Texture(Gdx.files.internal("bg.png")));
-        background.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        background = Assets.getNewSprite(BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor());
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
+        background.setPosition(0f, (Gm.HEIGHT - background.getHeight()) / 2f);
         backHDivH = background.getHeight() / Gm.HEIGHT;
-        background.setPosition(0f, Gm.HEIGHT - background.getHeight());
         ///
+        final float fieldSize = background.getWidth() * 0.9f;
+        field = Assets.getNewSprite(1);
+        field.setSize(fieldSize, fieldSize);
+        field.setPosition((Gm.WIDTH - fieldSize) / 2f, (Gm.HEIGHT - fieldSize) / 2f);
 
-        //инициализация кубика и игрового поля
-
-
-        final float levSqOtst = 0.22f;
-        final float posSqInMacketCFF = 0.22f; /// на 22 проценте находится фон поля как бы
-        final float levSqPos = (Gm.HEIGHT - background.getY()) * posSqInMacketCFF + background.getY();
-        levelSquare = new LevelSquare(textureGen, (Gm.WIDTH - levSize) / 2f, levSqPos + levSqOtst, levSize, sttCff);
-        centerXLEVSQ = Gm.WIDTH / 2f;
-        centerYLEVSQ = levSqPos + levSqOtst + levSize / 2f;
-        //устанавливаем размер игрового поля ширина - 2 размера кубика - небольшой отступ   /\
-        //устанавливаем игровое поле в центр экрана /\
-
-        /// инициализируем игровые объекты
-        NumberObj.pXii = 5f;
-        NumberObj.pYii = 16f;
-        sizeObjects = LevelSquare.sizOneSq * 0.85f;
-        otstObjects = LevelSquare.sizOneSq - sizeObjects;
-
-        objectsGen = new ObjectsGen(SQSIZE + 1, fulledCff, levelSquare.getBounds(), textureGen);
-
-        comboVombo = new ComboVombo(textureGen);
-        ///
+        fieldBounds = field.getBoundingRectangle();
 
         ///инициализируем кубик и устанавливаем размер кубика
-        cube = new Cube(textureGen.getSprite(Atalas.squareT2), levelSquare, objectsGen);
+        mainBlock = new MainBlock(Assets.getNewSprite(12), fieldBounds);
+        blockGenerator = new BlockGenerator(mainBlock, fieldBounds, StageButton.LEVEL - 1);
+        mainBlock.setBlockGenerator(blockGenerator);
+        //
+        //инициаилизируем летящий текст
+        Color flyStageColor = Color.BLACK;
+        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor()){
+            case BlockAndHolesPositions.BACK_COLOR_BLUE:
+                flyStageColor = Color.ROYAL.cpy();
+                break;
+            case BlockAndHolesPositions.BACK_COLOR_GRAY:
+                flyStageColor = Color.DARK_GRAY.cpy();
+                break;
+            case BlockAndHolesPositions.BACK_COLOR_GREEN:
+                flyStageColor = Color.FOREST.cpy();
+                break;
+            case BlockAndHolesPositions.BACK_COLOR_RED:
+                flyStageColor = Color.FIREBRICK.cpy();
+                break;
+            case BlockAndHolesPositions.BACK_COLOR_YELLOW:
+                flyStageColor = Color.GOLDENROD.cpy();
+                break;
+        }
+        flyingStage = new FlyingStage();
+        flyingStage.setNew(StageButton.LEVEL, flyStageColor);
         //
     }
 
     public void draw(SpriteBatch batch){
+        field.draw(batch);
+
+
+        batch.end();
+
+        int srcFunc = batch.getBlendSrcFunc();
+        int dstFunc = batch.getBlendDstFunc();
+
+        batch.enableBlending();
+        batch.begin();
+
+        batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
+
         background.draw(batch);
-        levelSquare.draw(batch);
-        objectsGen.draw(batch);
-        cube.draw(batch);
-        comboVombo.draw(batch);
-        GameUI.setScore(SCORE);
 
-    }
+        batch.end();
+        batch.begin();
+        batch.setBlendFunction(srcFunc, dstFunc);
 
-    final private static Color comboColor = Color.valueOf("ff0000");
-    private static Random rnd = new Random();
-    public static void PUSHCOMBOOOOO(){
-        comboVombo.PUSHCOMBOOOOO(centerXLEVSQ - 2f + rnd.nextInt(4), centerYLEVSQ - 2f + rnd.nextInt(4), comboColor);
-    }
+        blockGenerator.draw(batch);
+        mainBlock.draw(batch);
 
-    public void dispose() {
-        background.getTexture().dispose();
-        objectsGen.dispose();
-        comboVombo.dispose();
+        flyingStage.handle();
+        flyingStage.drawGlass(batch);
+        flyingStage.drawText(batch);
     }
 }

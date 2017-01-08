@@ -41,7 +41,7 @@ public class DebugDrawer {
             batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
-        Gdx.gl.glLineWidth(3f);
+        Gdx.gl.glLineWidth(1f);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         Rectangle rect = (isCust) ? DebugDrawer.rect : rect2;

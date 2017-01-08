@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
+import com.java4game.cuadro.utils.Assets;
 
 abstract class BaseButton extends BaseObject{
 
@@ -13,20 +14,31 @@ abstract class BaseButton extends BaseObject{
      * Класс чистой кнопки с двумя текстурами - нажатой и ненажатой, а так же при нажатии выполняется действияе
      * */
 
-    private boolean isTouched;
-    private ButtonActions.All action;
+    boolean isTouched;
+    ButtonActions.All action;
 
     //must
-    protected Sprite normalTex;       ///ненажатая кнопка
-    private Sprite touchedTex;      //нажатая кнопка
+    Sprite normalTex;       ///ненажатая кнопка
+    Sprite touchedTex;      //нажатая кнопка
     ///
 
 
     //proporties
-    private boolean isEnabled;
+    boolean isEnabled;
     ///
 
+    public BaseButton(final ButtonActions.All action, float x, float y, float h, int back, int front){
+        super(x, y, h, h);
+        this.action = action;
+        Sprite firstTexture = Assets.getNewSprite(back);
+        final float wCff = firstTexture.getWidth() /firstTexture.getHeight();
+        final float w = h * wCff;
+        bounds.setWidth(w);
 
+        setFirstTexture(firstTexture);
+        setSecondTexture(Assets.getNewSprite(front));
+        isEnabled = true;
+    }
 
     public BaseButton(final TextureGen textureGen, final ButtonActions.All action, float x, float y, float h, int back, int front){
         super(x, y, h, h);
@@ -56,6 +68,10 @@ abstract class BaseButton extends BaseObject{
     protected void setSecondTexture(Sprite sprite){
         touchedTex = sprite;
         touchedTex.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    protected void activateAction(){
+        ButtonActions.activateAction(action);
     }
 
     @Override
@@ -93,6 +109,14 @@ abstract class BaseButton extends BaseObject{
         return bounds.getY();
     }
 
+    public float getWidth(){
+        return bounds.getWidth();
+    }
+
+    public float getHeight(){
+        return bounds.getHeight();
+    }
+
 
     public void draw(SpriteBatch batch){
         calcM();
@@ -119,7 +143,7 @@ abstract class BaseButton extends BaseObject{
 
             }else {              //при отпускании кнопки
                 if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
-                    ButtonActions.activateAction(action);
+                   activateAction();
 
                 isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
             }

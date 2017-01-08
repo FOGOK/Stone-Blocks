@@ -2,9 +2,7 @@ package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.java4game.cuadro.core.usie.GameUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.PauseUI;
 import com.java4game.cuadro.utils.Atalas;
@@ -17,7 +15,7 @@ import com.java4game.cuadro.utils.Atalas;
  */
 public class Handler {
 
-    /**Класс, который отвечает за обработку всей игры по сути
+    /**Класс, который отвечает за обработку всей игры
      *
      * */
 
@@ -33,7 +31,7 @@ public class Handler {
     ///
 
     //ui
-    GameUI gameUi;
+//    GameUI gameUi;
     PauseUI pauseUI;
     MenuUI menuUI;
     ///
@@ -46,14 +44,13 @@ public class Handler {
         Game, Pause, Menu
     }
 
-    public Handler(Camera camera, SpriteBatch batch){
+    public Handler(){
         ISPAUSE = ISRESTART = false;
 
         isBackPressed = false;
         atls = new Atalas();
         textureGen = new TextureGen(atls);
-        levelGen = new LevelGen(textureGen, batch);
-        gameUi = new GameUI(textureGen);
+//        gameUi = new GameUI(textureGen);
         pauseUI = new PauseUI(textureGen);
         menuUI = new MenuUI(textureGen);
         state = State.Menu;
@@ -62,18 +59,16 @@ public class Handler {
     public void draw(SpriteBatch batch){
         if (state == State.Game || state == State.Pause){
             levelGen.draw(batch);
-            gameUi.draw(batch);
+//            gameUi.draw(batch);
             if (state == State.Pause)
                pauseUI.draw(batch);
-
-
 
         }else if (state == State.Menu){
             menuUI.draw(batch);
         }
 
 
-        if (ISRESTART) restart(batch);
+        if (ISRESTART) restart();
 
 
 
@@ -90,18 +85,15 @@ public class Handler {
 
     }
 
-    public void restart(SpriteBatch batch){
-        levelGen.dispose();
-        levelGen = new LevelGen(textureGen, batch);
-        LevelGen.SCORE = 0;
+    public void restart(){
+        levelGen = new LevelGen();
         ISRESTART = false;
     }
 
     public void dispose() {
         atls.dispose();
-        levelGen.dispose();
         menuUI.dispose();
-        gameUi.dispose();
+//        gameUi.dispose();
         pauseUI.dispose();
     }
 }

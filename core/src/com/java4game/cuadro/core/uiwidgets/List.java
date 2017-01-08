@@ -1,12 +1,10 @@
 package com.java4game.cuadro.core.uiwidgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.TextureGen;
-import com.java4game.cuadro.utils.Atalas;
 import com.java4game.cuadro.utils.PosF;
 
 /**
@@ -24,20 +22,16 @@ public class List extends BaseObject {
 
     private float currentPos;
     private float abstSizeList;
-    private Sprite listCover;
 
     //proporties
     private float padding = 0f;
-    private float paddingTop = 1.2f;
-    private float paddingBottom = 1f;
+    private float paddingTop = 0f;
+    private float paddingBottom = 0.5f;
 
     ///
 
     public List(TextureGen textureGen, float x, float y, float w, float h, int columns, int rows) {
         super(x, y, w, h);
-        listCover = textureGen.getSprite(Atalas.listCover);
-        final float listCoverHeight = Gm.WIDTH * 0.3907f;
-        listCover.setBounds(0, Gm.HEIGHT - listCoverHeight, Gm.WIDTH, listCoverHeight);
         this.columns = columns;
         this.rows = rows;
         objects = new BaseObject[columns][rows];
@@ -73,15 +67,12 @@ public class List extends BaseObject {
                 float x = positions[column][row].x, y = positions[column][row].y + currentPos;
                 if (y + objects[column][row].getBounds().getHeight() > bounds.y && y < bounds.y + bounds.height){
                     objects[column][row].setPosition(x, y);
-                    objects[column][row].draw(batch);
-                    if (objects[column][row] instanceof StageButton){
-                        if (!((StageButton)objects[column][row]).isLockedStage())
-                            ((StageButton)objects[column][row]).setEnabled(!moveSp && isTouchedList);
-                    }
+                    objects[column][row].draw(batch); //TODO: сделать тут проверку на разные объекты, может быть вызвано исключение
+                    if (!((StageButton)objects[column][row]).isLockedStage())
+                        ((StageButton)objects[column][row]).setEnabled(!moveSp && isTouchedList);
                 }
             }
         }
-        listCover.draw(batch);
     }
 
     public void setToCenter(int row){

@@ -20,6 +20,12 @@ public class TextButton extends BaseButton {
         textBlock.setTextColor(Color.valueOf("2c2c36"));
     }
 
+    public TextButton(ButtonActions.All action, float x, float y, float h, int back, int front, String text) {
+        super(action, x, y, h, back, front);
+        textBlock = new TextBlock(x + bounds.width / 2f, y + bounds.height / 2f, false, text);
+        textBlock.setTextColor(Color.valueOf("2c2c36"));
+    }
+
     @Override
     public void setPositionToCenter() {
         super.setPositionToCenter();

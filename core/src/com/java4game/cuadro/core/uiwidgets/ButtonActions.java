@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core.uiwidgets;
 
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.D;
 
@@ -14,7 +15,7 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT
     }
 
     public static void activateAction(All action){
@@ -46,7 +47,10 @@ public class ButtonActions {
                 break;
 
             case NEXT_MENU_OPTION:
-                MenuUI.MENUSTATE++;
+//                MenuUI.MENUSTATE++;
+                MenuUI.SELECTEDWORLD = 0;
+                MenuUI.SETSTAGEPROP = true;
+                MenuUI.MENUSTATE = 2;
                 break;
             case START_GAME_ACTION:
                 Handler.state = Handler.State.Game;
@@ -63,6 +67,13 @@ public class ButtonActions {
                 Handler.state = Handler.State.Game;
                 break;
 
+            case QUESTION_ACT:
+
+                break;
+            case INFO_ACT:
+
+                break;
+
             case SETTINGS_PAUSE_ACTION:
                 D.S("OPT");
                 break;
@@ -74,6 +85,7 @@ public class ButtonActions {
 
                 MenuUI.RESETANIMATION = true;
                 MenuUI.MENUSTATE = 0;
+                MusicCore.play(MusicCore.MENU);
                 break;
         }
     }

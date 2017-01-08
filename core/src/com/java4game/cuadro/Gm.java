@@ -6,35 +6,52 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.UI;
+import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.DebugDrawer;
 import com.java4game.cuadro.utils.DebugValueChanger;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Prefers;
 
 public class Gm extends ApplicationAdapter {
 
     /**THIS VARS IN DEBUG**/
-    boolean isNoSleep = true, textShow = false, showDebugValChanger = false;
-    SpriteBatch debugBatch;
-    BitmapFont bf;
+    private boolean isNoSleep = true, textShow = false, showDebugValChanger = false;
+    private SpriteBatch debugBatch;
+    private BitmapFont bf;
     public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
-    DebugValueChanger debugValueChanger;
-    DebugDrawer debugDrawer;
+    private DebugValueChanger debugValueChanger;
+    private DebugDrawer debugDrawer;
     /***/
 
-	SpriteBatch batch;
+    private Texture startTexture;
+
+    private boolean isGameInit, isFirstIter;
+
+	private SpriteBatch batch;
     static OrthographicCamera camera;
-    Handler handler;
+    private Handler handler;
 	
 	@Override
 	public void create () {
         //initNatives
         batch = new SpriteBatch();
         initCamera();
+        startTexture = new Texture(Gdx.files.internal("start.png"));
+        startTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        isFirstIter = isGameInit = false;
+        ///
+	}
+
+    private void initGame(){
+        Prefers.initPrefs();
+        setStagesOpened();
         ///
 
         //initDebug
@@ -46,12 +63,18 @@ public class Gm extends ApplicationAdapter {
         ///
 
         //initAll Game
+        Assets.init();
+        MusicCore.init();
         GameUtils.initializate();
         UI.initializate();
 
-        handler = new Handler(camera, batch);
-        ///
-	}
+        handler = new Handler();
+    }
+
+    private void setStagesOpened(){
+        if (Prefers.getInt(Prefers.KeyOpenedStages) == 0)
+            Prefers.putInt(Prefers.KeyOpenedStages, 1);
+    }
 
     public static float aspectR, WIDTH, HEIGHT, mdT;     ///размеры экрана статичны (высота всегда равна 20, ширина 20 * отнощение ширины на высоту, mdT - delta / 0.016 = ~1
 
@@ -66,16 +89,32 @@ public class Gm extends ApplicationAdapter {
 	@Override
 	public void render () {
         //natives
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        if (isGameInit)
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+        else
+            Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         ///
 
+        if (isGameInit){
+            MusicCore.handleVolumeAndTransition();
+            handler.draw(batch);
+        }else{
+            float sizeW = Gm.WIDTH * 0.8f;
+            float sizeH = sizeW * 1.42f;
+            batch.draw(startTexture, (Gm.WIDTH - sizeW) / 2f, (Gm.HEIGHT - sizeH) / 2f, sizeW, sizeH);
+            if (!isFirstIter)
+                isFirstIter = true;
+            else{
+                initGame();
+                isGameInit = true;
+            }
 
 
-        handler.draw(batch);
+        }
 
 
         //natives
@@ -150,6 +189,9 @@ public class Gm extends ApplicationAdapter {
         handler.dispose();
         debugValueChanger.dispose();
         debugDrawer.dispose();
+        MusicCore.dispose();
+        Assets.dispose();
+        startTexture.dispose();
 
 
         super.dispose();
