@@ -99,7 +99,9 @@ public class LevelGen {
         batch.setBlendFunction(srcFunc, dstFunc);
 
         blockGenerator.draw(batch);
-        mainBlock.draw(batch);
+
+        if (!flyingStage.isFlying())
+            mainBlock.draw(batch);
 
         flyingStage.handle();
         flyingStage.drawGlass(batch);

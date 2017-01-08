@@ -27,7 +27,7 @@ public class BlockAnimation {
 
         blocks = new Sprite[5];
         blockSelect = new Random().nextInt(blocks.length);
-        blockAnimation = new FloatAnimator(-blockSize * 1.5f, Gm.WIDTH + blockSize * 1.5f, 0.8f, Interpolation.linear);
+        blockAnimation = new FloatAnimator(-blockSize * 1.5f, Gm.WIDTH + blockSize * 1.5f, 1.3f, Interpolation.linear);
         blockAnimation.setTimer(0.6f);
         for (int i = 0; i < blocks.length; i++) {
             blocks[i] = Assets.getNewSprite(7 + i);

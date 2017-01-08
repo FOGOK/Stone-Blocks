@@ -76,6 +76,11 @@ public class FlyingStage {
         }
     }
 
+
+    public boolean isFlying(){
+        return flyingAnimatorToTo.isNeedToUpdate();
+    }
+
     public void drawGlass(SpriteBatch batch){
         glassCover.draw(batch);
     }
