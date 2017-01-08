@@ -20,31 +20,42 @@ public class FlyingStage {
 
     private Sprite glassCover;
     private TextBlock textBlock;
-    private FloatAnimator flyingAnimatorFrom, flyingAnimatorTo;
+    private FloatAnimator flyingAnimatorFrom, flyingAnimatorTo, flyingAnimatorToTo;
 
     private float size;
     public FlyingStage() {
-        size = 3f;
+        size = 2.3f;
 
         flyingAnimatorFrom = new FloatAnimator(Gm.HEIGHT + size, Gm.HEIGHT / 2f, 1f, Interpolation.exp10Out);
         flyingAnimatorTo = new FloatAnimator(Gm.HEIGHT / 2f, -size, 1f, Interpolation.exp10In);
         flyingAnimatorTo.setTimer(0.5f);
 
+        flyingAnimatorToTo = new FloatAnimator(Gm.WIDTH + size, Gm.WIDTH - size * 0.57f, 0.8f, Interpolation.exp10Out);
+
         glassCover = Assets.getNewSprite(30);
         glassCover.setSize(size * 1.524f, size);
         textBlock = new TextBlock(0, 0, true, "");
+        textBlock.setCustomCff(size * 0.25f);
     }
 
     public void setNew(int level, Color color){
         flyingAnimatorFrom.resetTime();
         flyingAnimatorTo.resetTime();
+        flyingAnimatorToTo.resetTime();
 
         textBlock.setText("STAGE " + level);
         textBlock.setTextColor(color);
+        setPositionX(Gm.WIDTH / 2f);
     }
 
     private void setPositionY(float y){
-        glassCover.setPosition((Gm.WIDTH - glassCover.getWidth()) / 2f, y - glassCover.getHeight() / 2f);
+        glassCover.setPosition(glassCover.getX(), y - glassCover.getHeight() / 2f);
+        textBlock.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f);
+        textBlock.setPositionToCenter();
+    }
+
+    private void setPositionX(float x){
+        glassCover.setPosition(x - glassCover.getWidth() / 2f, glassCover.getY());
         textBlock.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f);
         textBlock.setPositionToCenter();
     }
@@ -59,7 +70,9 @@ public class FlyingStage {
                 setPositionY(flyingAnimatorTo.current);
             }
         }else{
-            setPositionY(-size);
+            flyingAnimatorToTo.update(Gdx.graphics.getDeltaTime());
+            setPositionY(Gm.HEIGHT - size * 0.4f);
+            setPositionX(flyingAnimatorToTo.current);
         }
     }
 

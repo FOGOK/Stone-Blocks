@@ -21,6 +21,8 @@ public class FloatAnimator {
     private float time          = 0.0f;
     private float animationTime = 1.0f;
 
+    private boolean isRevers;
+
     private Interpolation interp = null;
 
     private boolean needToUpdate = true;
@@ -69,10 +71,16 @@ public class FloatAnimator {
     }
 
     public FloatAnimator resetTime() {
+        return resetTime(true);
+    }
+
+    private FloatAnimator resetTime(boolean resetRevers){
         time = 0.0f;
         timer = 0f;
         current = from;
         needToUpdate = true;
+        if (resetRevers)
+            isRevers = false;
         return this;
     }
 
@@ -118,11 +126,16 @@ public class FloatAnimator {
             from = to;
             to = ffrom;
             current = from;
-            resetTime();
+            resetTime(false);
+            isRevers = !isRevers;
             return true;
         }
 
         return false;
+    }
+
+    public boolean isRevers() {
+        return isRevers;
     }
 
     public boolean isNeedToUpdate() {

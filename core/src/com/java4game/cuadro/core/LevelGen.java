@@ -56,23 +56,23 @@ public class LevelGen {
         //
         //инициаилизируем летящий текст
         Color flyStageColor = Color.BLACK;
-        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor()){
-            case BlockAndHolesPositions.BACK_COLOR_BLUE:
-                flyStageColor = Color.ROYAL.cpy();
-                break;
-            case BlockAndHolesPositions.BACK_COLOR_GRAY:
-                flyStageColor = Color.DARK_GRAY.cpy();
-                break;
-            case BlockAndHolesPositions.BACK_COLOR_GREEN:
-                flyStageColor = Color.FOREST.cpy();
-                break;
-            case BlockAndHolesPositions.BACK_COLOR_RED:
-                flyStageColor = Color.FIREBRICK.cpy();
-                break;
-            case BlockAndHolesPositions.BACK_COLOR_YELLOW:
-                flyStageColor = Color.GOLDENROD.cpy();
-                break;
-        }
+//        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor()){
+//            case BlockAndHolesPositions.BACK_COLOR_BLUE:
+//                flyStageColor = Color.ROYAL.cpy();
+//                break;
+//            case BlockAndHolesPositions.BACK_COLOR_GRAY:
+//                flyStageColor = Color.DARK_GRAY.cpy();
+//                break;
+//            case BlockAndHolesPositions.BACK_COLOR_GREEN:
+//                flyStageColor = Color.FOREST.cpy();
+//                break;
+//            case BlockAndHolesPositions.BACK_COLOR_RED:
+//                flyStageColor = Color.FIREBRICK.cpy();
+//                break;
+//            case BlockAndHolesPositions.BACK_COLOR_YELLOW:
+//                flyStageColor = Color.GOLDENROD.cpy();
+//                break;
+//        }
         flyingStage = new FlyingStage();
         flyingStage.setNew(StageButton.LEVEL, flyStageColor);
         //
