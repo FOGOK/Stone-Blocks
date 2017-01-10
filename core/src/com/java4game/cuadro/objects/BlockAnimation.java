@@ -48,7 +48,10 @@ public class BlockAnimation {
     public void draw(SpriteBatch batch){
         blocks[blockSelect].setCenterX(blockAnimation.current);
         blocks[blockSelect].draw(batch);
-        blackBlock.setCenterX(blockAnimation.isRevers() ? blockAnimation.current + blackBlock.getWidth() * 0.9f : blockAnimation.current - blackBlock.getWidth() * 0.9f);
+        final float cffSize = 0.72f;
+        final float cffYBlock = 0.04f;
+        blackBlock.setCenterX(blockAnimation.isRevers() ? blockAnimation.current + blackBlock.getWidth() * cffSize : blockAnimation.current - blackBlock.getWidth() * cffSize);
+        blackBlock.setY(blocks[blockSelect].getY() + cffYBlock);
         blackBlock.draw(batch);
 
         if (blockAnimation.updateLoop(Math.min(Gdx.graphics.getDeltaTime(), 0.016f)))

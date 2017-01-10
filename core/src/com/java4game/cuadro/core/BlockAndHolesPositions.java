@@ -57,14 +57,14 @@ public class BlockAndHolesPositions {
     }
     public static class Level{
         private Object objects[];
-        private int color;
-        public Level(Object objects[], int color){
+        private int backgroundColor;
+        public Level(Object objects[], int backgroundColor){
             this.objects = objects;
-            this.color = color;
+            this.backgroundColor = backgroundColor;
         }
 
-        public int getColor() {
-            return color;
+        public int getBackgroundColor() {
+            return backgroundColor;
         }
 
         public Object[] getObjects() {

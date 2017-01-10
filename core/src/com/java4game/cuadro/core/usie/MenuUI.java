@@ -30,9 +30,11 @@ import java.util.Random;
  */
 public class MenuUI {
 
-    final static int START_BUTTON = 0;
-    final static int Q_BUTTON = 1;
-    final static int INFO_BUTTON = 2;
+    final static int START_BUTTON = 1;
+    final static int Q_BUTTON = 2;
+    final static int INFO_BUTTON = 3;
+    final static int GAME_NAME = 0;
+
     final float sizeButtonMains = 3.43f;
 
 
@@ -70,8 +72,8 @@ public class MenuUI {
 
     private StageButton[] stageButtons;
 
-    FloatAnimator[] objectAnimations;
-    float[] posYs;
+    private FloatAnimator[] objectAnimations;
+    private float[] posYs;
 
     public MenuUI(TextureGen textureGen) {
         setBackground();
@@ -80,7 +82,7 @@ public class MenuUI {
 
         RESETANIMATION = false;
         SETSTAGEPROP = false;
-        final int objCount = 3;     ///3 объекта, кнопки
+        final int objCount = 4;     ///4 объекта, кнопки и название игры
         objectAnimations = new FloatAnimator[objCount];
         posYs = new float[objCount];
         for (int i = 0; i < objCount; i++) {
@@ -233,6 +235,7 @@ public class MenuUI {
         final float cffHeight = 0.9446f;
         gameNameTex.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         gameNameTex.setPosition(0f, Gm.HEIGHT - gameNameTex.getHeight());
+        posYs[GAME_NAME] = gameNameTex.getHeight();
     }
 
 //    private void setUpBarMenu(TextureGen textureGen){
@@ -305,16 +308,19 @@ public class MenuUI {
 
                 backMain.draw(batch);
 
-                gameNameTex.draw(batch);    // 1 объект
-
-                blockAnimation.draw(batch);
-
                 startButton.draw(batch);        // 2 объект
                 qButton.draw(batch);        // 3 объект
                 infoButton.draw(batch);
 
-                for (int i = 0; i < blinks.length; i++) {
-                    blinks[i].draw(batch);
+                gameNameTex.draw(batch);    // 1 объект
+
+                if (!objectAnimations[INFO_BUTTON].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
+                    //и блики
+                    blockAnimation.draw(batch);
+
+                    for (int i = 0; i < blinks.length; i++) {
+                        blinks[i].draw(batch);
+                    }
                 }
 
 
@@ -372,6 +378,9 @@ public class MenuUI {
                     break;
                 case START_BUTTON:
                     startButton.setPosition(startButton.getX(), Gm.HEIGHT - whoY);
+                    break;
+                case GAME_NAME:
+                    gameNameTex.setPosition(gameNameTex.getX(), Gm.HEIGHT - whoY);
                     break;
             }
         }

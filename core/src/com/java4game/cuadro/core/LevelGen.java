@@ -36,7 +36,7 @@ public class LevelGen {
 
     public LevelGen() {
         //инициализируем фон
-        background = Assets.getNewSprite(BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor());
+        background = Assets.getNewSprite(BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor());
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
         background.setPosition(0f, (Gm.HEIGHT - background.getHeight()) / 2f);
@@ -56,7 +56,7 @@ public class LevelGen {
         //
         //инициаилизируем летящий текст
         Color flyStageColor = Color.BLACK;
-//        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getColor()){
+//        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor()){
 //            case BlockAndHolesPositions.BACK_COLOR_BLUE:
 //                flyStageColor = Color.ROYAL.cpy();
 //                break;
