@@ -174,6 +174,12 @@ public class MainBlock extends FieldObject{
         NClastSQY = NCsQY;
     }
 
+    public void blockHasComeHole(){
+        if (!lockChangeInTouch)
+            startChangeDir = true;
+        isTrueRevers = true;
+    }
+
     public void revers(){
 //        isTrueRevers = true;
         blockGenerator.clearStacked();

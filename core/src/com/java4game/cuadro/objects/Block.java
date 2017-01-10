@@ -49,7 +49,6 @@ public class Block extends FieldObject{
         final int sqY = getSQY(true);
         setSQX(sqX);
         setSQY(sqY);
-        setIsHoledVar(sqX, sqY);
     }
 
     private void setIsHoledVar(int sqX, int sqY){
@@ -58,6 +57,7 @@ public class Block extends FieldObject{
             if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
                 if (((Hole)fieldObjects[i]).getType() == type){
                     isHoled = true;
+                    mainBlock.blockHasComeHole();
                     break;
                 }
             }
@@ -78,6 +78,8 @@ public class Block extends FieldObject{
         super.draw(batch);
     }
 
+    private int sQX, sQY, lastSQX, lastSQY;
+
     private void handleMove(){
         if (stacked){
             switch (mainBlock.getDirection()){
@@ -95,5 +97,11 @@ public class Block extends FieldObject{
                     break;
             }
         }
+        sQX = getSQX(true);
+        sQY = getSQY(true);
+        if (sQX != lastSQX || sQY != lastSQY)
+            setIsHoledVar(sQX, sQY);
+        lastSQX = sQX;
+        lastSQY = sQY;
     }
 }

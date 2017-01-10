@@ -77,7 +77,7 @@ public class BlockAndHolesPositions {
     static {
         levels = new Level[10];
         levels[0] = new Level(new Object[]{
-                new Object(1, 4, COLOR_WHITE, HOLE),
+                new Object(2, 4, COLOR_WHITE, HOLE),
 
                 new Object(5, 4, COLOR_WHITE, CUBE)
         }, BACK_COLOR_GRAY);

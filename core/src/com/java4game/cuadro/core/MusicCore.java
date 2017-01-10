@@ -12,7 +12,7 @@ import com.java4game.cuadro.utils.Timer;
  */
 public class MusicCore {
 
-    private static float MUSIC_VOLUME = 0.2f;
+    private static float MUSIC_VOLUME = 0f;
 
     private static Timer stopTimer, startTimer;
     private static Music game, menu;

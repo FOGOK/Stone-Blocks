@@ -111,7 +111,7 @@ public class MenuUI {
 
     private void initBlockAnimation(){
         blockAnimation = new BlockAnimation();
-        blockAnimation.setY(gameNameTex.getY() + 0.5f);
+        blockAnimation.setY(gameNameTex.getY() + gameNameTex.getHeight() * 0.041f);
     }
 
     private void initBlinks(){
