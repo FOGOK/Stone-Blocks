@@ -87,7 +87,7 @@ public class MenuUI {
         posYs = new float[objCount];
         for (int i = 0; i < objCount; i++) {
             objectAnimations[i] = new FloatAnimator(0f, 1f, 1f + 0.3f * i, Interpolation.bounceOut);
-            objectAnimations[i].setTimer((5f + 5f * i) / 10f);
+            objectAnimations[i].setTimer((5f + 0.5f * i) / 10f);
         }
 
 
@@ -314,7 +314,7 @@ public class MenuUI {
 
                 gameNameTex.draw(batch);    // 1 объект
 
-                if (!objectAnimations[INFO_BUTTON].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
+                if (!objectAnimations[GAME_NAME].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
                     //и блики
                     blockAnimation.draw(batch);
 
