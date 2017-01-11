@@ -11,7 +11,7 @@ public class DesktopLauncher {
 
 //        config.width = 160;
 //        config.height = 320;
-        boolean Oleg = false;
+        boolean Oleg = true;
 
 
         config.samples = 8;

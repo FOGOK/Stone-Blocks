@@ -87,16 +87,18 @@ public class BlockGenerator {
     private void calculateCountMinSteps(){
         for (int i = 0; i < fieldObjects.length; i++) {
             if (fieldObjects[i].isCube()){
-                countMinSteps += isOneLineInHoles(fieldObjects[i].getSQX(true), fieldObjects[i].getSQY(true)) ? 1 : 2;
+                countMinSteps += isOneLineInHoles(fieldObjects[i].getSQX(true), fieldObjects[i].getSQY(true), ((Block)fieldObjects[i]).getType()) ? 1 : 2;
             }
         }
     }
 
-    private boolean isOneLineInHoles(int x, int y){
+    private boolean isOneLineInHoles(int x, int y, int type){
         for (int i = 0; i < fieldObjects.length; i++) {
             if (!fieldObjects[i].isCube()){
-                if (x == fieldObjects[i].getSQX(true) || y == fieldObjects[i].getSQY(true))
-                    return true;
+                if (((Hole)fieldObjects[i]).getType() == type){
+                    if (x == fieldObjects[i].getSQX(true) || y == fieldObjects[i].getSQY(true))
+                        return true;
+                }
             }
         }
         return false;

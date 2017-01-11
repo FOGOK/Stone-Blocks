@@ -135,4 +135,8 @@ public class Block extends FieldObject{
 
         blockCompleted.setPosition(block.getX() + cellSize * 0.152f, block.getY() + cellSize * 0.2f);
     }
+
+    public int getType() {
+        return type;
+    }
 }
