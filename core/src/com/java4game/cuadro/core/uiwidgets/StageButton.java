@@ -28,7 +28,7 @@ public class StageButton extends TextButton {
         lockedTexture = Assets.getNewSprite(26);
         normalTexture = Assets.getNewSprite(25);
         completeTexture = Assets.getNewSprite(27);
-        getTextBlock().setCustomCff(h / 2f);
+        getTextBlock().setCustomCff(h / 3f);
     }
 
     @Override

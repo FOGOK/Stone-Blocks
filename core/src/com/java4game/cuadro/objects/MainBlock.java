@@ -31,7 +31,7 @@ public class MainBlock extends FieldObject{
 
     private boolean isRotationStart;
 
-    private boolean isTrueRevers;
+    private boolean isReversTrued;
 
     private BlockGenerator blockGenerator;
 
@@ -49,7 +49,7 @@ public class MainBlock extends FieldObject{
 
 
 
-        isTrueRevers = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
+        isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
         isDirectionChanged = true;
         setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
     }
@@ -141,7 +141,7 @@ public class MainBlock extends FieldObject{
             if (!lockChangeInTouch)
                 startChangeDir = true;
             if (blockGenerator.isStackAvailable())
-                isTrueRevers = true;
+                revers();
 
         }
 
@@ -158,15 +158,10 @@ public class MainBlock extends FieldObject{
 
         if (isCornered(0) && !isDirectionChanged){
             nextDirection();
-            lockChangeInTouch = false;
+            isReversTrued = lockChangeInTouch = false;
         }
         else if (isDirectionChanged)
             isDirectionChanged = !(sQX != lastSQX || sQY != lastSQY);
-
-        if (isTrueRevers && (NCsQX != NClastSQX || NCsQY != NClastSQY)){
-            isTrueRevers = false;
-            revers();
-        }
 
         lastSQX = sQX;
         lastSQY = sQY;
@@ -175,14 +170,15 @@ public class MainBlock extends FieldObject{
     }
 
     public void blockHasComeHole(){
-        if (!lockChangeInTouch)
-            startChangeDir = true;
-        isTrueRevers = true;
+        if (!isReversTrued){
+            isReversTrued = true;
+            revers();
+        }
     }
 
     public void revers(){
 //        isTrueRevers = true;
-        blockGenerator.clearStacked();
+        blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
         nextDirection();
         nextDirection();    //поворачиваемся на 180 градусов
     }

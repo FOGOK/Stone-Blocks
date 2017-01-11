@@ -3,6 +3,7 @@ package com.java4game.cuadro.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.PauseUI;
 import com.java4game.cuadro.utils.Atalas;
@@ -54,6 +55,10 @@ public class Handler {
         pauseUI = new PauseUI(textureGen);
         menuUI = new MenuUI(textureGen);
         state = State.Menu;
+
+//        state = State.Game;
+//        StageButton.LEVEL = 8;
+//        levelGen = new LevelGen();
     }
 
     public void draw(SpriteBatch batch){

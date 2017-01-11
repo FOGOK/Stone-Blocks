@@ -28,7 +28,7 @@ public class LevelGen {
     public static final int SQSIZE = 7;
     public static float backHDivH;
     private Rectangle fieldBounds;
-    private Sprite background, field;
+    private Sprite background, field, test, test2;
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
@@ -54,6 +54,16 @@ public class LevelGen {
         blockGenerator = new BlockGenerator(mainBlock, fieldBounds, StageButton.LEVEL - 1);
         mainBlock.setBlockGenerator(blockGenerator);
         //
+
+        test = Assets.getNewSprite(32);
+        test.setSize(3f, 3f * 0.9521f);
+        test.setPosition((Gm.WIDTH - test.getWidth()) / 2f, Gm.HEIGHT - 3.4f);
+        test.setAlpha(0.5f);
+
+        test2 = Assets.getNewSprite(35);
+        test2.setSize(3f, 3f * 0.9523f);
+        test2.setPosition((Gm.WIDTH - test.getWidth()) / 2f, Gm.HEIGHT - 3.4f);
+
         //инициаилизируем летящий текст
         Color flyStageColor = Color.BLACK;
 //        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor()){
@@ -79,7 +89,17 @@ public class LevelGen {
     }
 
     public void draw(SpriteBatch batch){
-        field.draw(batch);
+
+
+        flyingStage.handle();
+        flyingStage.drawGlass(batch);
+
+//        test.draw(batch);
+
+        if (!flyingStage.isFlying()){
+            field.setAlpha(flyingStage.getProgressEnd());
+            field.draw(batch);
+        }
 
 
         batch.end();
@@ -98,13 +118,16 @@ public class LevelGen {
         batch.begin();
         batch.setBlendFunction(srcFunc, dstFunc);
 
-        blockGenerator.draw(batch);
 
-        if (!flyingStage.isFlying())
+//        test2.draw(batch);
+
+        if (!flyingStage.isFlying()){
+            blockGenerator.setAlpha(flyingStage.getProgressEnd());
+            blockGenerator.draw(batch);
+            mainBlock.setAlpha(flyingStage.getProgressEnd());
             mainBlock.draw(batch);
-
-        flyingStage.handle();
-        flyingStage.drawGlass(batch);
+        }
         flyingStage.drawText(batch);
+
     }
 }

@@ -41,6 +41,10 @@ public class FieldObject {
         setSQY(iY);
     }
 
+    public void setAlpha(float alpha){
+        block.setAlpha(alpha);
+    }
+
     //устанавливаем позицию по x | y в клетках
     void setSQX(int iX){        //устанавливаем x на определённую клетку внутри поля
         setX(fieldBounds.getX() + iX * cellSize + (cellSize - block.getWidth()) / 2f);
@@ -48,21 +52,66 @@ public class FieldObject {
     void setSQY(int iY){    //устанавливаем y  на определённую клетку внутри поля
         setY(fieldBounds.getY() + iY * cellSize + (cellSize - block.getWidth()) / 2f);
     }
+    float getPosSQX(){        //какую позицию будет иметь кубик, если находится в таком положении по x
+        return fieldBounds.getX() + getSQX(true) * cellSize + (cellSize - block.getWidth()) / 2f;
+    }
+    float getPosSQY(){    //какую позицию будет иметь кубик, если находится в таком положении по y
+        return fieldBounds.getY() + getSQY(true) * cellSize + (cellSize - block.getWidth()) / 2f;
+    }
     ///
 
     //получить координаты кубика в клетках
     private BigDecimal bigDecimal;
+    int getSQX(int direction, float offset){
+        float val = block.getX() + block.getWidth() / 2;
+        switch (direction){
+            case MainBlock.RIGHT:
+                val -= block.getWidth() / 2 + offset;
+                break;
+            case MainBlock.LEFT:
+                val += block.getWidth() / 2 - offset;
+                break;
+        }
+        return getSQX(false, val);
+    }
+
+    int getSQY(int direction, float offset){
+        float val = block.getY() + block.getWidth() / 2;
+        switch (direction){
+            case MainBlock.BOTTOM:
+                val += block.getWidth() / 2 - offset;
+                break;
+            case MainBlock.TOP:
+                val -= block.getWidth() / 2 + offset;
+                break;
+        }
+        return getSQY(false, val);
+    }
+
+
     int getSQX(boolean center){
+        return getSQX(center, block.getX());
+    }
+    int getSQY(boolean center) {
+        return getSQY(center, block.getY());
+    }
+    int getSQX(boolean center, float value){
         final float centerP = center ? block.getWidth() / 2 : 0f;
-        final float posXiiP = (block.getX() + centerP - fieldBounds.getX()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
+        final float posXiiP = (value + centerP - fieldBounds.getX()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
         bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
     }
-    int getSQY(boolean center) {
+    int getSQY(boolean center, float value){
         final float centerP = center ? block.getWidth() / 2 : 0f;
-        final float posYiiP = (block.getY() + centerP - fieldBounds.getY()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
+        final float posYiiP = (value + centerP - fieldBounds.getY()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
         bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
         return bigDecimal.intValue();
+    }
+    int getSQX(float value){
+        return getSQX(false, value);
+    }
+    int getSQY(float value){
+        return getSQY(false, value);
     }
     ///
 

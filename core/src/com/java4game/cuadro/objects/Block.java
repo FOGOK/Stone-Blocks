@@ -3,6 +3,7 @@ package com.java4game.cuadro.objects;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.java4game.cuadro.utils.Assets;
 
 /**
  * Created by FOGOK on 03.01.2017 16:00.
@@ -16,6 +17,8 @@ public class Block extends FieldObject{
     private boolean stacked;
     private int stackedPosition;
     private boolean isHoled;
+
+    private Sprite blockCompleted;
 
     private int type;
 
@@ -32,6 +35,9 @@ public class Block extends FieldObject{
         this.mainBlock = mainBlock;
         mainBlockBounds = mainBlock.getBlockBounds();
 
+        blockCompleted = Assets.getNewSprite(31);
+        blockCompleted.setSize(cellSize / 3f, cellSize / 3f);
+
         this.type = type;
         isHoled = stacked = false;
 
@@ -43,12 +49,33 @@ public class Block extends FieldObject{
         stacked = true;
     }
 
-    public void clearStacked(){
-        stacked = false;
-        final int sqX = getSQX(true);
-        final int sqY = getSQY(true);
-        setSQX(sqX);
-        setSQY(sqY);
+
+
+    public void clearStacked(float ssqX, float ssqY){
+        if (stacked){
+            stacked = false;
+
+            float sqX = ssqX;
+            float sqY = ssqY;
+
+            switch (mainBlock.getDirection()){
+                case MainBlock.TOP:
+                    sqY += cellSize * stackedPosition;
+                    break;
+                case MainBlock.BOTTOM:
+                    sqY -= cellSize * stackedPosition;
+                    break;
+                case MainBlock.LEFT:
+                    sqX -= cellSize * stackedPosition;
+                    break;
+                case MainBlock.RIGHT:
+                    sqX += cellSize * stackedPosition;
+                    break;
+            }
+
+            setSQX(getSQX(sqX));
+            setSQY(getSQY(sqY));
+        }
     }
 
     private void setIsHoledVar(int sqX, int sqY){
@@ -76,6 +103,8 @@ public class Block extends FieldObject{
     public void draw(SpriteBatch batch){
         handleMove();
         super.draw(batch);
+        if (isHoled)
+            blockCompleted.draw(batch);
     }
 
     private int sQX, sQY, lastSQX, lastSQY;
@@ -100,8 +129,10 @@ public class Block extends FieldObject{
         sQX = getSQX(true);
         sQY = getSQY(true);
         if (sQX != lastSQX || sQY != lastSQY)
-            setIsHoledVar(sQX, sQY);
+            setIsHoledVar(getSQX(true), getSQY(true));
         lastSQX = sQX;
         lastSQY = sQY;
+
+        blockCompleted.setPosition(block.getX() + cellSize * 0.152f, block.getY() + cellSize * 0.2f);
     }
 }

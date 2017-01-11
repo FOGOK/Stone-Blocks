@@ -111,13 +111,19 @@ public class BlockGenerator {
 //        DebugDrawer.drawRect(batch, stackedTrain);
     }
 
-    public void clearStacked(){
+    public void setAlpha(float alpha){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            fieldObjects[i].setAlpha(alpha);
+        }
+    }
+
+    public void clearStacked(float x, float y){
         stackedCount = 0;
         isCleanedCollision = false;
         stackedTrain.set(mainBlockBounds);
         for (int i = 0; i < fieldObjects.length; i++) {
             if (fieldObjects[i].isCube())
-                ((Block)fieldObjects[i]).clearStacked();
+                ((Block)fieldObjects[i]).clearStacked(x, y);
         }
         inspectHolesAndBlocks();
     }

@@ -78,7 +78,11 @@ public class FlyingStage {
 
 
     public boolean isFlying(){
-        return flyingAnimatorToTo.isNeedToUpdate();
+        return flyingAnimatorTo.isNeedToUpdate();
+    }
+
+    public float getProgressEnd(){
+        return flyingAnimatorToTo.getProgress();
     }
 
     public void drawGlass(SpriteBatch batch){

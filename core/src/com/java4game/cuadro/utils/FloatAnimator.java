@@ -134,6 +134,10 @@ public class FloatAnimator {
         return false;
     }
 
+    public float getProgress(){
+        return needToUpdate ? GMUtils.normalizeOneZero(time / animationTime) : 1f;
+    }
+
     public boolean isRevers() {
         return isRevers;
     }
