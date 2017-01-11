@@ -11,12 +11,20 @@ public class DesktopLauncher {
 
 //        config.width = 160;
 //        config.height = 320;
+        boolean Oleg = false;
+
 
         config.samples = 8;
-        config.width = 360;
-        config.height = 640;
         config.resizable = false;
-        config.y = 768 / 2 - 20 - config.height / 2;
+
+        if (Oleg){
+            config.width = 360;
+            config.height = 640;
+            config.y = 768 / 2 - 20 - config.height / 2;
+        }else{
+            config.width = 480;
+            config.height = 854;
+        }
 
 		new LwjglApplication(new Gm(), config);
 	}
