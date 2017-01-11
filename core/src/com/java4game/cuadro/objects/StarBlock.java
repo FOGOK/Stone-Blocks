@@ -55,7 +55,7 @@ public class StarBlock {
         this.goldSteps = goldSteps;
         silverSteps = 1;
         bronzeSteps = 1;
-        allSteps = (int) ((goldSteps + 2) * 1.3f);
+        allSteps = (int) ((goldSteps + 3) * 1.2f);
         currentStar = Star.Gold;
     }
     private void initStarSprites(){
