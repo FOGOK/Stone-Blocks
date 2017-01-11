@@ -58,9 +58,19 @@ public class BlockAndHolesPositions {
     public static class Level{
         private Object objects[];
         private int backgroundColor;
+        private int minSteps;
         public Level(Object objects[], int backgroundColor){
             this.objects = objects;
             this.backgroundColor = backgroundColor;
+            minSteps = 0;
+        }
+
+        public int getMinSteps() {
+            return minSteps;
+        }
+
+        public void setMinSteps(int minSteps) {
+            this.minSteps = minSteps;
         }
 
         public int getBackgroundColor() {

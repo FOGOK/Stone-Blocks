@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.DebugDrawer;
@@ -72,8 +73,14 @@ public class Gm extends ApplicationAdapter {
     }
 
     private void setStagesOpened(){
-        if (Prefers.getInt(Prefers.KeyOpenedStages) == 0)
+        if (Prefers.getInt(Prefers.KeyOpenedStages) == 0){
             Prefers.putInt(Prefers.KeyOpenedStages, 1);
+            char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
+            for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[0]; i++) {
+                chars[i] = '0';
+            }
+            Prefers.putString(Prefers.KeyStars, new String(chars));
+        }
     }
 
     public static float aspectR, WIDTH, HEIGHT, mdT;     ///размеры экрана статичны (высота всегда равна 20, ширина 20 * отнощение ширины на высоту, mdT - delta / 0.016 = ~1

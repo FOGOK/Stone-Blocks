@@ -67,7 +67,10 @@ public class UI {
         contentFont.getData().setScale(CONVERTED_TO_ABSTRACT * DIFFCONTENTFONT);
     }
 
-
+    public static void setAlpha(final float alpha, final boolean isTitle){
+        BitmapFont textBF = isTitle ? titleFont : contentFont;
+        textBF.setColor(textBF.getColor().r, textBF.getColor().g, textBF.getColor().b, alpha);
+    }
 
     public static void setColor(final Color color, final boolean isTitle){
         BitmapFont textBF = isTitle ? titleFont : contentFont;

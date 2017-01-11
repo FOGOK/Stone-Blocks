@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
+import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 
 /**
@@ -28,15 +31,23 @@ public class LevelGen {
     public static final int SQSIZE = 7;
     public static float backHDivH;
     private Rectangle fieldBounds;
-    private Sprite background, field, test, test2;
+    private Sprite background, field;
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
-    private FlyingStage flyingStage;
 
-    public LevelGen() {
+    //ui
+    private FlyingStage flyingStage;
+    private StarBlock starBlock;
+    ///
+
+    private MenuUI menuUI;
+
+    public LevelGen(MenuUI menuUI) {
         //инициализируем фон
-        background = Assets.getNewSprite(BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor());
+        this.menuUI = menuUI;
+        BlockAndHolesPositions.Level currLevel = BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1);
+        background = Assets.getNewSprite(currLevel.getBackgroundColor());
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
         background.setPosition(0f, (Gm.HEIGHT - background.getHeight()) / 2f);
@@ -50,22 +61,14 @@ public class LevelGen {
         fieldBounds = field.getBoundingRectangle();
 
         ///инициализируем кубик и устанавливаем размер кубика
-        mainBlock = new MainBlock(Assets.getNewSprite(12), fieldBounds);
-        blockGenerator = new BlockGenerator(mainBlock, fieldBounds, StageButton.LEVEL - 1);
+        mainBlock = new MainBlock(this, Assets.getNewSprite(12), fieldBounds);
+        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, StageButton.LEVEL - 1);
         mainBlock.setBlockGenerator(blockGenerator);
         //
 
-        test = Assets.getNewSprite(32);
-        test.setSize(3f, 3f * 0.9521f);
-        test.setPosition((Gm.WIDTH - test.getWidth()) / 2f, Gm.HEIGHT - 3.4f);
-        test.setAlpha(0.5f);
-
-        test2 = Assets.getNewSprite(35);
-        test2.setSize(3f, 3f * 0.9523f);
-        test2.setPosition((Gm.WIDTH - test.getWidth()) / 2f, Gm.HEIGHT - 3.4f);
-
+        //ui
         //инициаилизируем летящий текст
-        Color flyStageColor = Color.BLACK;
+        Color flyStageColor = Color.valueOf("2c2c36");
 //        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor()){
 //            case BlockAndHolesPositions.BACK_COLOR_BLUE:
 //                flyStageColor = Color.ROYAL.cpy();
@@ -86,6 +89,8 @@ public class LevelGen {
         flyingStage = new FlyingStage();
         flyingStage.setNew(StageButton.LEVEL, flyStageColor);
         //
+        starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
+        blockGenerator.setStarBlock(starBlock);
     }
 
     public void draw(SpriteBatch batch){
@@ -94,11 +99,15 @@ public class LevelGen {
         flyingStage.handle();
         flyingStage.drawGlass(batch);
 
-//        test.draw(batch);
 
         if (!flyingStage.isFlying()){
             field.setAlpha(flyingStage.getProgressEnd());
             field.draw(batch);
+            if (flyingStage.getProgressEnd() != 1f)
+                starBlock.handle(flyingStage.getProgressEnd());
+            else
+                starBlock.handle();
+            starBlock.drawGlass(batch);
         }
 
 
@@ -119,15 +128,31 @@ public class LevelGen {
         batch.setBlendFunction(srcFunc, dstFunc);
 
 
-//        test2.draw(batch);
-
         if (!flyingStage.isFlying()){
             blockGenerator.setAlpha(flyingStage.getProgressEnd());
             blockGenerator.draw(batch);
             mainBlock.setAlpha(flyingStage.getProgressEnd());
             mainBlock.draw(batch);
+
+            starBlock.drawMetalAndText(batch);
         }
         flyingStage.drawText(batch);
 
+    }
+
+    public void refreshStars(){
+        menuUI.refreshStarsData();
+    }
+
+    public void minusStep(){
+        starBlock.minusStep();
+    }
+
+    public void inspectIsChangeStar(){
+        starBlock.inspectIsChangeStar();
+    }
+
+    public void lose(){
+        ButtonActions.activateAction(ButtonActions.All.TOMAINMENU_PAUSE_ACTION);
     }
 }

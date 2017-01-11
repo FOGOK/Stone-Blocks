@@ -3,6 +3,7 @@ package com.java4game.cuadro.core.uiwidgets;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 
 /**
@@ -19,16 +20,21 @@ public class StageButton extends TextButton {
     private int stage;
     private boolean isLockedStage;
     private boolean isCompleteStage;
+    private StarBlock.Star currentStar;
+    private float size;
 
-    private Sprite lockedTexture, normalTexture, completeTexture;
+    private Sprite lockedTexture, normalTexture, completeTexture, starTexture;
+
 
     public StageButton(ButtonActions.All action, float h, int stage) {
         super(action, 0f, 0f, h, 25, 28, stage + "");
         this.stage = stage;
+        size = h;
         lockedTexture = Assets.getNewSprite(26);
         normalTexture = Assets.getNewSprite(25);
         completeTexture = Assets.getNewSprite(27);
         getTextBlock().setCustomCff(h / 3f);
+        currentStar = StarBlock.Star.None;
     }
 
     @Override
@@ -43,8 +49,9 @@ public class StageButton extends TextButton {
         refreshState();
     }
 
-    public void setCompleteStage(boolean completeStage) {
+    public void setCompleteStage(boolean completeStage, StarBlock.Star currentStar) {
         isCompleteStage = completeStage;
+        this.currentStar = currentStar;
         refreshState();
     }
 
@@ -57,8 +64,24 @@ public class StageButton extends TextButton {
             setFirstTexture(lockedTexture);
             setEnabled(false);
         }else{
-            if (isCompleteStage)
+            if (isCompleteStage){
                 setFirstTexture(completeTexture);
+                float sizeTex = size / 3f;
+                switch (currentStar){
+                    case Gold:
+                        starTexture = Assets.getNewSprite(35);
+                        starTexture.setSize(sizeTex, sizeTex);
+                        break;
+                    case Silver:
+                        starTexture = Assets.getNewSprite(34);
+                        starTexture.setSize(sizeTex, sizeTex);
+                        break;
+                    case Bronze:
+                        starTexture = Assets.getNewSprite(33);
+                        starTexture.setSize(sizeTex, sizeTex);
+                        break;
+                }
+            }
             else
                 setFirstTexture(normalTexture);
 
@@ -74,6 +97,11 @@ public class StageButton extends TextButton {
     public void draw(final SpriteBatch batch) {
         if (!isLockedStage){
             super.draw(batch);
+            if (currentStar != StarBlock.Star.None){
+                starTexture.setPosition(completeTexture.getX() + completeTexture.getWidth() * 0.933f - starTexture.getWidth() / 2f,
+                                        completeTexture.getY() + completeTexture.getHeight() * 0.866f - starTexture.getWidth() / 2f);
+                starTexture.draw(batch);
+            }
         }
         else
             drawButtonTexture(batch);

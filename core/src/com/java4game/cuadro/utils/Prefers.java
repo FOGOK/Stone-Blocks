@@ -2,6 +2,9 @@ package com.java4game.cuadro.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.java4game.cuadro.objects.StarBlock;
+
+import java.util.Map;
 
 /**
  * Created by FOGOK on 25.10.2016 7:58.
@@ -15,16 +18,19 @@ public class Prefers {
 
     /////// DO NOT CHANGE FINAL STRINGS
     public static final String KeyOpenedStages = "KeyOpenedStages";
+    public static final String KeyStars = "KeyStars";
     /////// DO NOT CHANGE FINAL STRINGS
 
     public static void initPrefs(){
         prefs = Gdx.app.getPreferences("My Preferences");
     }
 
+
     public static void putInt(String key, int whoEdit){
         prefs.putInteger(key, whoEdit);
         prefs.flush();
     }
+
 
     public static void putFloat(String key, float whoEdit){
         prefs.putFloat(key, whoEdit);
@@ -42,6 +48,15 @@ public class Prefers {
     public static void putBool(String key, boolean whoEdit){
         prefs.putBoolean(key, whoEdit);
         prefs.flush();
+    }
+
+    public static void putString(String key, String val){
+        prefs.putString(key, val);
+        prefs.flush();
+    }
+
+    public static String getString(String key){
+        return prefs.getString(key, " ");
     }
 
     public static boolean getBool(String key, boolean defVal){

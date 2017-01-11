@@ -34,6 +34,7 @@ public class MainBlock extends FieldObject{
     private boolean isReversTrued;
 
     private BlockGenerator blockGenerator;
+    private LevelGen levelGen;
 
     private Random rnd = new Random();
     private boolean isRevers;
@@ -41,8 +42,9 @@ public class MainBlock extends FieldObject{
 
     //corner = угол поля
 
-    public MainBlock(Sprite block, Rectangle fieldBounds) {
+    public MainBlock(LevelGen levelGen, Sprite block, Rectangle fieldBounds) {
         super(block, fieldBounds, true);
+        this.levelGen = levelGen;
 
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
         this.block.setOriginCenter();
@@ -150,6 +152,7 @@ public class MainBlock extends FieldObject{
             nextDirection();
             startRotation();
             lockChangeInTouch = true;
+            levelGen.minusStep();  //отнимаем один ход
         }
 
 
@@ -158,6 +161,8 @@ public class MainBlock extends FieldObject{
 
         if (isCornered(0) && !isDirectionChanged){
             nextDirection();
+            if (lockChangeInTouch)
+                levelGen.inspectIsChangeStar();
             isReversTrued = lockChangeInTouch = false;
         }
         else if (isDirectionChanged)

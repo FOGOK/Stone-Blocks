@@ -57,7 +57,7 @@ public class Handler {
         state = State.Menu;
 
 //        state = State.Game;
-//        StageButton.LEVEL = 8;
+//        StageButton.LEVEL = 4;
 //        levelGen = new LevelGen();
     }
 
@@ -91,7 +91,7 @@ public class Handler {
     }
 
     public void restart(){
-        levelGen = new LevelGen();
+        levelGen = new LevelGen(menuUI);
         ISRESTART = false;
     }
 

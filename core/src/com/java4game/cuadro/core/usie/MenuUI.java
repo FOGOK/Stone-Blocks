@@ -15,6 +15,7 @@ import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.objects.Blink;
 import com.java4game.cuadro.objects.BlockAnimation;
+import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Atalas;
 import com.java4game.cuadro.utils.FloatAnimator;
@@ -49,9 +50,9 @@ public class MenuUI {
 
     private int OPENED_WORLDS;
     public static int SELECTEDWORLD;
-    private int[][] STARS = new int[5][100];
+    private StarBlock.Star[] STARS = new StarBlock.Star[10];
 
-    public static int[][] STARSINSTAGES = new int[5][2];
+//    public static int[][] STARSINSTAGES = new int[5][2];
 
     public static int[] OPENEDSTAGESINWORLD;
     public static final int[] COUNTSTAGESINWORLD = new int[] {10, 30, 30, 30, 30};
@@ -138,15 +139,42 @@ public class MenuUI {
         OPENEDSTAGESINWORLD = new int[] {1, 12, 17, 18, 28};    ///количество уровней, открытых на каждых мирах
         OPENEDSTAGESINWORLD[0] = Prefers.getInt(Prefers.KeyOpenedStages);
 
-        int addTo;
-        for (int i = 0; i < 5; i++) {
-            addTo = 0;
-            for (int i2 = 0; i2 < OPENEDSTAGESINWORLD[i]; i2++) {
-                STARS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
-                addTo += STARS[i][i2];
-            }
-            STARSINSTAGES[i][0] = addTo;
-            STARSINSTAGES[i][1] = COUNTSTAGESINWORLD[i] * 3;
+        refreshStarsData();
+
+//        int addTo;
+//        for (int i = 0; i < 5; i++) {
+//            addTo = 0;
+//            for (int i2 = 0; i2 < OPENEDSTAGESINWORLD[i]; i2++) {
+//                STARS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
+//                addTo += STARS[i][i2];
+//            }
+//            STARSINSTAGES[i][0] = addTo;
+//            STARSINSTAGES[i][1] = COUNTSTAGESINWORLD[i] * 3;
+//        }
+    }
+
+    public void refreshStarsData(){
+        STARS = new StarBlock.Star[COUNTSTAGESINWORLD[0]];
+        final char[] starsS = Prefers.getString(Prefers.KeyStars).toCharArray();
+        for (int i = 0; i < COUNTSTAGESINWORLD[0]; i++) {
+            if (i < OPENEDSTAGESINWORLD[0]){
+                int key = Character.getNumericValue(starsS[i]);
+                switch (key){
+                    case 0:
+                        STARS[i] = StarBlock.Star.None;
+                        break;
+                    case 1:
+                        STARS[i] = StarBlock.Star.Bronze;
+                        break;
+                    case 2:
+                        STARS[i] = StarBlock.Star.Silver;
+                        break;
+                    case 3:
+                        STARS[i] = StarBlock.Star.Gold;
+                        break;
+                }
+            }else
+                STARS[i] = StarBlock.Star.None;
         }
     }
 
@@ -164,14 +192,14 @@ public class MenuUI {
         sizeB * 0.4f, sizeB * 0.4f);
 
 
-        int starsCount = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
-                starsCount += STARS[i][i2];
-            }
-        }
-        starsText = new TextBlock(starIco.getX() + starIco.getWidth() + otstf, starIco.getY() + 0.15f, true, "" + starsCount);
-        starsText.setCustomCff(starIco.getHeight() * 0.8f);
+//        int starsCount = 0;
+//        for (int i = 0; i < 5; i++) {
+//            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
+//                starsCount += STARS[i][i2];
+//            }
+//        }
+//        starsText = new TextBlock(starIco.getX() + starIco.getWidth() + otstf, starIco.getY() + 0.15f, true, "" + starsCount);
+//        starsText.setCustomCff(starIco.getHeight() * 0.8f);
     }
 
 //    private void initStageAndWorldText(){
@@ -202,10 +230,10 @@ public class MenuUI {
         final int columns = 2, rows = 5;
         final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
         for (int i = 0; i < columns * rows; i++) {
-            stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i);
+            stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i, STARS[i]);
             stageButtons[i].setLockedStage(i >= countOpened);
-            if (i < countOpened)
-                stageButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+//            if (i < countOpened)
+//                stageButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
         }
         int i = 0, selectedRow = 0;
         boolean isSelectedRow = false;

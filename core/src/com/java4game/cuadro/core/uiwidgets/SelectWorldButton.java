@@ -36,32 +36,32 @@ public class SelectWorldButton extends BaseButton {
                 backT = Atalas.worldBtn1;
                 frontT = Atalas.worldBtn2;
                 setAction(ButtonActions.All.WORLD1ACT);
-                countStars = MenuUI.STARSINSTAGES[0][0];
-                allStars = MenuUI.STARSINSTAGES[0][1];
+//                countStars = MenuUI.STARSINSTAGES[0][0];
+//                allStars = MenuUI.STARSINSTAGES[0][1];
                 break;
             case 1:
                 text.setText(Localization.getText(Localization.LettersKey.ICE_SITY));
                 backT = Atalas.worldBtn2;
                 frontT = Atalas.worldBtn1;
                 setAction(ButtonActions.All.WORLD2ACT);
-                countStars = MenuUI.STARSINSTAGES[1][0];
-                allStars = MenuUI.STARSINSTAGES[1][1];
+//                countStars = MenuUI.STARSINSTAGES[1][0];
+//                allStars = MenuUI.STARSINSTAGES[1][1];
                 break;
             case 2:
                 text.setText(Localization.getText(Localization.LettersKey.SUMMER));
                 backT = Atalas.worldBtn3;
                 frontT = Atalas.worldBtn2;
                 setAction(ButtonActions.All.WORLD3ACT);
-                countStars = MenuUI.STARSINSTAGES[2][0];
-                allStars = MenuUI.STARSINSTAGES[2][1];
+//                countStars = MenuUI.STARSINSTAGES[2][0];
+//                allStars = MenuUI.STARSINSTAGES[2][1];
                 break;
             case 3:
                 text.setText(Localization.getText(Localization.LettersKey.RAINBOW));
                 backT = Atalas.worldBtn4;
                 frontT = Atalas.worldBtn2;
                 setAction(ButtonActions.All.WORLD4ACT);
-                countStars = MenuUI.STARSINSTAGES[3][0];
-                allStars = MenuUI.STARSINSTAGES[3][1];
+//                countStars = MenuUI.STARSINSTAGES[3][0];
+//                allStars = MenuUI.STARSINSTAGES[3][1];
                 break;
             case 4:
                 text.setText(Localization.getText(Localization.LettersKey.DARK_SIDE));
@@ -69,8 +69,8 @@ public class SelectWorldButton extends BaseButton {
                 backT = Atalas.worldBtn5;
                 frontT = Atalas.worldBtn2;
                 setAction(ButtonActions.All.WORLD5ACT);
-                countStars = MenuUI.STARSINSTAGES[4][0];
-                allStars = MenuUI.STARSINSTAGES[4][1];
+//                countStars = MenuUI.STARSINSTAGES[4][0];
+//                allStars = MenuUI.STARSINSTAGES[4][1];
                 break;
         }
 

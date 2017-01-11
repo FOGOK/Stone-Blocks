@@ -89,10 +89,10 @@ public class FieldObject {
     }
 
 
-    int getSQX(boolean center){
+    public int getSQX(boolean center){
         return getSQX(center, block.getX());
     }
-    int getSQY(boolean center) {
+    public int getSQY(boolean center) {
         return getSQY(center, block.getY());
     }
     int getSQX(boolean center, float value){

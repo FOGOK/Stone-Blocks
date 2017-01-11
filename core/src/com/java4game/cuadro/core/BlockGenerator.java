@@ -9,6 +9,7 @@ import com.java4game.cuadro.objects.Block;
 import com.java4game.cuadro.objects.FieldObject;
 import com.java4game.cuadro.objects.Hole;
 import com.java4game.cuadro.objects.MainBlock;
+import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 import com.java4game.cuadro.utils.Timer;
@@ -24,6 +25,7 @@ public class BlockGenerator {
     private int LEVEL;
 //    private Block blocks[];
     private FieldObject fieldObjects[];
+    private int countMinSteps;
     private Rectangle mainBlockBounds, stackedTrain, dotq;
     private int stackedCount;
     private MainBlock mainBlock;
@@ -39,10 +41,13 @@ public class BlockGenerator {
     private float cellSize;
 
     private Rectangle fieldBounds;
+    private StarBlock starBlock;
+    private LevelGen levelGen;
 
-    public BlockGenerator(MainBlock mainBlock, Rectangle fieldBounds, int LEVEL) {
+    public BlockGenerator(LevelGen levelGen, MainBlock mainBlock, Rectangle fieldBounds, int LEVEL) {
         this.mainBlock = mainBlock;
         this.fieldBounds = fieldBounds;
+        this.levelGen = levelGen;
 
         this.LEVEL = LEVEL;
 
@@ -60,7 +65,7 @@ public class BlockGenerator {
 
         BlockAndHolesPositions.Level level = BlockAndHolesPositions.getLevel(LEVEL);
 
-        endGameTimer = new Timer(1);
+        endGameTimer = new Timer(1f);
 
         fieldObjects = new FieldObject[level.getObjects().length];
         for (int i = 0; i < fieldObjects.length; i++) {
@@ -72,7 +77,29 @@ public class BlockGenerator {
                 fieldObjects[i] = new Hole(Assets.getNewSprite(13 + level.getObjects()[i].getType()), fieldBounds,
                         level.getObjects()[i].getX(), level.getObjects()[i].getY(), level.getObjects()[i].getType());
         }
+        calculateCountMinSteps();
+    }
 
+    public void setStarBlock(StarBlock starBlock) {
+        this.starBlock = starBlock;
+    }
+
+    private void calculateCountMinSteps(){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (fieldObjects[i].isCube()){
+                countMinSteps += isOneLineInHoles(fieldObjects[i].getSQX(true), fieldObjects[i].getSQY(true)) ? 1 : 2;
+            }
+        }
+    }
+
+    private boolean isOneLineInHoles(int x, int y){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (!fieldObjects[i].isCube()){
+                if (x == fieldObjects[i].getSQX(true) || y == fieldObjects[i].getSQY(true))
+                    return true;
+            }
+        }
+        return false;
     }
 
     public void draw(SpriteBatch batch){
@@ -91,18 +118,31 @@ public class BlockGenerator {
         }
 
         if (isEndLevel || endGameTimer.isStarted()){
-            if (endGameTimer.next()){
-                Handler.state = Handler.State.Menu;
-                MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
-                MenuUI.SETSTAGEPROP = true;
-                MusicCore.play(MusicCore.MENU);
-                if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1){     //открываем следующий уровень
-                    if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
-                        MenuUI.OPENEDSTAGESINWORLD[0]++;
-                        Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);
-                    }
+//            if (endGameTimer.next()){
+            Handler.state = Handler.State.Menu;
+            MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
+            MenuUI.SETSTAGEPROP = true;
+            MusicCore.play(MusicCore.MENU);
+
+            //setStar
+            final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
+            final int curStar = starBlock.getCurrentStar().ordinal();
+            if (curStar > Character.getNumericValue(chars[LEVEL]))
+                chars[LEVEL] = Integer.toString(curStar).charAt(0);
+            Prefers.putString(Prefers.KeyStars, new String(chars));
+            levelGen.refreshStars();
+
+
+//            chars[LEVEL] =
+            ///
+
+            if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1){     //открываем следующий уровень
+                if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
+                    MenuUI.OPENEDSTAGESINWORLD[0]++;
+                    Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);
                 }
             }
+//            }
         }
 
 //        dotq.setPosition(cornTrainX, cornTrainY);
@@ -238,7 +278,7 @@ public class BlockGenerator {
         }
     }
 
-    public void dispose() {
-
+    public int getCountMinSteps() {
+        return countMinSteps;
     }
 }
