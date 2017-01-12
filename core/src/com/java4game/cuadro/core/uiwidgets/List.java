@@ -49,6 +49,10 @@ public class List extends BaseObject {
         objects[column][row] = object;
     }
 
+    public void setPaddingBottom(float paddingBottom) {
+        this.paddingBottom = paddingBottom;
+    }
+
     public void calculatePadding(int targetObjectColumn, int targetObjectRow){
         padding = (bounds.width - objects[targetObjectColumn][targetObjectRow].getBounds().width * columns) / (float) (columns - 1);
         setPositionAllObjects();

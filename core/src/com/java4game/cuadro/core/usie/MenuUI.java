@@ -2,7 +2,6 @@ package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -63,7 +62,7 @@ public class MenuUI {
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
 //    private TextButton startButton;
     private CustomFormButton startButton, infoButton, qButton;
-    private Sprite backMain, /*upBarMenu, downBarMenu,*/ gameNameTex, selectStageText;
+    private Sprite backMain, /*upBarMenu, downBarMenu,*/ gameNameTex, selectStageText, bottomBar;
 
     public static int MENUSTATE;
     public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
@@ -100,7 +99,7 @@ public class MenuUI {
 
         addTestedValues();
 
-        setSelectStageText();
+        setSelectStageTextAndBottomBar();
 
         setGameNameTex();
         setStartButton();
@@ -116,7 +115,7 @@ public class MenuUI {
     }
 
     private void initAnimGlass(){
-        flyingGlasses = new FlyingGlass[20];
+        flyingGlasses = new FlyingGlass[35];
         for (int i = 0; i < flyingGlasses.length; i++) {
             flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length);
         }
@@ -229,7 +228,8 @@ public class MenuUI {
         final float widthList = Gm.WIDTH * 0.6f;
         final float heightList = selectStageText.getY();
         final int columns = 2, rows = 5;
-        stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0f, widthList, heightList, columns, rows);
+        stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
+        stageList.setPaddingBottom(0.5f + bottomBar.getHeight());
         stageButtons = new StageButton[columns * rows];
 
         for (int i = 0; i < columns * rows; i++) {
@@ -290,11 +290,15 @@ public class MenuUI {
 //        downBarMenu.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
 //    }
 
-    private void setSelectStageText(){
+    private void setSelectStageTextAndBottomBar(){
         selectStageText = Assets.getNewSprite(24);
         final float cffHeight = 0.3041f;
         selectStageText.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         selectStageText.setPosition(0f, Gm.HEIGHT - selectStageText.getHeight());
+
+        bottomBar = Assets.getNewSprite(38);
+        bottomBar.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
+        bottomBar.setPosition(0f, 0f);
     }
 
     private void setInfoButton(){
@@ -355,10 +359,6 @@ public class MenuUI {
 
                 gameNameTex.draw(batch);    // 1 объект
 
-                for (int i = 0; i < flyingGlasses.length; i++) {
-                    flyingGlasses[i].draw(batch);
-                }
-
 
                 if (!objectAnimations[GAME_NAME].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
                     blockAnimation.draw(batch);
@@ -387,12 +387,37 @@ public class MenuUI {
                     SETSTAGEPROP = false;
                     setStageListPoperties();
                 }
-                backMain.draw(batch);
+
                 for (int i = 0; i < flyingGlasses.length; i++) {
                     flyingGlasses[i].draw(batch);
                 }
+
+                batch.end();
+
+                int srcFunc = batch.getBlendSrcFunc();
+                int dstFunc = batch.getBlendDstFunc();
+
+                batch.enableBlending();
+                batch.begin();
+
+                batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
+
+                backMain.draw(batch);
+
+                batch.end();
+                batch.begin();
+                batch.setBlendFunction(srcFunc, dstFunc);
+
+
+
+
+
+
+
+
                 stageList.draw(batch);
                 selectStageText.draw(batch);
+                bottomBar.draw(batch);
 
                 break;
         }

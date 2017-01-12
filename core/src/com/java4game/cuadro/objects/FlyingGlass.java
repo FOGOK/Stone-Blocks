@@ -34,7 +34,8 @@ public class FlyingGlass {
         size = 0.5f + (rnd.nextInt(50) / 100f);
         glass = Assets.getNewSprite(40);
         glass.setSize(size, size);
-        glass.setAlpha(0.43f);
+        glass.setAlpha(0.2f);
+        glass.setRotation(rnd.nextInt(360));
         glass.setOriginCenter();
         float cff = (Gm.WIDTH / Gdx.graphics.getWidth());
         glass.setX(cff * rnd.nextInt(Gdx.graphics.getWidth() - (int)(size * (1f / cff))));
@@ -57,14 +58,19 @@ public class FlyingGlass {
     }
 
     private void refreshAnimator(boolean b){
-        if (b)
+        float animTimeOld = 0f;
+        if (b){
             glass.setY(Gm.HEIGHT);
+            animTimeOld = floatAnimator.getAnimationTime();
+        }
 
         float max = Gm.HEIGHT + size * 1.3f;
 
+
         floatAnimator = new FloatAnimator(glass.getY(), -size * 1.3f, (glass.getY() / max) * timer, Interpolation.linear);
+//        floatAnimator = new FloatAnimator(Gm.HEIGHT, -size * 1.3f, timer, Interpolation.pow4In);
         if (b)
-            floatAnimator.setTimer(((float) number / all) * timer);
+            floatAnimator.setTimer(((float) number / all) * animTimeOld);
         speedRot = rnd.nextBoolean() ? -0.3f : 0.3f;
     }
 }

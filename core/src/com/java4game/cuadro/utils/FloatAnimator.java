@@ -65,7 +65,11 @@ public class FloatAnimator {
         return this;
     }
 
-    public FloatAnimator setInterpolation( final Interpolation interp ) {
+    public float getAnimationTime() {
+        return animationTime;
+    }
+
+    public FloatAnimator setInterpolation(final Interpolation interp ) {
         this.interp = interp;
         return this;
     }
