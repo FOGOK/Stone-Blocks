@@ -58,7 +58,7 @@ public class Handler {
 
 //        state = State.Game;
 //        StageButton.LEVEL = 4;
-//        levelGen = new LevelGen();
+//        levelGen = new LevelGen(menuUI);
     }
 
     public void draw(SpriteBatch batch){

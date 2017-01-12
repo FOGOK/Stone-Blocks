@@ -19,7 +19,7 @@ import com.java4game.cuadro.utils.FloatAnimator;
 public class FlyingStage {
 
     private Sprite glassCover;
-    private TextBlock textBlock;
+    private TextBlock stageT, numberT;
     private FloatAnimator flyingAnimatorFrom, flyingAnimatorTo, flyingAnimatorToTo;
 
     private float size;
@@ -34,8 +34,11 @@ public class FlyingStage {
 
         glassCover = Assets.getNewSprite(30);
         glassCover.setSize(size * 1.524f, size);
-        textBlock = new TextBlock(0, 0, true, "");
-        textBlock.setCustomCff(size * 0.25f);
+        stageT = new TextBlock(0, 0, true, "");
+        stageT.setCustomCff(size * 0.3f);
+
+        numberT = new TextBlock(0, 0, true, "");
+        numberT.setCustomCff(size * 0.3f);
     }
 
     public void setNew(int level, Color color){
@@ -43,21 +46,31 @@ public class FlyingStage {
         flyingAnimatorTo.resetTime();
         flyingAnimatorToTo.resetTime();
 
-        textBlock.setText("STAGE " + level);
-        textBlock.setTextColor(color);
+        stageT.setText("STAGE");
+        stageT.setTextColor(color);
+
+        numberT.setText(level + "");
+        numberT.setTextColor(color);
+
         setPositionX(Gm.WIDTH / 2f);
     }
 
     private void setPositionY(float y){
         glassCover.setPosition(glassCover.getX(), y - glassCover.getHeight() / 2f);
-        textBlock.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f);
-        textBlock.setPositionToCenter();
+        refreshPosText();
     }
 
     private void setPositionX(float x){
         glassCover.setPosition(x - glassCover.getWidth() / 2f, glassCover.getY());
-        textBlock.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f);
-        textBlock.setPositionToCenter();
+        refreshPosText();
+    }
+
+    private void refreshPosText(){
+        stageT.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f + stageT.getBounds().getHeight() / 2f);
+        stageT.setPositionToCenter();
+
+        numberT.setPosition(glassCover.getX() + glassCover.getWidth() / 2f, glassCover.getY() + glassCover.getHeight() / 2f - stageT.getBounds().getHeight() * 0.8f);
+        numberT.setPositionToCenter();
     }
 
     public void handle(){
@@ -90,7 +103,8 @@ public class FlyingStage {
     }
 
     public void drawText(SpriteBatch batch){
-        textBlock.draw(batch);
+        stageT.draw(batch);
+        numberT.draw(batch);
     }
 
     public void dispose() {
