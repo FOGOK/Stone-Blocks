@@ -189,8 +189,6 @@ public class StarBlock {
         else
             starStepsBlock.setText(allSteps + "");
 
-        if (starStepsBlock.getText().equals("0"))
-            starStepsBlock.setText("1");
 
         starStepsBlock.setPosition(noneStar.getX() + noneStar.getWidth() / 2f,
                 noneStar.getY() + noneStar.getHeight() / 2f);
