@@ -38,12 +38,13 @@ public class FlyingGlass {
         glass.setOriginCenter();
         float cff = (Gm.WIDTH / Gdx.graphics.getWidth());
         glass.setX(cff * rnd.nextInt(Gdx.graphics.getWidth() - (int)(size * (1f / cff))));
-        refreshAnimator();
+        glass.setY(cff * rnd.nextInt(Gdx.graphics.getHeight() - (int)(size * (1f / cff))));
+        refreshAnimator(false);
     }
 
     public void draw(SpriteBatch batch) {
         if (!floatAnimator.isNeedToUpdate())
-            refreshAnimator();
+            refreshAnimator(true);
         else{
             if (floatAnimator.isAnimationStarted()){
                 glass.setY(floatAnimator.current);
@@ -55,9 +56,15 @@ public class FlyingGlass {
 
     }
 
-    private void refreshAnimator(){
-        floatAnimator = new FloatAnimator(Gm.HEIGHT, -size * 1.3f, timer, Interpolation.linear);
-        floatAnimator.setTimer(((float) number / all) * timer);
+    private void refreshAnimator(boolean b){
+        if (b)
+            glass.setY(Gm.HEIGHT);
+
+        float max = Gm.HEIGHT + size * 1.3f;
+
+        floatAnimator = new FloatAnimator(glass.getY(), -size * 1.3f, (glass.getY() / max) * timer, Interpolation.linear);
+        if (b)
+            floatAnimator.setTimer(((float) number / all) * timer);
         speedRot = rnd.nextBoolean() ? -0.3f : 0.3f;
     }
 }

@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,7 @@ import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.objects.Blink;
 import com.java4game.cuadro.objects.BlockAnimation;
+import com.java4game.cuadro.objects.FlyingGlass;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Atalas;
@@ -68,6 +70,8 @@ public class MenuUI {
 
     private float sizeTopT;
 
+    private FlyingGlass[] flyingGlasses;
+
     private List stageList;
     private TextBlock /*stageText, worldText, */starsText;
 
@@ -78,6 +82,7 @@ public class MenuUI {
 
     public MenuUI(TextureGen textureGen) {
         setBackground();
+        initAnimGlass();
 
         MENUSTATE = GAMEMAIN;
 
@@ -108,6 +113,13 @@ public class MenuUI {
 
         initBlinks();
         initBlockAnimation();
+    }
+
+    private void initAnimGlass(){
+        flyingGlasses = new FlyingGlass[20];
+        for (int i = 0; i < flyingGlasses.length; i++) {
+            flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length);
+        }
     }
 
     private void initBlockAnimation(){
@@ -330,6 +342,7 @@ public class MenuUI {
     }
     public void draw(SpriteBatch batch){
 
+
         switch (MENUSTATE){
             case GAMEMAIN:
                 calcAnim();
@@ -342,14 +355,20 @@ public class MenuUI {
 
                 gameNameTex.draw(batch);    // 1 объект
 
+                for (int i = 0; i < flyingGlasses.length; i++) {
+                    flyingGlasses[i].draw(batch);
+                }
+
+
                 if (!objectAnimations[GAME_NAME].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
-                    //и блики
                     blockAnimation.draw(batch);
 
                     for (int i = 0; i < blinks.length; i++) {
                         blinks[i].draw(batch);
                     }
                 }
+
+
 
 
                 break;
@@ -369,8 +388,12 @@ public class MenuUI {
                     setStageListPoperties();
                 }
                 backMain.draw(batch);
+                for (int i = 0; i < flyingGlasses.length; i++) {
+                    flyingGlasses[i].draw(batch);
+                }
                 stageList.draw(batch);
                 selectStageText.draw(batch);
+
                 break;
         }
 

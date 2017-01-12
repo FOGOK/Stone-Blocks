@@ -38,7 +38,7 @@ public class LevelGen {
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
 
-    private FlyingGlass[] flyingGlasses;
+
 
     //ui
     private FlyingStage flyingStage;
@@ -102,17 +102,12 @@ public class LevelGen {
         pauseButton.setPositionToCenter();
         pauseButton.completeX();
 
-        flyingGlasses = new FlyingGlass[20];
-        for (int i = 0; i < flyingGlasses.length; i++) {
-            flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length);
-        }
+
     }
 
     public void draw(SpriteBatch batch){
 
-        for (int i = 0; i < flyingGlasses.length; i++) {
-            flyingGlasses[i].draw(batch);
-        }
+
 
         flyingStage.handle();
         flyingStage.drawGlass(batch);

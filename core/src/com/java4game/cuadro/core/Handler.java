@@ -54,11 +54,11 @@ public class Handler {
 //        gameUi = new GameUI(textureGen);
         pauseUI = new PauseUI(textureGen);
         menuUI = new MenuUI(textureGen);
-//        state = State.Menu;
+        state = State.Menu;
 
-        state = State.Game;
-        StageButton.LEVEL = 4;
-        levelGen = new LevelGen(menuUI);
+//        state = State.Game;
+//        StageButton.LEVEL = 4;
+//        levelGen = new LevelGen(menuUI);
     }
 
     public void draw(SpriteBatch batch){
