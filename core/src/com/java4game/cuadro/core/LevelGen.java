@@ -10,6 +10,7 @@ import com.java4game.cuadro.core.uiwidgets.PauseButton;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.objects.FlyingGlass;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.StarBlock;
@@ -36,6 +37,8 @@ public class LevelGen {
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
+
+    private FlyingGlass[] flyingGlasses;
 
     //ui
     private FlyingStage flyingStage;
@@ -98,14 +101,21 @@ public class LevelGen {
         pauseButton = new PauseButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
         pauseButton.setPositionToCenter();
         pauseButton.completeX();
+
+        flyingGlasses = new FlyingGlass[20];
+        for (int i = 0; i < flyingGlasses.length; i++) {
+            flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length);
+        }
     }
 
     public void draw(SpriteBatch batch){
 
+        for (int i = 0; i < flyingGlasses.length; i++) {
+            flyingGlasses[i].draw(batch);
+        }
 
         flyingStage.handle();
         flyingStage.drawGlass(batch);
-
 
         if (!flyingStage.isFlying()){
             field.setAlpha(flyingStage.getProgressEnd());

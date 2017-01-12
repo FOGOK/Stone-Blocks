@@ -146,6 +146,10 @@ public class FloatAnimator {
         return needToUpdate;
     }
 
+    public boolean isAnimationStarted(){
+        return timer >= endTime;
+    }
+
     public FloatAnimator fromCurrent() {
         from = current;
         return this;
