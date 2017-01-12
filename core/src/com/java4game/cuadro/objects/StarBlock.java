@@ -8,6 +8,7 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.GMUtils;
 
 /**
  * Created by FOGOK on 11.01.2017 6:00.
@@ -135,7 +136,7 @@ public class StarBlock {
             thisIters = 0f;
         }
 
-        handle(thisIters);
+        handle(GMUtils.normalizeOneZero(thisIters));
     }
 
     public void drawGlass(SpriteBatch batch){
@@ -187,6 +188,9 @@ public class StarBlock {
             allStepsBlock.setText(allSteps + "");
         else
             starStepsBlock.setText(allSteps + "");
+
+        if (starStepsBlock.getText().equals("0"))
+            starStepsBlock.setText("1");
 
         starStepsBlock.setPosition(noneStar.getX() + noneStar.getWidth() / 2f,
                 noneStar.getY() + noneStar.getHeight() / 2f);

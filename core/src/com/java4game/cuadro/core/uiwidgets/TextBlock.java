@@ -27,6 +27,10 @@ public class TextBlock extends BaseObject {
         setText(text);
     }
 
+    public String getText() {
+        return text;
+    }
+
     public void setOffsetX(float offsetX) {
         this.offsetX = offsetX;
     }
