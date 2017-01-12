@@ -77,7 +77,7 @@ public class Handler {
 
 
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P) || isBackPressed){
+        if (isBackPressed){
             isBackPressed = false;
 
             if (Handler.state == Handler.State.Pause)

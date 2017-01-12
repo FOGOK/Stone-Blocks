@@ -139,7 +139,7 @@ public class MainBlock extends FieldObject{
         NCsQX = getSQX(false);
         NCsQY = getSQY(false);
 
-        if (Gdx.input.justTouched()){
+        if (Gdx.input.justTouched() && (Gm.HEIGHT / Gdx.graphics.getHeight()) * Gdx.input.getY() > 3f){
             if (!lockChangeInTouch)
                 startChangeDir = true;
             if (blockGenerator.isStackAvailable())

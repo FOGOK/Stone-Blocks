@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.uiwidgets.Button;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
+import com.java4game.cuadro.core.uiwidgets.IconButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.FlyingStage;
@@ -39,6 +41,7 @@ public class LevelGen {
     //ui
     private FlyingStage flyingStage;
     private StarBlock starBlock;
+    private Button pauseButton;
     ///
 
     private MenuUI menuUI;
@@ -91,6 +94,10 @@ public class LevelGen {
         //
         starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
         blockGenerator.setStarBlock(starBlock);
+
+        pauseButton = new Button(ButtonActions.All.PAUSE_ACT, 0.4f, Gm.HEIGHT - 0.4f, 3f, 36, 37);
+        pauseButton.setPositionToCenter();
+        pauseButton.completeX();
     }
 
     public void draw(SpriteBatch batch){
@@ -135,6 +142,11 @@ public class LevelGen {
             mainBlock.draw(batch);
 
             starBlock.drawMetalAndText(batch);
+
+            pauseButton.setOffsetX((1f - flyingStage.getProgressEnd()) * -pauseButton.getWidth());
+            pauseButton.setAlpha(flyingStage.getProgressEnd());
+            pauseButton.setEnabled(!Handler.ISPAUSE);
+            pauseButton.draw(batch);
         }
         flyingStage.drawText(batch);
 
