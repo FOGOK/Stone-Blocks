@@ -289,16 +289,3 @@ repeat: none
   orig: 720, 1280
   offset: 0, 0
   index: -1
-
-7204.png
-size: 1024,2048
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-39
-  rotate: false
-  xy: 5, 5
-  size: 720, 1280
-  orig: 720, 1280
-  offset: 0, 0
-  index: -1
