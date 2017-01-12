@@ -317,8 +317,8 @@ public class MenuUI {
         posYs[START_BUTTON] = Gm.HEIGHT - startButton.getY();
     }
     private void setBackground(){
-        backMain = Assets.getNewSprite(3);
-        backMain.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backMain = Assets.getNewSprite(39);
+//        backMain.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         final float wDivH = 0.5625f;
         backMain.setSize(Gm.WIDTH, Gm.WIDTH * (1f / wDivH));
         backMain.setPosition(0f, (Gm.HEIGHT - backMain.getHeight()) / 2f);
