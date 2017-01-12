@@ -34,7 +34,7 @@ public class FlyingGlass {
         size = 0.5f + (rnd.nextInt(50) / 100f);
         glass = Assets.getNewSprite(40);
         glass.setSize(size, size);
-//        glass.setAlpha(0.4f);
+        glass.setAlpha(0.43f);
         glass.setOriginCenter();
         float cff = (Gm.WIDTH / Gdx.graphics.getWidth());
         glass.setX(cff * rnd.nextInt(Gdx.graphics.getWidth() - (int)(size * (1f / cff))));
