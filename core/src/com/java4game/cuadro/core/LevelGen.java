@@ -119,7 +119,6 @@ public class LevelGen {
                 starBlock.handle(flyingStage.getProgressEnd());
             else
                 starBlock.handle();
-            starBlock.drawGlass(batch);
 
             pauseButton.setOffsetX((1f - flyingStage.getProgressEnd()) * -pauseButton.getWidth());
             pauseButton.setAlpha(flyingStage.getProgressEnd());
@@ -150,7 +149,7 @@ public class LevelGen {
             blockGenerator.draw(batch);
             mainBlock.setAlpha(flyingStage.getProgressEnd());
             mainBlock.draw(batch);
-
+            starBlock.drawGlass(batch);
             starBlock.drawMetalAndText(batch);
 
             pauseButton.drawIcon(batch);
