@@ -345,13 +345,32 @@ public class MenuUI {
 //        backGrdnt.setPosition((Gm.WIDTH - backMain.getWidth()) / 2f, 0f);
     }
     public void draw(SpriteBatch batch){
-
+        int dstFunc;
+        int srcFunc;
 
         switch (MENUSTATE){
             case GAMEMAIN:
                 calcAnim();
 
+                for (int i = 0; i < flyingGlasses.length; i++) {
+                    flyingGlasses[i].draw(batch);
+                }
+
+                batch.end();
+
+                srcFunc = batch.getBlendSrcFunc();
+                dstFunc = batch.getBlendDstFunc();
+
+                batch.enableBlending();
+                batch.begin();
+
+                batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
+
                 backMain.draw(batch);
+
+                batch.end();
+                batch.begin();
+                batch.setBlendFunction(srcFunc, dstFunc);
 
                 startButton.draw(batch);        // 2 объект
                 qButton.draw(batch);        // 3 объект
@@ -394,8 +413,8 @@ public class MenuUI {
 
                 batch.end();
 
-                int srcFunc = batch.getBlendSrcFunc();
-                int dstFunc = batch.getBlendDstFunc();
+                srcFunc = batch.getBlendSrcFunc();
+                dstFunc = batch.getBlendDstFunc();
 
                 batch.enableBlending();
                 batch.begin();
