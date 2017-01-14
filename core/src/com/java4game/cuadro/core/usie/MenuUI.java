@@ -56,7 +56,7 @@ public class MenuUI {
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
     public static int[] OPENEDSTAGESINWORLD;
-    public static final int[] COUNTSTAGESINWORLD = new int[] {10, 30, 30, 30, 30};
+    public static final int[] COUNTSTAGESINWORLD = new int[] {21, 30, 30, 30, 30};
     ///
 
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
@@ -81,7 +81,6 @@ public class MenuUI {
 
     public MenuUI(TextureGen textureGen) {
         setBackground();
-        initAnimGlass();
 
         MENUSTATE = GAMEMAIN;
 
@@ -102,6 +101,7 @@ public class MenuUI {
         setSelectStageTextAndBottomBar();
 
         setGameNameTex();
+        initAnimGlass();
         setStartButton();
         setQButton();
         setInfoButton();
@@ -117,7 +117,7 @@ public class MenuUI {
     private void initAnimGlass(){
         flyingGlasses = new FlyingGlass[35];
         for (int i = 0; i < flyingGlasses.length; i++) {
-            flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length);
+            flyingGlasses[i] = new FlyingGlass(i, flyingGlasses.length, gameNameTex.getY());
         }
     }
 
@@ -213,6 +213,7 @@ public class MenuUI {
 //        starsText.setCustomCff(starIco.getHeight() * 0.8f);
     }
 
+
 //    private void initStageAndWorldText(){
 //
 //        stageText = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - selectStageText.getHeight() * 1.1f, true, Localization.getText(Localization.LettersKey.SELECTSTAGETEXT));
@@ -225,21 +226,24 @@ public class MenuUI {
 //    }
     private Random rnd = new Random();
     private void setStageList(TextureGen textureGen){
-        final float widthList = Gm.WIDTH * 0.6f;
+        final float widthList = Gm.WIDTH * 0.76f;
         final float heightList = selectStageText.getY();
-        final int columns = 2, rows = 5;
+        final int columns = 3, rows = 7;
         stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
         stageList.setPaddingBottom(0.5f + bottomBar.getHeight());
         stageButtons = new StageButton[columns * rows];
 
         for (int i = 0; i < columns * rows; i++) {
-            stageButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1);
+            if (i != 0)
+                stageButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
+            else
+                stageButtons[i] = new StageButton(ButtonActions.All.START_LEARN, 2.43f, i + 1, this);
         }
         setStageListPoperties();
     }
 
     private void setStageListPoperties(){
-        final int columns = 2, rows = 5;
+        final int columns = 3, rows = 7;
         final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
         for (int i = 0; i < columns * rows; i++) {
             stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i, STARS[i]);
@@ -352,8 +356,10 @@ public class MenuUI {
             case GAMEMAIN:
                 calcAnim();
 
-                for (int i = 0; i < flyingGlasses.length; i++) {
-                    flyingGlasses[i].draw(batch);
+                if (!objectAnimations[GAME_NAME].isNeedToUpdate()){
+                    for (int i = 0; i < flyingGlasses.length; i++) {
+                        flyingGlasses[i].draw(batch);
+                    }
                 }
 
                 batch.end();
@@ -449,6 +455,7 @@ public class MenuUI {
     private void calcAnim(){
         boolean resetAnim = false;
         if (RESETANIMATION){
+            initAnimGlass();
             resetAnim = true;
             RESETANIMATION = false;
 //            infoButton.setPosition(infoButton.getX(), posYs[2] - infoButton.getHeight());

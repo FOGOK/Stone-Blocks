@@ -26,7 +26,8 @@ public class FlyingGlass {
     private float size;
     private int number;
     private int all;
-    public FlyingGlass(int number, int all) {
+
+    public FlyingGlass(int number, int all, float offset) {
         this.number = number;
         this.all = all;
         timer = 16f + (rnd.nextInt(80) / 10f);
@@ -34,12 +35,12 @@ public class FlyingGlass {
         size = 0.5f + (rnd.nextInt(50) / 100f);
         glass = Assets.getNewSprite(40);
         glass.setSize(size, size);
-        glass.setAlpha(0.1f);
+        glass.setAlpha(0.3f);
         glass.setRotation(rnd.nextInt(360));
         glass.setOriginCenter();
         float cff = (Gm.WIDTH / Gdx.graphics.getWidth());
         glass.setX(cff * rnd.nextInt(Gdx.graphics.getWidth() - (int)(size * (1f / cff))));
-        glass.setY(cff * rnd.nextInt(Gdx.graphics.getHeight() - (int)(size * (1f / cff))));
+        glass.setY(cff * rnd.nextInt(Gdx.graphics.getHeight() - (int)(size * (1f / cff))) + offset);
         refreshAnimator(false);
     }
 

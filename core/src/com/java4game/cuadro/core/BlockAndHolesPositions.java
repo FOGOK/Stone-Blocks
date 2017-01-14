@@ -85,7 +85,7 @@ public class BlockAndHolesPositions {
     private static Level levels[];
 
     static {
-        levels = new Level[10];
+        levels = new Level[21];
 
 //        levels[0] = new Level(new Object[]{
 //                new Object(1, 1, COLOR_WHITE, HOLE),
@@ -111,31 +111,31 @@ public class BlockAndHolesPositions {
 //                new Object(1, 7, COLOR_YELLOW, CUBE),
 //        }, BACK_COLOR_GRAY);
 //        levels[0].setMinSteps(10);
-        levels[0] = new Level(new Object[]{
+        levels[1] = new Level(new Object[]{
                 new Object(2, 4, COLOR_WHITE, HOLE),
 
                 new Object(5, 4, COLOR_WHITE, CUBE)
         }, BACK_COLOR_GRAY);
-        levels[1] = new Level(new Object[]{
+        levels[2] = new Level(new Object[]{
                 new Object(2, 6, COLOR_BLUE, HOLE),
 
                 new Object(5, 3, COLOR_BLUE, CUBE)
         }, BACK_COLOR_BLUE);
-        levels[2] = new Level(new Object[]{
+        levels[3] = new Level(new Object[]{
                 new Object(1, 6, COLOR_YELLOW, HOLE),
                 new Object(2, 8, COLOR_YELLOW, HOLE),
 
                 new Object(6, 3, COLOR_YELLOW, CUBE),
                 new Object(5, 6, COLOR_YELLOW, CUBE)
         }, BACK_COLOR_YELLOW);
-        levels[3] = new Level(new Object[]{
+        levels[4] = new Level(new Object[]{
                 new Object(2, 2, COLOR_GREEN, HOLE),
                 new Object(3, 7, COLOR_GREEN, HOLE),
 
                 new Object(7, 4, COLOR_GREEN, CUBE),
                 new Object(6, 6, COLOR_GREEN, CUBE)
         }, BACK_COLOR_GREEN);
-        levels[4] = new Level(new Object[]{
+        levels[5] = new Level(new Object[]{
                 new Object(1, 2, COLOR_RED, HOLE),
                 new Object(3, 5, COLOR_RED, HOLE),
                 new Object(2, 7, COLOR_RED, HOLE),
@@ -144,59 +144,159 @@ public class BlockAndHolesPositions {
                 new Object(6, 4, COLOR_RED, CUBE),
                 new Object(6, 7, COLOR_RED, CUBE)
         }, BACK_COLOR_RED);
-        levels[5] = new Level(new Object[]{
+        levels[6] = new Level(new Object[]{
                 new Object(2, 2, COLOR_BLUE, HOLE),
                 new Object(7, 3, COLOR_WHITE, HOLE),
 
                 new Object(6, 7, COLOR_BLUE, CUBE),
                 new Object(3, 5, COLOR_WHITE, CUBE)
         }, BACK_COLOR_GRAY);
-        levels[6] = new Level(new Object[]{
+        levels[7] = new Level(new Object[]{
                 new Object(4, 7, COLOR_BLUE, HOLE),
                 new Object(5, 6, COLOR_BLUE, HOLE),
                 new Object(2, 7, COLOR_WHITE, HOLE),
 
-                new Object(2, 4, COLOR_BLUE, CUBE),
-                new Object(8, 3, COLOR_BLUE, CUBE),
-                new Object(7, 8, COLOR_WHITE, CUBE)
+                new Object(4, 4, COLOR_BLUE, CUBE),
+                new Object(5, 3, COLOR_BLUE, CUBE),
+                new Object(7, 7, COLOR_WHITE, CUBE)
         }, BACK_COLOR_BLUE);
-        levels[7] = new Level(new Object[]{
+        levels[8] = new Level(new Object[]{
                 new Object(4, 2, COLOR_YELLOW, HOLE),
                 new Object(2, 2, COLOR_BLUE, HOLE),
                 new Object(7, 2, COLOR_WHITE, HOLE),
 
                 new Object(2, 7, COLOR_YELLOW, CUBE),
-                new Object(7, 8, COLOR_BLUE, CUBE),
-                new Object(3, 4, COLOR_WHITE, CUBE)
+                new Object(7, 7, COLOR_BLUE, CUBE),
+                new Object(5, 7, COLOR_WHITE, CUBE)
         }, BACK_COLOR_YELLOW);
-        levels[8] = new Level(new Object[]{
-                new Object(2, 2, COLOR_GREEN, HOLE),
+        levels[9] = new Level(new Object[]{
+                new Object(3, 4, COLOR_BLUE, HOLE),
                 new Object(3, 7, COLOR_GREEN, HOLE),
                 new Object(7, 7, COLOR_BLUE, HOLE),
-                new Object(3, 4, COLOR_BLUE, HOLE),
 
-                new Object(2, 7, COLOR_GREEN, CUBE),
-                new Object(7, 8, COLOR_GREEN, CUBE),
-                new Object(6, 2, COLOR_BLUE, CUBE),
-                new Object(2, 1, COLOR_BLUE, CUBE)
+                new Object(2, 5, COLOR_BLUE, CUBE),
+                new Object(3, 2, COLOR_GREEN, CUBE),
+                new Object(6, 6, COLOR_BLUE, CUBE)
         }, BACK_COLOR_GREEN);
-        levels[9] = new Level(new Object[]{
-                new Object(1, 3, COLOR_YELLOW, HOLE),
-                new Object(8, 5, COLOR_RED, HOLE),
+        levels[10] = new Level(new Object[]{
                 new Object(3, 7, COLOR_BLUE, HOLE),
-                new Object(5, 3, COLOR_GREEN, HOLE),
-                new Object(7, 3, COLOR_WHITE, HOLE),
+                new Object(6, 3, COLOR_GREEN, HOLE),
+                new Object(8, 5, COLOR_RED, HOLE),
 
-                new Object(2, 8, COLOR_YELLOW, CUBE),
-                new Object(2, 4, COLOR_RED, CUBE),
-                new Object(2, 2, COLOR_BLUE, CUBE),
-                new Object(7, 5, COLOR_GREEN, CUBE),
-                new Object(4, 2, COLOR_WHITE, CUBE)
+                new Object(4, 3, COLOR_BLUE, CUBE),
+                new Object(5, 7, COLOR_GREEN, CUBE),
+                new Object(2, 5, COLOR_RED, CUBE)
         }, BACK_COLOR_RED);
+        levels[11] = new Level(new Object[]{
+                new Object(2, 7, COLOR_WHITE, HOLE),
+                new Object(3, 7, COLOR_WHITE, HOLE),
+                new Object(7, 2, COLOR_WHITE, HOLE),
+
+                new Object(2, 5, COLOR_WHITE, CUBE),
+                new Object(2, 6, COLOR_WHITE, CUBE),
+                new Object(7, 7, COLOR_WHITE, CUBE)
+        }, BACK_COLOR_GRAY);
+        levels[11].setMinSteps(4);
+        levels[12] = new Level(new Object[]{
+                new Object(1, 2, COLOR_RED, HOLE),
+                new Object(8, 8, COLOR_BLUE, HOLE),
+                new Object(8, 1, COLOR_YELLOW, HOLE),
+
+                new Object(1, 1, COLOR_BLUE, CUBE),
+                new Object(1, 8, COLOR_YELLOW, CUBE),
+                new Object(8, 7, COLOR_RED, CUBE)
+        }, BACK_COLOR_GREEN);
+        levels[13] = new Level(new Object[]{
+                new Object(7, 4, COLOR_RED, HOLE),
+                new Object(7, 3, COLOR_RED, HOLE),
+                new Object(7, 2, COLOR_GREEN, HOLE),
+
+                new Object(2, 7, COLOR_RED, CUBE),
+                new Object(2, 6, COLOR_GREEN, CUBE),
+                new Object(2, 5, COLOR_RED, CUBE)
+        }, BACK_COLOR_YELLOW);
+        levels[14] = new Level(new Object[]{
+                new Object(2, 6, COLOR_WHITE, HOLE),
+                new Object(3, 3, COLOR_WHITE, HOLE),
+                new Object(5, 5, COLOR_YELLOW, HOLE),
+
+                new Object(3, 4, COLOR_YELLOW, CUBE),
+                new Object(6, 5, COLOR_WHITE, CUBE),
+                new Object(7, 4, COLOR_WHITE, CUBE)
+        }, BACK_COLOR_BLUE);
+        levels[15] = new Level(new Object[]{
+                new Object(3, 7, COLOR_BLUE, HOLE),
+                new Object(4, 8, COLOR_RED, HOLE),
+                new Object(6, 6, COLOR_GREEN, HOLE),
+
+                new Object(4, 1, COLOR_GREEN, CUBE),
+                new Object(5, 3, COLOR_RED, CUBE),
+                new Object(6, 2, COLOR_BLUE, CUBE)
+        }, BACK_COLOR_RED);
+        levels[15].setMinSteps(5);
+        levels[16] = new Level(new Object[]{
+                new Object(3, 3, COLOR_WHITE, HOLE),
+                new Object(5, 3, COLOR_BLUE, HOLE),
+                new Object(8, 8, COLOR_WHITE, HOLE),
+
+                new Object(2, 5, COLOR_BLUE, CUBE),
+                new Object(4, 3, COLOR_WHITE, CUBE),
+                new Object(5, 4, COLOR_WHITE, CUBE)
+        }, BACK_COLOR_GRAY);
+        levels[17] = new Level(new Object[]{
+                new Object(3, 5, COLOR_YELLOW, HOLE),
+                new Object(6, 4, COLOR_GREEN, HOLE),
+                new Object(6, 3, COLOR_WHITE, HOLE),
+
+                new Object(4, 5, COLOR_GREEN, CUBE),
+                new Object(4, 4, COLOR_WHITE, CUBE),
+                new Object(4, 3, COLOR_YELLOW, CUBE)
+        }, BACK_COLOR_YELLOW);
+        levels[17].setMinSteps(5);
+        levels[18] = new Level(new Object[]{
+                new Object(3, 2, COLOR_BLUE, HOLE),
+                new Object(3, 3, COLOR_RED, HOLE),
+                new Object(7, 7, COLOR_RED, HOLE),
+
+                new Object(1, 2, COLOR_BLUE, CUBE),
+                new Object(2, 2, COLOR_RED, CUBE),
+                new Object(5, 5, COLOR_RED, CUBE)
+        }, BACK_COLOR_RED);
+        levels[19] = new Level(new Object[]{
+                new Object(2, 1, COLOR_BLUE, HOLE),
+                new Object(6, 1, COLOR_RED, HOLE),
+                new Object(8, 1, COLOR_WHITE, HOLE),
+
+                new Object(2, 7, COLOR_RED, CUBE),
+                new Object(7, 7, COLOR_WHITE, CUBE),
+                new Object(8, 2, COLOR_BLUE, CUBE)
+        }, BACK_COLOR_GREEN);
+        levels[20] = new Level(new Object[]{
+                new Object(2, 4, COLOR_YELLOW, HOLE),
+                new Object(4, 3, COLOR_WHITE, HOLE),
+                new Object(6, 7, COLOR_GREEN, HOLE),
+
+                new Object(1, 3, COLOR_WHITE, CUBE),
+                new Object(2, 3, COLOR_GREEN, CUBE),
+                new Object(2, 2, COLOR_YELLOW, CUBE)
+        }, BACK_COLOR_BLUE);
     }
 
     public static Level getLevel(int level){
         return levels[level];
     }
 
+
+
+    ///blankLevel
+//    levels[] = new Level(new Object[]{
+//                new Object(0, 0, COLOR_, HOLE),
+//                new Object(0, 0, COLOR_, HOLE),
+//                new Object(0, 0, COLOR_, HOLE),
+//
+//                new Object(0, 0, COLOR_, CUBE),
+//                new Object(0, 0, COLOR_, CUBE),
+//                new Object(0, 0, COLOR_, CUBE)
+//    }, BACK_COLOR_);
+    //
 }

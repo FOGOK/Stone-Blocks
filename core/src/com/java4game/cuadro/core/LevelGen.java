@@ -92,7 +92,7 @@ public class LevelGen {
 //                break;
 //        }
         flyingStage = new FlyingStage();
-        flyingStage.setNew(StageButton.LEVEL, flyStageColor);
+        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor);
         //
         starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
         blockGenerator.setStarBlock(starBlock);

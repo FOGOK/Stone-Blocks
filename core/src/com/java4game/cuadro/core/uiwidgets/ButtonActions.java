@@ -4,6 +4,8 @@ import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.D;
+import com.java4game.cuadro.utils.Prefers;
+
 
 /**
  * Created by FOGOK on 13.10.2016 0:49.
@@ -15,11 +17,27 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, START_LEARN
     }
 
     public static void activateAction(All action){
         switch (action){
+            case START_LEARN:
+                activateAction(All.COMPLETE_LEARN);
+                break;
+            case COMPLETE_LEARN:
+                final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
+                chars[0] = '3';
+                Prefers.putString(Prefers.KeyStars, new String(chars));
+
+//            chars[LEVEL] =
+                ///
+
+                if (MenuUI.OPENEDSTAGESINWORLD[0] == 1){     //открываем следующий уровень
+                    MenuUI.OPENEDSTAGESINWORLD[0]++;
+                    Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);
+                }
+                break;
             case PAUSE_ACT:
                 Handler.isBackPressed = true;
                 break;

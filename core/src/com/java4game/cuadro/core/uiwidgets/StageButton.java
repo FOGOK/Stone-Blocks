@@ -2,7 +2,9 @@ package com.java4game.cuadro.core.uiwidgets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 
@@ -23,16 +25,20 @@ public class StageButton extends TextButton {
     private StarBlock.Star currentStar;
     private float size;
 
-    private Sprite lockedTexture, normalTexture, completeTexture, starTexture;
+    private Sprite lockedTexture, normalTexture, completeTexture, starTexture, learnIcon;
+    private MenuUI menuUI;
 
-
-    public StageButton(ButtonActions.All action, float h, int stage) {
-        super(action, 0f, 0f, h, 25, 28, stage + "");
+    public StageButton(ButtonActions.All action, float h, int stage, MenuUI menuUI) {
+        super(action, 0f, 0f, h, 25, 28, (stage - 1) + "");
+        this.menuUI = menuUI;
         this.stage = stage;
         size = h;
         lockedTexture = Assets.getNewSprite(26);
         normalTexture = Assets.getNewSprite(25);
         completeTexture = Assets.getNewSprite(27);
+        learnIcon = Assets.getNewSprite(35);
+        learnIcon.setSize(h / 2f, h / 2f);
+
         getTextBlock().setCustomCff(h / 3f);
         currentStar = StarBlock.Star.None;
     }
@@ -40,8 +46,13 @@ public class StageButton extends TextButton {
     @Override
     protected void activateAction() {
         super.activateAction();
-        LEVEL = stage;
-        MusicCore.play(MusicCore.GAME);
+        if (action == ButtonActions.All.RESTART_PAUSE_ACTION){
+            LEVEL = stage;
+            MusicCore.play(MusicCore.GAME);
+        }else{ //endLearningDat
+            menuUI.refreshStarsData();
+            MenuUI.SETSTAGEPROP = true;
+        }
     }
 
     public void setLockedStage(boolean lockedStage) {
@@ -95,15 +106,26 @@ public class StageButton extends TextButton {
 
     @Override
     public void draw(final SpriteBatch batch) {
-        if (!isLockedStage){
-            super.draw(batch);
-            if (currentStar != StarBlock.Star.None){
-                starTexture.setPosition(completeTexture.getX() + completeTexture.getWidth() * 0.933f - starTexture.getWidth() / 2f,
-                                        completeTexture.getY() + completeTexture.getHeight() * 0.866f - starTexture.getWidth() / 2f);
-                starTexture.draw(batch);
+        if (action == ButtonActions.All.RESTART_PAUSE_ACTION){
+            if (!isLockedStage){
+                super.draw(batch);
+                if (currentStar != StarBlock.Star.None){
+                    starTexture.setPosition(completeTexture.getX() + completeTexture.getWidth() * 0.933f - starTexture.getWidth() / 2f,
+                            completeTexture.getY() + completeTexture.getHeight() * 0.866f - starTexture.getWidth() / 2f);
+                    starTexture.draw(batch);
+                }
             }
-        }
-        else
+            else
+                drawButtonTexture(batch);
+        }else {
+            calcM();
             drawButtonTexture(batch);
+            drawLearnIcon(batch);
+        }
+    }
+
+    private void drawLearnIcon(SpriteBatch batch){
+        learnIcon.setPosition(normalTex.getX() + (normalTex.getWidth() - learnIcon.getWidth()) / 2f, normalTex.getY() + (normalTex.getHeight() - learnIcon.getHeight()) / 2f);
+        learnIcon.draw(batch);
     }
 }

@@ -56,7 +56,8 @@ public class StarBlock {
         this.goldSteps = goldSteps;
         silverSteps = 1;
         bronzeSteps = 1;
-        allSteps = (int) ((goldSteps + 3) * 1.2f);
+        allSteps = goldSteps + 2;
+//        allSteps = (int) ((goldSteps + 3) * 1.2f);
         currentStar = Star.Gold;
     }
     private void initStarSprites(){
@@ -184,10 +185,10 @@ public class StarBlock {
                 break;
         }
         allSteps--;
-        if (currentStar != Star.None)
-            allStepsBlock.setText(allSteps + "");
-        else
-            starStepsBlock.setText(allSteps + "");
+//        if (currentStar != Star.None)
+        allStepsBlock.setText(allSteps + "");
+//        else
+//            starStepsBlock.setText(allSteps + "");
 
 
         starStepsBlock.setPosition(noneStar.getX() + noneStar.getWidth() / 2f,
@@ -211,14 +212,14 @@ public class StarBlock {
                     isStartAnimThisIters = true;
                 }
                 break;
-            case Bronze:
+            case None:
                 if (bronzeSteps < 1){
                     currentStar = Star.None;
                     starStepsBlock.setText(allSteps + "");
                     isStartAnimThisIters = true;
                 }
                 break;
-            case None:
+            case Bronze:
                 if (allSteps < 1){
                     levelGen.lose();
                 }
