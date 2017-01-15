@@ -126,7 +126,10 @@ public class List extends BaseObject {
     private int posX, posY, w, h, sizeSpisAll;
     private boolean isTouchedList;
     private void matchControl() {
-        isTouchedList = Gdx.input.isTouched() && Gdx.input.getX() > posX && Gdx.input.getX() < posX + w && Gdx.graphics.getHeight() - Gdx.input.getY() > posY && Gdx.graphics.getHeight() - Gdx.input.getY() < posY + h;
+        isTouchedList = Gdx.input.isTouched() && Gdx.input.getX() > posX &&
+                Gdx.input.getX() < posX + w &&
+                Gdx.graphics.getHeight() - Gdx.input.getY() > posY + paddingBottom * (Gdx.graphics.getHeight() / Gm.HEIGHT) &&
+                Gdx.graphics.getHeight() - Gdx.input.getY() < posY + h;
         if (isTouchedList){
 
             if (!onch) {

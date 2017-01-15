@@ -49,6 +49,8 @@ public class MenuUI {
     private Blink blinks[];
     private BlockAnimation blockAnimation;
 
+    private TypeGameBottomBar typeGameBottomBar;
+
     private int OPENED_WORLDS;
     public static int SELECTEDWORLD;
     private StarBlock.Star[] STARS = new StarBlock.Star[10];
@@ -56,7 +58,7 @@ public class MenuUI {
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
     public static int[] OPENEDSTAGESINWORLD;
-    public static final int[] COUNTSTAGESINWORLD = new int[] {21, 30, 30, 30, 30};
+    public static final int[] COUNTSTAGESINWORLD = new int[] {45, 30, 30, 30, 30};
     ///
 
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
@@ -112,6 +114,11 @@ public class MenuUI {
 
         initBlinks();
         initBlockAnimation();
+        initTypeGameBottomBar();
+    }
+
+    private void initTypeGameBottomBar(){
+        typeGameBottomBar = new TypeGameBottomBar(bottomBar.getHeight());
     }
 
     private void initAnimGlass(){
@@ -228,7 +235,7 @@ public class MenuUI {
     private void setStageList(TextureGen textureGen){
         final float widthList = Gm.WIDTH * 0.76f;
         final float heightList = selectStageText.getY();
-        final int columns = 3, rows = 7;
+        final int columns = 3, rows = 15;
         stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
         stageList.setPaddingBottom(0.5f + bottomBar.getHeight());
         stageButtons = new StageButton[columns * rows];
@@ -243,7 +250,7 @@ public class MenuUI {
     }
 
     private void setStageListPoperties(){
-        final int columns = 3, rows = 7;
+        final int columns = 3, rows = 15;
         final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
         for (int i = 0; i < columns * rows; i++) {
             stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i, STARS[i]);
@@ -443,6 +450,7 @@ public class MenuUI {
                 stageList.draw(batch);
                 selectStageText.draw(batch);
                 bottomBar.draw(batch);
+                typeGameBottomBar.draw(batch);
 
                 break;
         }

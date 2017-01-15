@@ -32,10 +32,10 @@ public class FlyingGlass {
         this.all = all;
         timer = 16f + (rnd.nextInt(80) / 10f);
 
-        size = 0.5f + (rnd.nextInt(50) / 100f);
+        size = 0.05f + (rnd.nextInt(10) / 10f);
         glass = Assets.getNewSprite(40);
         glass.setSize(size, size);
-        glass.setAlpha(0.3f);
+        glass.setAlpha(0.35f * (size * 2f));
         glass.setRotation(rnd.nextInt(360));
         glass.setOriginCenter();
         float cff = (Gm.WIDTH / Gdx.graphics.getWidth());

@@ -43,7 +43,7 @@ public class DebugValueChanger{
 
 
         stage = new Stage(new ScreenViewport(), batch);
-        Gdx.input.setInputProcessor(stage);
+//        Gdx.input.setInputProcessor(stage);
 
         textFields = new TextField[mx];
         buttons = new Button[mx];

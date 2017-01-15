@@ -75,6 +75,7 @@ public class Block extends FieldObject{
 
             setSQX(getSQX(sqX));
             setSQY(getSQY(sqY));
+            setIsHoledVar(getSQX(true), getSQY(true));
         }
     }
 

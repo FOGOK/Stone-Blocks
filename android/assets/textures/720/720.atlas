@@ -270,6 +270,34 @@ repeat: none
   orig: 164, 164
   offset: 0, 0
   index: -1
+47
+  rotate: false
+  xy: 1699, 232
+  size: 164, 164
+  orig: 164, 164
+  offset: 0, 0
+  index: -1
+48
+  rotate: false
+  xy: 1865, 253
+  size: 164, 164
+  orig: 164, 164
+  offset: 0, 0
+  index: -1
+49
+  rotate: false
+  xy: 1699, 66
+  size: 164, 164
+  orig: 164, 164
+  offset: 0, 0
+  index: -1
+50
+  rotate: false
+  xy: 1865, 87
+  size: 164, 164
+  orig: 164, 164
+  offset: 0, 0
+  index: -1
 6
   rotate: false
   xy: 1364, 224
@@ -284,39 +312,11 @@ repeat: none
   orig: 132, 140
   offset: 0, 0
   index: -1
-77
-  rotate: false
-  xy: 1699, 232
-  size: 164, 164
-  orig: 164, 164
-  offset: 0, 0
-  index: -1
-78
-  rotate: false
-  xy: 1865, 253
-  size: 164, 164
-  orig: 164, 164
-  offset: 0, 0
-  index: -1
-79
-  rotate: false
-  xy: 1699, 66
-  size: 164, 164
-  orig: 164, 164
-  offset: 0, 0
-  index: -1
 8
   rotate: false
   xy: 1006, 157
   size: 132, 140
   orig: 132, 140
-  offset: 0, 0
-  index: -1
-80
-  rotate: false
-  xy: 1865, 87
-  size: 164, 164
-  orig: 164, 164
   offset: 0, 0
   index: -1
 9

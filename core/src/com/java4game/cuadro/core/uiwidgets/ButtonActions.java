@@ -3,6 +3,7 @@ package com.java4game.cuadro.core.uiwidgets;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.core.usie.TypeGameBottomBar;
 import com.java4game.cuadro.utils.D;
 import com.java4game.cuadro.utils.Prefers;
 
@@ -17,11 +18,14 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, START_LEARN
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, START_LEARN
     }
 
     public static void activateAction(All action){
         switch (action){
+            case CHANGE_GAME_MODE:
+                TypeGameBottomBar.SELECTED_BTN = TypeGameButton.TOUCHED_B;
+                break;
             case START_LEARN:
                 activateAction(All.COMPLETE_LEARN);
                 break;

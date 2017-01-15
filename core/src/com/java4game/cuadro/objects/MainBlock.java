@@ -118,7 +118,7 @@ public class MainBlock extends FieldObject{
 
 
     private void blockMove(){   ///ездием по кругу
-
+//        float speed = !lockChangeInTouch ? this.speed : this.speed * 0.8f;
         switch (direction){
             case BOTTOM:
                 setY(block.getY() - speed * Gm.mdT);

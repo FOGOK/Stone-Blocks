@@ -104,6 +104,13 @@ public class BlockGenerator {
         return false;
     }
 
+    public void drawHoles(SpriteBatch batch){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (!fieldObjects[i].isCube())
+                fieldObjects[i].draw(batch);
+        }
+    }
+
     public void draw(SpriteBatch batch){
         handleStackedTrain();
 
@@ -116,7 +123,8 @@ public class BlockGenerator {
             waitToNoCollision();
 
         for (int i = 0; i < fieldObjects.length; i++) {
-            fieldObjects[i].draw(batch);
+            if (fieldObjects[i].isCube())
+                fieldObjects[i].draw(batch);
         }
 
         if (isEndLevel || endGameTimer.isStarted()){

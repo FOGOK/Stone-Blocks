@@ -14,7 +14,7 @@ public class DesktopLauncher {
         boolean Oleg = true;
 
 
-        config.samples = 8;
+//        config.samples = 8;
         config.resizable = false;
 
         if (Oleg){

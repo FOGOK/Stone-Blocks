@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Rectangle;
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985
  */
-abstract class BaseObject implements BaseDrawingObject{
+public abstract class BaseObject implements BaseDrawingObject{
 
     Rectangle bounds;
-    BaseObject(final float x, final float y, final float w, final float h){
+    public BaseObject(final float x, final float y, final float w, final float h){
         setBounds(x, y, w, h);
     }
 

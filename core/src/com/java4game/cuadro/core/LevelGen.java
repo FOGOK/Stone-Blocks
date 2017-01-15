@@ -146,9 +146,10 @@ public class LevelGen {
 
         if (!flyingStage.isFlying()){
             blockGenerator.setAlpha(flyingStage.getProgressEnd());
-            blockGenerator.draw(batch);
+            blockGenerator.drawHoles(batch);
             mainBlock.setAlpha(flyingStage.getProgressEnd());
             mainBlock.draw(batch);
+            blockGenerator.draw(batch);
             starBlock.drawGlass(batch);
             starBlock.drawMetalAndText(batch);
 

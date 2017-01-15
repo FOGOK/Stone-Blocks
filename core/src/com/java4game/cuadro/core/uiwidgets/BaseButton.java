@@ -64,10 +64,12 @@ abstract class BaseButton extends BaseObject{
     protected void setFirstTexture(Sprite sprite){
         normalTex = sprite;
         normalTex.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        normalTex.setOriginCenter();
     }
     protected void setSecondTexture(Sprite sprite){
         touchedTex = sprite;
         touchedTex.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        touchedTex.setOriginCenter();
     }
 
     protected void activateAction(){
