@@ -116,12 +116,11 @@ public class Block extends FieldObject{
     }
 
     private boolean isNextNoHoles(int nextsqX, int nextsqY){
-        boolean result = true;
         for (int i = 0; i < fieldObjects.length; i++) {
             if (fieldObjects[i].getSQX(true) == nextsqX && fieldObjects[i].getSQY(true) == nextsqY){
                 if (!fieldObjects[i].isCube()){
                     if (((Hole)fieldObjects[i]).getType() == type) {
-                        result = false;
+                        return false;
                     }
                 }
 //                else
@@ -129,7 +128,7 @@ public class Block extends FieldObject{
             }
         }
 
-        return result;
+        return true;
     }
 
 
@@ -151,6 +150,7 @@ public class Block extends FieldObject{
 
     private int sQX, sQY, lastSQX, lastSQY;
     private float pX, pY, lastPX, lastPY;
+    private boolean oldStacked;
 
     private void handleMove(){
         if (stacked){
@@ -189,8 +189,9 @@ public class Block extends FieldObject{
         }
 
 
-        if (sQX != lastSQX || sQY != lastSQY)
+        if (sQX != lastSQX || sQY != lastSQY || oldStacked != stacked)
             setIsHoledVar(sQX, sQY, nextsqX, nextsqY);
+        oldStacked = stacked;
         lastSQX = sQX;
         lastSQY = sQY;
 
