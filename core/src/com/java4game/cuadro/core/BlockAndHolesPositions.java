@@ -279,7 +279,7 @@ public class BlockAndHolesPositions {
                 new Object(2, 2, COLOR_YELLOW, CUBE),
                 new Object(3, 2, COLOR_GREEN, CUBE)
         }, BACK_COLOR_GRAY);
-        levels[22].setMinSteps(7);
+        levels[22].setMinSteps(6);
         levels[23] = new Level(new Object[]{
                 new Object(1, 1, COLOR_RED, HOLE),
                 new Object(7, 7, COLOR_BLUE, HOLE),
