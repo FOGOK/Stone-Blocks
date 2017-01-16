@@ -74,7 +74,7 @@ public class Gm extends ApplicationAdapter {
 
     private void setStagesOpened(){
         if (Prefers.getInt(Prefers.KeyOpenedStages) == 0){
-            Prefers.putInt(Prefers.KeyOpenedStages, 102);
+            Prefers.putInt(Prefers.KeyOpenedStages, 103);
             char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[0]; i++) {
                 chars[i] = '0';

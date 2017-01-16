@@ -680,6 +680,7 @@ public class BlockAndHolesPositions {
                 new Object(4, 6, COLOR_WHITE, CUBE),
                 new Object(4, 7, COLOR_WHITE, CUBE),
         }, BACK_COLOR_GRAY);
+        levels[51].setMinSteps(4);
 
         levels[52] = new Level(new Object[]{
                 new Object(5, 1, COLOR_BLUE, HOLE),
@@ -698,6 +699,7 @@ public class BlockAndHolesPositions {
                 new Object(5, 7, COLOR_BLUE, CUBE),
                 new Object(6, 7, COLOR_BLUE, CUBE),
         }, BACK_COLOR_BLUE);
+        levels[52].setMinSteps(8);
 
         levels[53] = new Level(new Object[]{
                 new Object(4, 2, COLOR_RED, HOLE),

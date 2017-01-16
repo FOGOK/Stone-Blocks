@@ -192,12 +192,12 @@ public class Block extends FieldObject{
         lastSQX = sQX;
         lastSQY = sQY;
 
-//        pX = mainBlockBounds.getX();
-//        pY = mainBlockBounds.getY();
-//        if (pX != lastPX || pY != lastPY)
-//            setIsHoledVarCleaned(sQX, sQY);
-//        lastPX = pX;
-//        lastPY = pY;
+        pX = mainBlockBounds.getX();
+        pY = mainBlockBounds.getY();
+        if (pX != lastPX || pY != lastPY)
+            setIsHoledVarCleaned(sQX, sQY);
+        lastPX = pX;
+        lastPY = pY;
 
 
         blockCompleted.setPosition(block.getX() + cellSize * 0.152f, block.getY() + cellSize * 0.2f);
