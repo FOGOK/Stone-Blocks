@@ -73,6 +73,10 @@ public class FlyingStage {
         numberT.setPositionToCenter();
     }
 
+    public void refreshRefresh(){
+        flyingAnimatorTo.setNeedToUpdate(false);
+    }
+
     public void handle(){
         if (flyingAnimatorTo.isNeedToUpdate()){
             if (flyingAnimatorFrom.isNeedToUpdate()){

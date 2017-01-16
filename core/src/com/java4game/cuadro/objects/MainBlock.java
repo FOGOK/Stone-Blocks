@@ -175,17 +175,17 @@ public class MainBlock extends FieldObject{
     }
 
     public void blockHasComeHole(){
-        if (!isReversTrued){
-            isReversTrued = true;
-            revers();
-        }
+        revers();
     }
-
     public void revers(){
 //        isTrueRevers = true;
-        blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
-        nextDirection();
-        nextDirection();    //поворачиваемся на 180 градусов
+
+        if (!isReversTrued){
+            isReversTrued = true;
+            blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+            nextDirection();
+            nextDirection();    //поворачиваемся на 180 градусов
+        }
     }
 
     private void startRotation(){

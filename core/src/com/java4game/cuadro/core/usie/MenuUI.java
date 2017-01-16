@@ -58,7 +58,7 @@ public class MenuUI {
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
     public static int[] OPENEDSTAGESINWORLD;
-    public static final int[] COUNTSTAGESINWORLD = new int[] {45, 30, 30, 30, 30};
+    public static final int[] COUNTSTAGESINWORLD = new int[] {102, 30, 30, 30, 30};
     ///
 
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
@@ -235,7 +235,7 @@ public class MenuUI {
     private void setStageList(TextureGen textureGen){
         final float widthList = Gm.WIDTH * 0.76f;
         final float heightList = selectStageText.getY();
-        final int columns = 3, rows = 15;
+        final int columns = 3, rows = 34;
         stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
         stageList.setPaddingBottom(0.5f + bottomBar.getHeight());
         stageButtons = new StageButton[columns * rows];
@@ -250,7 +250,7 @@ public class MenuUI {
     }
 
     private void setStageListPoperties(){
-        final int columns = 3, rows = 15;
+        final int columns = 3, rows = 34;
         final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
         for (int i = 0; i < columns * rows; i++) {
             stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i, STARS[i]);

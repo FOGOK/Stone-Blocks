@@ -146,6 +146,10 @@ public class FloatAnimator {
         return isRevers;
     }
 
+    public void setNeedToUpdate(boolean needToUpdate) {
+        this.needToUpdate = needToUpdate;
+    }
+
     public boolean isNeedToUpdate() {
         return needToUpdate;
     }

@@ -35,6 +35,8 @@ public class LevelGen {
     private Rectangle fieldBounds;
     private Sprite background, field;
 
+    public static boolean REFRESH_REFRESH;
+
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
 
@@ -93,6 +95,8 @@ public class LevelGen {
 //        }
         flyingStage = new FlyingStage();
         flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor);
+        if (!REFRESH_REFRESH)
+            flyingStage.refreshRefresh();
         //
         starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
         blockGenerator.setStarBlock(starBlock);

@@ -36,6 +36,7 @@ public class TextButton extends BaseButton {
         super.setPosition(x, y);
         textBlock.setPosition(x + bounds.width / 2f, y + bounds.height / 2f);
         textBlock.setPositionToCenter();
+        textBlock.setPosition(textBlock.getBounds().getX(), textBlock.getBounds().getY() + bounds.height * 0.025f);
     }
 
     public TextBlock getTextBlock() {

@@ -69,10 +69,12 @@ public class BlockGenerator {
 
         fieldObjects = new FieldObject[level.getObjects().length];
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (level.getObjects()[i].isCube())
+            if (level.getObjects()[i].isCube()){
                 fieldObjects[i] = new Block(level.getObjects()[i].getType(), Assets.getNewSprite(7 + level.getObjects()[i].getType()),
                         cellSize * 1.3f, level.getObjects()[i].getX(), level.getObjects()[i].getY(),
                         fieldBounds, mainBlock, fieldObjects);
+                ((Block)fieldObjects[i]).setBlockGenerator(this);
+            }
             else
                 fieldObjects[i] = new Hole(Assets.getNewSprite(13 + level.getObjects()[i].getType()), fieldBounds,
                         level.getObjects()[i].getX(), level.getObjects()[i].getY(), level.getObjects()[i].getType());
@@ -109,6 +111,10 @@ public class BlockGenerator {
             if (!fieldObjects[i].isCube())
                 fieldObjects[i].draw(batch);
         }
+    }
+
+    public int getStackedCount() {
+        return stackedCount;
     }
 
     public void draw(SpriteBatch batch){

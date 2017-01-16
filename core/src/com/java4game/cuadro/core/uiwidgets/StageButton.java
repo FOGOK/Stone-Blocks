@@ -49,6 +49,7 @@ public class StageButton extends TextButton {
         if (action == ButtonActions.All.RESTART_PAUSE_ACTION){
             LEVEL = stage;
             MusicCore.play(MusicCore.GAME);
+            LevelGen.REFRESH_REFRESH = true;
         }else{ //endLearningDat
             menuUI.refreshStarsData();
             MenuUI.SETSTAGEPROP = true;
@@ -125,7 +126,7 @@ public class StageButton extends TextButton {
     }
 
     private void drawLearnIcon(SpriteBatch batch){
-        learnIcon.setPosition(normalTex.getX() + (normalTex.getWidth() - learnIcon.getWidth()) / 2f, normalTex.getY() + (normalTex.getHeight() - learnIcon.getHeight()) / 2f);
+        learnIcon.setPosition(normalTex.getX() + (normalTex.getWidth() - learnIcon.getWidth()) / 2f, normalTex.getY() + (normalTex.getHeight() - learnIcon.getHeight()) * 0.6f);
         learnIcon.draw(batch);
     }
 }

@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core.uiwidgets;
 
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
@@ -90,6 +91,7 @@ public class ButtonActions {
                 Handler.ISRESTART = true;
                 Handler.ISPAUSE = false;
                 Handler.state = Handler.State.Game;
+                LevelGen.REFRESH_REFRESH = false;
                 break;
 
             case QUESTION_ACT:
