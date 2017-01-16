@@ -1890,6 +1890,7 @@ public class BlockAndHolesPositions {
                 new Object(7, 8, COLOR_RED, CUBE),
                 new Object(8, 8, COLOR_RED, CUBE),
         }, BACK_COLOR_RED);
+        levels[101].setMinSteps(33);
 
 
     }

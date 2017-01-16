@@ -86,7 +86,6 @@ public class Block extends FieldObject{
             setSQX(getSQX(sqX));
             setSQY(getSQY(sqY));
             setIsHoledVar(getSQX(true), getSQY(true), nextsqX, nextsqY);
-            setIsHoledVarCleaned(sQX, sQY);
         }
     }
 
@@ -94,13 +93,14 @@ public class Block extends FieldObject{
         isHoled = false;
         for (int i = 0; i < fieldObjects.length; i++) {
             if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
-                if (((Hole)fieldObjects[i]).getType() == type && isNextNoHoles(nextsqX, nextsqY)){
+                if (((Hole)fieldObjects[i]).getType() == type && (isNextNoHoles(nextsqX, nextsqY) || blockGenerator.getStackedCount() == 1)){
                     isHoled = true;
                     mainBlock.blockHasComeHole();
                     break;
                 }
             }
         }
+        setIsHoledVarCleaned(sQX, sQY);
     }
 
     private void setIsHoledVarCleaned(int sqX, int sqY){
@@ -123,13 +123,15 @@ public class Block extends FieldObject{
                     if (((Hole)fieldObjects[i]).getType() == type) {
                         result = false;
                     }
-                }else
-                    result = stackedPosition == blockGenerator.getStackedCount();
+                }
+//                else
+//                    result = stackedPosition == blockGenerator.getStackedCount();
             }
         }
 
         return result;
     }
+
 
     public boolean isHoled() {
         return isHoled;
@@ -192,12 +194,12 @@ public class Block extends FieldObject{
         lastSQX = sQX;
         lastSQY = sQY;
 
-        pX = mainBlockBounds.getX();
-        pY = mainBlockBounds.getY();
-        if (pX != lastPX || pY != lastPY)
-            setIsHoledVarCleaned(sQX, sQY);
-        lastPX = pX;
-        lastPY = pY;
+//        pX = mainBlockBounds.getX();
+//        pY = mainBlockBounds.getY();
+//        if (pX != lastPX || pY != lastPY)
+//            setIsHoledVarCleaned(sQX, sQY);
+//        lastPX = pX;
+//        lastPY = pY;
 
 
         blockCompleted.setPosition(block.getX() + cellSize * 0.152f, block.getY() + cellSize * 0.2f);
