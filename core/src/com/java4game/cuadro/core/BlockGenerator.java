@@ -259,6 +259,10 @@ public class BlockGenerator {
         }
     }
 
+    public int getStackedCount() {
+        return stackedCount;
+    }
+
     public boolean isStackAvailable(){
         return stackedCount > 0;
     }

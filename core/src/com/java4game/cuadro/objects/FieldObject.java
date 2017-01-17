@@ -66,10 +66,10 @@ public class FieldObject {
         float val = block.getX() + block.getWidth() / 2;
         switch (direction){
             case MainBlock.RIGHT:
-                val -= block.getWidth() / 2 + offset;
+                val += block.getWidth() / 2 + offset;
                 break;
             case MainBlock.LEFT:
-                val += block.getWidth() / 2 - offset;
+                val -= block.getWidth() / 2 - offset;
                 break;
         }
         return getSQX(false, val);
@@ -79,10 +79,10 @@ public class FieldObject {
         float val = block.getY() + block.getWidth() / 2;
         switch (direction){
             case MainBlock.BOTTOM:
-                val += block.getWidth() / 2 - offset;
+                val -= block.getWidth() / 2 - offset;
                 break;
             case MainBlock.TOP:
-                val -= block.getWidth() / 2 + offset;
+                val += block.getWidth() / 2 + offset;
                 break;
         }
         return getSQY(false, val);

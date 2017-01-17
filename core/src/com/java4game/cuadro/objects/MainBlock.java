@@ -94,7 +94,7 @@ public class MainBlock extends FieldObject{
         super.draw(batch);
         if (!Handler.ISPAUSE)
             blockMove();
-//        setDebugText();
+        setDebugText();
     }
 
     private void setDebugText(){
@@ -114,7 +114,7 @@ public class MainBlock extends FieldObject{
                 break;
 
         }
-        Gm.DEBUG_VALUE1 = "DIRECTION =" + dirS + " X = " + sQX + " Y = " + sQY + "\nISREVERS = " + isRevers + "isCornered = " + positionIsCorner();
+        Gm.DEBUG_VALUE1 = "DIRECTION =" + dirS + " X = " + NCsQX + " Y = " + NCsQY + "\nISREVERS = " + isRevers + "isCornered = " + positionIsCorner();
     }
 
 
@@ -137,8 +137,8 @@ public class MainBlock extends FieldObject{
 
         sQX = getSQX(true);
         sQY = getSQY(true);
-        NCsQX = getSQX(false);
-        NCsQY = getSQY(false);
+        NCsQX = getSQX(direction, 0);
+        NCsQY = getSQY(direction, 0);
 
         if (Gdx.input.justTouched() && (Gm.HEIGHT / Gdx.graphics.getHeight()) * Gdx.input.getY() > 3f){
             if (!lockChangeInTouch)
@@ -171,6 +171,7 @@ public class MainBlock extends FieldObject{
 
         if ((NCsQX != NClastSQX || NCsQY != NClastSQY) && isBlockMovedOneSquare)
             blockGenerator.reversInspect();
+
 
         if (blockGenerator.isStackAvailable()){
             if (!isBlockMovedOneSquare)
