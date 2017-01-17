@@ -2,6 +2,7 @@ package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.java4game.cuadro.utils.Timer;
 
 /**
@@ -13,19 +14,36 @@ import com.java4game.cuadro.utils.Timer;
 public class MusicCore {
 
     private static float MUSIC_VOLUME = 0.0f;
+    private static float SOUND_VOLUME = 1.0f;
 
     private static Timer stopTimer, startTimer;
     private static Music game, menu;
+    private static Sound sounds[];
     private static int currentPlay;
     public static final int GAME = 0, MENU = 1;
+
     public static void init(){
         game = Gdx.audio.newMusic(Gdx.files.internal("music/game.mp3"));
         game.setLooping(true);
         menu = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
         menu.setLooping(true);
+
+        //initSounds
+        sounds = new Sound[15];
+        String endLett;
+        for (int i = 0; i < sounds.length; i++) {
+            endLett = i < 3 || i > 13 ? ".wav" : ".mp3";
+            sounds[i] = Gdx.audio.newSound(Gdx.files.internal("sounds/" + i + endLett));
+        }
+        ///
+
         stopTimer = new Timer(0);
         startTimer = new Timer(1.5f);
         currentPlay = MENU;
+    }
+
+    public static void playSound(int i){
+        sounds[i].play(SOUND_VOLUME);
     }
 
     public static void play(int _currentPlay){
@@ -60,5 +78,11 @@ public class MusicCore {
 
         menu.dispose();
         menu = null;
+
+        for (int i = 0; i < sounds.length; i++) {
+            sounds[i].dispose();
+            sounds[i] = null;
+        }
+        sounds = null;
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.BlockGenerator;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.utils.Assets;
 
 /**
@@ -88,14 +89,22 @@ public class Block extends FieldObject{
     }
 
     private void setIsHoledVarCleaned(int sqX, int sqY){
-        isHoled = false;
+        boolean isForTrued = false;
         for (int i = 0; i < fieldObjects.length; i++) {
             if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
                 if (((Hole)fieldObjects[i]).getType() == type){
-                    isHoled = true;
+                    if (!isHoled){
+                        MusicCore.playSound(10);
+                        isHoled = true;
+                    }
+                    isForTrued = true;
                     break;
                 }
             }
+        }
+        if (!isForTrued && isHoled){
+            isHoled = false;
+            MusicCore.playSound(9);
         }
     }
 

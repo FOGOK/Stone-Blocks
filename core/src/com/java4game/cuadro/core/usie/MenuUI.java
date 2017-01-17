@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.CustomFormButton;
@@ -115,6 +116,8 @@ public class MenuUI {
         initBlinks();
         initBlockAnimation();
         initTypeGameBottomBar();
+
+        MusicCore.playSound(8);
     }
 
     private void initTypeGameBottomBar(){

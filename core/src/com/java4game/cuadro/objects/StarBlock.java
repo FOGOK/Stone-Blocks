@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.LevelGen;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
@@ -108,7 +109,12 @@ public class StarBlock {
     }
 
     private Interpolation goldStarInterpolation;
+    private boolean isPlayGoldS;
     public void handle(float alpha){
+        if (!isPlayGoldS){
+            MusicCore.playSound(0);
+            isPlayGoldS = true;
+        }
         noneStar.setAlpha(alpha);
         stepsLetter.setAlpha(alpha);
         stepsLetter.setOffsetX((1f - alpha) * (-stepsLetter.getBounds().getWidth() / 4f));
@@ -201,6 +207,7 @@ public class StarBlock {
             case Gold:
                 if (goldSteps < 1){
                     currentStar = Star.Silver;
+                    MusicCore.playSound(2);
                     starStepsBlock.setText(silverSteps + "");
                     isStartAnimThisIters = true;
                 }
@@ -208,6 +215,7 @@ public class StarBlock {
             case Silver:
                 if (silverSteps < 1) {
                     currentStar = Star.Bronze;
+                    MusicCore.playSound(1);
                     starStepsBlock.setText(bronzeSteps + "");
                     isStartAnimThisIters = true;
                 }

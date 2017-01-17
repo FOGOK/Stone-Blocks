@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.utils.Assets;
 
@@ -76,6 +77,10 @@ abstract class BaseButton extends BaseObject{
         ButtonActions.activateAction(action);
     }
 
+    protected void playSound(){
+        MusicCore.playSound(4);
+    }
+
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
@@ -144,8 +149,11 @@ abstract class BaseButton extends BaseObject{
                 );  ///определяем,  касается ли палец кнопки или нет
 
             }else {              //при отпускании кнопки
-                if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
-                   activateAction();
+                if (isTouched){
+                    ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
+                    activateAction();
+                    playSound();
+                }
 
                 isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
             }

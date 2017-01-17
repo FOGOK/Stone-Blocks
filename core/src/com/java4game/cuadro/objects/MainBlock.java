@@ -8,6 +8,7 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
+import com.java4game.cuadro.core.MusicCore;
 
 import java.util.Random;
 
@@ -152,6 +153,7 @@ public class MainBlock extends FieldObject{
             startChangeDir = false;
             nextDirection();
             startRotation();
+            MusicCore.playSound(11);
             lockChangeInTouch = true;
             levelGen.minusStep();  //отнимаем один ход
         }

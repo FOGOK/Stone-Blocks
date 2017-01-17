@@ -298,6 +298,7 @@ public class BlockGenerator {
                 if (!((Block)fieldObjects[i]).isStacked()){
                     if (fieldObjects[i].getBlockBounds().contains(cornTrainX, cornTrainY)){
                         stackedCount++;
+                        MusicCore.playSound(6);
                         ((Block)fieldObjects[i]).setStacked(stackedCount);
                         switch (mainBlock.getDirection()){
                             case MainBlock.TOP:

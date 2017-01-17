@@ -106,6 +106,8 @@ public class LevelGen {
         pauseButton.setPositionToCenter();
         pauseButton.completeX();
 
+        MusicCore.playSound(8);
+
 
     }
 

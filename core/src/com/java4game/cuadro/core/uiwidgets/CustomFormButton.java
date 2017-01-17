@@ -95,8 +95,10 @@ public class CustomFormButton extends BaseButton {
                 isTouched = Intersector.overlapConvexPolygons(form, dot);  ///определяем,  касается ли палец кнопки или нет
 
             }else {              //при отпускании кнопки
-                if (isTouched)      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
+                if (isTouched) {      ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
                     ButtonActions.activateAction(action);
+                    playSound();
+                }
 
                 isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз
             }
