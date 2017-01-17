@@ -121,7 +121,7 @@ public class MenuUI {
     }
 
     private void initTypeGameBottomBar(){
-        typeGameBottomBar = new TypeGameBottomBar(bottomBar.getHeight());
+        typeGameBottomBar = new TypeGameBottomBar(this, bottomBar.getHeight());
     }
 
     private void initAnimGlass(){
@@ -305,14 +305,20 @@ public class MenuUI {
 //    }
 
     private void setSelectStageTextAndBottomBar(){
-        selectStageText = Assets.getNewSprite(24);
         final float cffHeight = 0.3041f;
-        selectStageText.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
-        selectStageText.setPosition(0f, Gm.HEIGHT - selectStageText.getHeight());
 
         bottomBar = Assets.getNewSprite(38);
         bottomBar.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         bottomBar.setPosition(0f, 0f);
+
+        refreshTopBar(0);
+    }
+
+    public void refreshTopBar(int i){
+        selectStageText = Assets.getNewSprite(i + 51);
+        final float cffHeight = 0.3041f;
+        selectStageText.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
+        selectStageText.setPosition(0f, Gm.HEIGHT - selectStageText.getHeight());
     }
 
     private void setInfoButton(){
