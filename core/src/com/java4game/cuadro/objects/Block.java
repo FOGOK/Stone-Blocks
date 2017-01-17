@@ -83,6 +83,9 @@ public class Block extends FieldObject{
         }
     }
 
+    public int getStackedPosition() {
+        return stackedPosition;
+    }
 
     private void setIsHoledVarCleaned(int sqX, int sqY){
         isHoled = false;

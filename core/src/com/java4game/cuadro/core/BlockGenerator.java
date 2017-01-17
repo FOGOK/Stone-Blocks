@@ -174,7 +174,7 @@ public class BlockGenerator {
     public void reversInspect(){
         for (int i = 0; i < fieldObjects.length; i++) {
             if (fieldObjects[i].isCube()){
-                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && !isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i)){
+                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && (!isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i) || !isNextTypeEqCurrentType())){
                     mainBlock.blockHasComedHole();
                 }
             }
@@ -189,6 +189,48 @@ public class BlockGenerator {
                         return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean isNextTypeEqCurrentType(){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (fieldObjects[i].isCube()){
+                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).getStackedPosition() == stackedCount)
+                    return nextTypeEqualsCurrentType(i, true);
+            }
+        }
+        return false;
+    }
+
+
+    private boolean nextTypeEqualsCurrentType(int currentBlock, boolean isOffset){
+        int nextX = 0, nextY = 0;
+        if (isOffset){
+            switch (mainBlock.getDirection()){
+                case MainBlock.TOP:
+                    nextY++;
+                    break;
+                case MainBlock.BOTTOM:
+                    nextY--;
+                    break;
+                case MainBlock.RIGHT:
+                    nextX++;
+                    break;
+                case MainBlock.LEFT:
+                    nextX--;
+                    break;
+            }
+        }
+        int currentX = fieldObjects[currentBlock].getSQX(true);
+        int currentY = fieldObjects[currentBlock].getSQY(true);
+        int currentType = ((Block)fieldObjects[currentBlock]).getType();
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == currentX + nextX
+                                          && fieldObjects[i].getSQY(true) == currentY + nextY){
+                if (currentType == ((Hole)fieldObjects[i]).getType())
+                    return true;
             }
         }
         return false;
