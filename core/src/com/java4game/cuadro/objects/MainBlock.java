@@ -30,6 +30,7 @@ public class MainBlock extends FieldObject{
     private float currentRotation, speedRotation = 120f, rotationMax = 180;
 
     private boolean isRotationStart;
+    private boolean isBlockMovedOneSquare;
 
     private boolean isReversTrued;
 
@@ -168,13 +169,22 @@ public class MainBlock extends FieldObject{
         else if (isDirectionChanged)
             isDirectionChanged = !(sQX != lastSQX || sQY != lastSQY);
 
+        if ((NCsQX != NClastSQX || NCsQY != NClastSQY) && isBlockMovedOneSquare)
+            blockGenerator.reversInspect();
+
+        if (blockGenerator.isStackAvailable()){
+            if (!isBlockMovedOneSquare)
+                isBlockMovedOneSquare = (sQX != lastSQX || sQY != lastSQY);
+        }else
+            isBlockMovedOneSquare = false;
+
         lastSQX = sQX;
         lastSQY = sQY;
         NClastSQX = NCsQX;
         NClastSQY = NCsQY;
     }
 
-    public void blockHasComeHole(){
+    public void blockHasComedHole(){
         revers();
     }
     public void revers(){

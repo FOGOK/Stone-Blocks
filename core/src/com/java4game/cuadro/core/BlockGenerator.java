@@ -113,10 +113,6 @@ public class BlockGenerator {
         }
     }
 
-    public int getStackedCount() {
-        return stackedCount;
-    }
-
     public void draw(SpriteBatch batch){
         handleStackedTrain();
 
@@ -167,10 +163,35 @@ public class BlockGenerator {
 //        DebugDrawer.drawRect(batch, stackedTrain);
     }
 
+
+
     public void setAlpha(float alpha){
         for (int i = 0; i < fieldObjects.length; i++) {
             fieldObjects[i].setAlpha(alpha);
         }
+    }
+
+    public void reversInspect(){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (fieldObjects[i].isCube()){
+                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && !isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i)){
+                    mainBlock.blockHasComedHole();
+                }
+            }
+        }
+    }
+
+    private boolean isOtherBlockTargetTypeAvailable(int targetType, int targetCube){   ///есть ли в стаке ещё такие блоки, как этот и в лунках ли они
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (i != targetCube){
+                if (fieldObjects[i].isCube()){
+                    if (((Block)fieldObjects[i]).isStacked() && !((Block)fieldObjects[i]).isHoled() && ((Block)fieldObjects[i]).getType() == targetType){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void clearStacked(float x, float y){

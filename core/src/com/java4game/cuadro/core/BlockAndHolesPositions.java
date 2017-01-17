@@ -1873,23 +1873,23 @@ public class BlockAndHolesPositions {
                 new Object(4, 8, COLOR_RED, HOLE),
                 new Object(5, 8, COLOR_RED, HOLE),
 
-                new Object(1, 1, COLOR_WHITE, CUBE),
-                new Object(1, 2, COLOR_WHITE, CUBE),
-                new Object(3, 2, COLOR_BLUE, CUBE),
-                new Object(5, 2, COLOR_WHITE, CUBE),
-                new Object(1, 4, COLOR_YELLOW, CUBE),
-                new Object(5, 4, COLOR_RED, CUBE),
-                new Object(7, 4, COLOR_BLUE, CUBE),
-                new Object(1, 6, COLOR_RED, CUBE),
-                new Object(3, 6, COLOR_BLUE, CUBE),
-                new Object(5, 6, COLOR_YELLOW, CUBE),
-                new Object(1, 7, COLOR_YELLOW, CUBE),
-                new Object(7, 7, COLOR_RED, CUBE),
-                new Object(8, 7, COLOR_RED, CUBE),
-                new Object(1, 8, COLOR_YELLOW, CUBE),
-                new Object(3, 8, COLOR_WHITE, CUBE),
-                new Object(7, 8, COLOR_RED, CUBE),
-                new Object(8, 8, COLOR_RED, CUBE),
+                new Object(1, 1, COLOR_WHITE, CUBE),    //1
+                new Object(1, 2, COLOR_WHITE, CUBE),    //2
+                new Object(3, 2, COLOR_BLUE, CUBE), //3
+                new Object(5, 2, COLOR_WHITE, CUBE),    //4
+                new Object(1, 4, COLOR_YELLOW, CUBE),   //5
+                new Object(5, 4, COLOR_RED, CUBE),  //6
+                new Object(7, 4, COLOR_BLUE, CUBE), //7
+                new Object(1, 6, COLOR_RED, CUBE),  //8
+                new Object(3, 6, COLOR_BLUE, CUBE), //9
+                new Object(5, 6, COLOR_YELLOW, CUBE),   //10
+                new Object(1, 7, COLOR_YELLOW, CUBE),   //11
+                new Object(7, 7, COLOR_RED, CUBE),  //12
+                new Object(8, 7, COLOR_RED, CUBE),  //13
+                new Object(1, 8, COLOR_YELLOW, CUBE),   //14
+                new Object(3, 8, COLOR_WHITE, CUBE),    //15
+                new Object(7, 8, COLOR_RED, CUBE),  //16
+                new Object(8, 8, COLOR_RED, CUBE),  //17
         }, BACK_COLOR_RED);
         levels[101].setMinSteps(33);
 

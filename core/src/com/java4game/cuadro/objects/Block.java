@@ -62,46 +62,27 @@ public class Block extends FieldObject{
             float sqX = ssqX;
             float sqY = ssqY;
 
-            int nextsqX = getSQX(true), nextsqY = getSQY(true);
-
             switch (mainBlock.getDirection()){
                 case MainBlock.TOP:
                     sqY += cellSize * stackedPosition;
-                    nextsqY += 1;
                     break;
                 case MainBlock.BOTTOM:
                     sqY -= cellSize * stackedPosition;
-                    nextsqY -= 1;
                     break;
                 case MainBlock.LEFT:
                     sqX -= cellSize * stackedPosition;
-                    nextsqX -= 1;
                     break;
                 case MainBlock.RIGHT:
                     sqX += cellSize * stackedPosition;
-                    nextsqX += 1;
                     break;
             }
 
             setSQX(getSQX(sqX));
             setSQY(getSQY(sqY));
-            setIsHoledVar(getSQX(true), getSQY(true), nextsqX, nextsqY);
+            setIsHoledVarCleaned(getSQX(true), getSQY(true));
         }
     }
 
-    private void setIsHoledVar(int sqX, int sqY, int nextsqX, int nextsqY){
-        isHoled = false;
-        for (int i = 0; i < fieldObjects.length; i++) {
-            if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
-                if (((Hole)fieldObjects[i]).getType() == type && (isNextNoHoles(nextsqX, nextsqY) || blockGenerator.getStackedCount() == 1)){
-                    isHoled = true;
-                    mainBlock.blockHasComeHole();
-                    break;
-                }
-            }
-        }
-        setIsHoledVarCleaned(sQX, sQY);
-    }
 
     private void setIsHoledVarCleaned(int sqX, int sqY){
         isHoled = false;
@@ -113,22 +94,6 @@ public class Block extends FieldObject{
                 }
             }
         }
-    }
-
-    private boolean isNextNoHoles(int nextsqX, int nextsqY){
-        for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].getSQX(true) == nextsqX && fieldObjects[i].getSQY(true) == nextsqY){
-                if (!fieldObjects[i].isCube()){
-                    if (((Hole)fieldObjects[i]).getType() == type) {
-                        return false;
-                    }
-                }
-//                else
-//                    result = stackedPosition == blockGenerator.getStackedCount();
-            }
-        }
-
-        return true;
     }
 
 
@@ -149,8 +114,6 @@ public class Block extends FieldObject{
     }
 
     private int sQX, sQY, lastSQX, lastSQY;
-    private float pX, pY, lastPX, lastPY;
-    private boolean oldStacked;
 
     private void handleMove(){
         if (stacked){
@@ -171,36 +134,10 @@ public class Block extends FieldObject{
         }
         sQX = getSQX(true);
         sQY = getSQY(true);
-        int nextsqX = sQX, nextsqY = sQY;
-
-        switch (mainBlock.getDirection()){
-            case MainBlock.TOP:
-                nextsqY += 1;
-                break;
-            case MainBlock.BOTTOM:
-                nextsqY -= 1;
-                break;
-            case MainBlock.LEFT:
-                nextsqX -= 1;
-                break;
-            case MainBlock.RIGHT:
-                nextsqX += 1;
-                break;
-        }
-
-
-        if (sQX != lastSQX || sQY != lastSQY || oldStacked != stacked)
-            setIsHoledVar(sQX, sQY, nextsqX, nextsqY);
-        oldStacked = stacked;
+        if (sQX != lastSQX || sQY != lastSQY)
+            setIsHoledVarCleaned(sQX, sQY);
         lastSQX = sQX;
         lastSQY = sQY;
-
-//        pX = mainBlockBounds.getX();
-//        pY = mainBlockBounds.getY();
-//        if (pX != lastPX || pY != lastPY)
-//            setIsHoledVarCleaned(sQX, sQY);
-//        lastPX = pX;
-//        lastPY = pY;
 
 
         blockCompleted.setPosition(block.getX() + cellSize * 0.152f, block.getY() + cellSize * 0.2f);
