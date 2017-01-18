@@ -17,6 +17,7 @@ abstract class BaseButton extends BaseObject{
 
     boolean isTouched;
     ButtonActions.All action;
+    boolean soundEnabled = true;
 
     //must
     Sprite normalTex;       ///ненажатая кнопка
@@ -152,7 +153,8 @@ abstract class BaseButton extends BaseObject{
                 if (isTouched){
                     ///если при отпускании кнопки палец находился на кнопке, то выполняем действие
                     activateAction();
-                    playSound();
+                    if (soundEnabled)
+                        playSound();
                 }
 
                 isTouched = false;  //делаем так, чтобы действие не выполнилось ещё раз

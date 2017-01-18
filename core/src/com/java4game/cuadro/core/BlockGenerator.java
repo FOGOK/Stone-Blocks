@@ -148,7 +148,7 @@ public class BlockGenerator {
 //            chars[LEVEL] =
             ///
 
-            if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1){     //открываем следующий уровень
+            if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
                 if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
                     MenuUI.OPENEDSTAGESINWORLD[0]++;
                     Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);

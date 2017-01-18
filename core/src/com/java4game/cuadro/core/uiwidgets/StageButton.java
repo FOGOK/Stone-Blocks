@@ -38,6 +38,7 @@ public class StageButton extends TextButton {
         completeTexture = Assets.getNewSprite(27);
         learnIcon = Assets.getNewSprite(35);
         learnIcon.setSize(h / 2f, h / 2f);
+        soundEnabled = false;
 
         getTextBlock().setCustomCff(h / 3f);
         currentStar = StarBlock.Star.None;

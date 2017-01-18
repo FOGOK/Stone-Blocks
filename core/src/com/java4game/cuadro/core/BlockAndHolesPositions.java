@@ -413,6 +413,7 @@ public class BlockAndHolesPositions {
                 new Object(6, 7, COLOR_BLUE, CUBE),
                 new Object(8, 1, COLOR_YELLOW, CUBE)
         }, BACK_COLOR_YELLOW);
+        levels[33].setMinSteps(8);
         levels[34] = new Level(new Object[]{
                 new Object(3, 6, COLOR_WHITE, HOLE),
                 new Object(3, 3, COLOR_RED, HOLE),
@@ -439,6 +440,7 @@ public class BlockAndHolesPositions {
                 new Object(3, 7, COLOR_GREEN, CUBE),
                 new Object(6, 3, COLOR_WHITE, CUBE)
         }, BACK_COLOR_RED);
+        levels[35].setMinSteps(7);
         levels[36] = new Level(new Object[]{
                 new Object(3, 3, COLOR_YELLOW, HOLE),
                 new Object(4, 6, COLOR_YELLOW, HOLE),
@@ -465,7 +467,7 @@ public class BlockAndHolesPositions {
                 new Object(5, 7, COLOR_RED, CUBE),
                 new Object(5, 2, COLOR_RED, CUBE)
         }, BACK_COLOR_BLUE);
-        levels[37].setMinSteps(9);
+        levels[37].setMinSteps(8);
         levels[38] = new Level(new Object[]{
                 new Object(3, 3, COLOR_RED, HOLE),
                 new Object(6, 3, COLOR_YELLOW, HOLE),
@@ -479,7 +481,7 @@ public class BlockAndHolesPositions {
                 new Object(3, 7, COLOR_GREEN, CUBE),
                 new Object(7, 3, COLOR_RED, CUBE)
         }, BACK_COLOR_YELLOW);
-        levels[38].setMinSteps(6);
+        levels[38].setMinSteps(4);
         levels[39] = new Level(new Object[]{
                 new Object(3, 4, COLOR_WHITE, HOLE),
                 new Object(4, 5, COLOR_WHITE, HOLE),
@@ -521,6 +523,7 @@ public class BlockAndHolesPositions {
                 new Object(4, 6, COLOR_GREEN, CUBE),
                 new Object(5, 6, COLOR_GREEN, CUBE),
         }, BACK_COLOR_GREEN);
+        levels[41].setMinSteps(10);
         levels[42] = new Level(new Object[]{
                 new Object(2, 7, COLOR_RED, HOLE),
                 new Object(5, 2, COLOR_YELLOW, HOLE),
@@ -536,6 +539,7 @@ public class BlockAndHolesPositions {
                 new Object(5, 3, COLOR_YELLOW, CUBE),
                 new Object(6, 3, COLOR_RED, CUBE)
         }, BACK_COLOR_GREEN);
+        levels[32].setMinSteps(8);
         levels[43] = new Level(new Object[]{
                 new Object(4, 6, COLOR_WHITE, HOLE),
                 new Object(6, 6, COLOR_WHITE, HOLE),
@@ -551,6 +555,7 @@ public class BlockAndHolesPositions {
                 new Object(5, 3, COLOR_YELLOW, CUBE),
                 new Object(5, 1, COLOR_WHITE, CUBE)
         }, BACK_COLOR_YELLOW);
+        levels[43].setMinSteps(9);
         levels[44] = new Level(new Object[]{
                 new Object(4, 3, COLOR_RED, HOLE),
                 new Object(4, 4, COLOR_GREEN, HOLE),
