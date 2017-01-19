@@ -153,7 +153,7 @@ public class MainBlock extends FieldObject{
             startChangeDir = false;
             nextDirection();
             startRotation();
-            MusicCore.playSound(11);
+            MusicCore.playSound(11, 0.3f);
             lockChangeInTouch = true;
             levelGen.minusStep();  //отнимаем один ход
         }

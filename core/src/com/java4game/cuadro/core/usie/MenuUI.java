@@ -116,8 +116,6 @@ public class MenuUI {
         initBlinks();
         initBlockAnimation();
         initTypeGameBottomBar();
-
-        MusicCore.playSound(8);
     }
 
     private void initTypeGameBottomBar(){

@@ -106,7 +106,6 @@ public class ButtonActions {
                 break;
 
             case TOMAINMENU_PAUSE_ACTION:
-                Handler.ISRESTART = true;
                 Handler.state = Handler.State.Menu;
                 Handler.ISPAUSE = false;
 

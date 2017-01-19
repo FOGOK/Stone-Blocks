@@ -13,7 +13,7 @@ import com.java4game.cuadro.utils.Timer;
  */
 public class MusicCore {
 
-    private static float MUSIC_VOLUME = 0.0f;
+    private static float MUSIC_VOLUME = 0.2f;
     private static float SOUND_VOLUME = 1.0f;
 
     private static Timer stopTimer, startTimer;
@@ -32,7 +32,7 @@ public class MusicCore {
         sounds = new Sound[15];
         String endLett;
         for (int i = 0; i < sounds.length; i++) {
-            endLett = i < 3 || i > 13 ? ".wav" : ".mp3";
+            endLett = i > 13 ? ".wav" : ".mp3";
             sounds[i] = Gdx.audio.newSound(Gdx.files.internal("sounds/" + i + endLett));
         }
         ///
@@ -43,7 +43,11 @@ public class MusicCore {
     }
 
     public static void playSound(int i){
-        sounds[i].play(SOUND_VOLUME);
+        playSound(i, 1f);
+    }
+
+    public static void playSound(int i, float volumeModulation){
+        sounds[i].play(SOUND_VOLUME * volumeModulation);
     }
 
     public static void play(int _currentPlay){
