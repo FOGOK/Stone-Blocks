@@ -4,17 +4,22 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.uiwidgets.PauseButton;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
+import com.java4game.cuadro.core.uiwidgets.PauseButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
-import com.java4game.cuadro.objects.FlyingGlass;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.StarBlock;
+import com.java4game.cuadro.objects.Timer;
 import com.java4game.cuadro.utils.Assets;
+
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:16.
@@ -35,6 +40,8 @@ public class LevelGen {
     private Rectangle fieldBounds;
     private Sprite background, field;
 
+
+
     public static boolean REFRESH_REFRESH;
 
     private MainBlock mainBlock;
@@ -45,6 +52,7 @@ public class LevelGen {
     //ui
     private FlyingStage flyingStage;
     private StarBlock starBlock;
+    private Timer timer;
     private PauseButton pauseButton;
     ///
 
@@ -53,8 +61,15 @@ public class LevelGen {
     public LevelGen(MenuUI menuUI) {
         //инициализируем фон
         this.menuUI = menuUI;
-        BlockAndHolesPositions.Level currLevel = BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1);
-        background = Assets.getNewSprite(currLevel.getBackgroundColor());
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                background = Assets.getNewSprite(InitLevels.getStepsLevels(StageButton.LEVEL - 1).getBackgroundColor());
+                break;
+            case TYPE_TIMED:
+                background = Assets.getNewSprite(InitLevels.getTimeLevels(StageButton.LEVEL - 1).getBackgroundColor());
+                break;
+        }
+
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
         background.setPosition(0f, (Gm.HEIGHT - background.getHeight()) / 2f);
@@ -76,7 +91,7 @@ public class LevelGen {
         //ui
         //инициаилизируем летящий текст
         Color flyStageColor = Color.valueOf("2c2c36");
-//        switch (BlockAndHolesPositions.getLevel(StageButton.LEVEL - 1).getBackgroundColor()){
+//        switch (BlockAndHolesPositions.getStepsLevels(StageButton.LEVEL - 1).getBackgroundColor()){
 //            case BlockAndHolesPositions.BACK_COLOR_BLUE:
 //                flyStageColor = Color.ROYAL.cpy();
 //                break;
@@ -98,19 +113,31 @@ public class LevelGen {
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
         //
-        starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
-        blockGenerator.setStarBlock(starBlock);
+        InitLevels.Level currLevel;
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
+                starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
+                blockGenerator.setStarBlock(starBlock);
+                break;
+            case TYPE_TIMED:
+                 currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
+                timer = new Timer(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 5.20f : currLevel.getAllSeconds());
+                break;
+        }
 
         final float sizePauseBtn = 2.3f;
         pauseButton = new PauseButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
         pauseButton.setPositionToCenter();
         pauseButton.completeX();
 
+        pauseBInterp = Interpolation.exp5Out;
+
         MusicCore.playSound(8);
 
 
     }
-
+    private Interpolation pauseBInterp;
     public void draw(SpriteBatch batch){
 
 
@@ -121,13 +148,25 @@ public class LevelGen {
         if (!flyingStage.isFlying()){
             field.setAlpha(flyingStage.getProgressEnd());
             field.draw(batch);
-            if (flyingStage.getProgressEnd() != 1f)
-                starBlock.handle(flyingStage.getProgressEnd());
-            else
-                starBlock.handle();
 
-            pauseButton.setOffsetX((1f - flyingStage.getProgressEnd()) * -pauseButton.getWidth());
-            pauseButton.setAlpha(flyingStage.getProgressEnd());
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    if (flyingStage.getProgressEnd() != 1f)
+                        starBlock.handle(flyingStage.getProgressEnd());
+                    else
+                        starBlock.handle();
+                    break;
+                case TYPE_TIMED:
+                    if (flyingStage.getProgressEnd() != 1f)
+                        timer.handle(flyingStage.getProgressEnd());
+                    else
+                        timer.handle();
+                    break;
+            }
+
+
+            pauseButton.setOffsetX(pauseBInterp.apply(-pauseButton.getWidth(), 0f, flyingStage.getProgressEnd()));
+            pauseButton.setAlpha(pauseBInterp.apply(0f, 1f, flyingStage.getProgressEnd()));
             pauseButton.setEnabled(!Handler.ISPAUSE);
             pauseButton.draw(batch);
         }
@@ -156,8 +195,16 @@ public class LevelGen {
             mainBlock.setAlpha(flyingStage.getProgressEnd());
             mainBlock.draw(batch);
             blockGenerator.draw(batch);
-            starBlock.drawGlass(batch);
-            starBlock.drawMetalAndText(batch);
+
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    starBlock.drawGlass(batch);
+                    starBlock.drawMetalAndText(batch);
+                    break;
+                case TYPE_TIMED:
+                    timer.draw(batch);
+                    break;
+            }
 
             pauseButton.drawIcon(batch);
         }
@@ -170,11 +217,23 @@ public class LevelGen {
     }
 
     public void minusStep(){
-        starBlock.minusStep();
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                starBlock.minusStep();
+                break;
+            case TYPE_TIMED:
+                break;
+        }
     }
 
     public void inspectIsChangeStar(){
-        starBlock.inspectIsChangeStar();
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                starBlock.inspectIsChangeStar();
+                break;
+            case TYPE_TIMED:
+                break;
+        }
     }
 
     public void lose(){

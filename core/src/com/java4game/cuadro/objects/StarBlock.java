@@ -63,24 +63,24 @@ public class StarBlock {
     }
     private void initStarSprites(){
         noneStar = Assets.getNewSprite(32);
-        noneStar.setSize(3f, 3f * 0.9523f);
+        noneStar.setSize(3f, 3f);
         noneStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         noneStar.setOriginCenter();
 
         goldStar = Assets.getNewSprite(35);
-        goldStar.setSize(3f, 3f * 0.9521f);
+        goldStar.setSize(3f, 3f);
         goldStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         goldStar.setOriginCenter();
         goldStarInterpolation = Interpolation.exp5Out;
 
 
         silverStar = Assets.getNewSprite(34);
-        silverStar.setSize(3f, 3f * 0.9521f);
+        silverStar.setSize(3f, 3f);
         silverStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         silverStar.setOriginCenter();
 
         bronzeStar = Assets.getNewSprite(33);
-        bronzeStar.setSize(3f, 3f * 0.9521f);
+        bronzeStar.setSize(3f, 3f);
         bronzeStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         bronzeStar.setOriginCenter();
     }

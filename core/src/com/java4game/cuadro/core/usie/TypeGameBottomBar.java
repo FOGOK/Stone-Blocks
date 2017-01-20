@@ -18,6 +18,9 @@ public class TypeGameBottomBar extends BaseObject {
     private int lastSelectedBtn;
     private TypeGameButton tgButtons[];
 
+
+    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1;
+
     private MenuUI menuUI;
 
     public TypeGameBottomBar(MenuUI menuUI, float h) {

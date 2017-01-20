@@ -30,7 +30,7 @@ public class List extends BaseObject {
 
     ///
 
-    public List(TextureGen textureGen, float x, float y, float w, float h, int columns, int rows) {
+    public List(float x, float y, float w, float h, int columns, int rows) {
         super(x, y, w, h);
         this.columns = columns;
         this.rows = rows;

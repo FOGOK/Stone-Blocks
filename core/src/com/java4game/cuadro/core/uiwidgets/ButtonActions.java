@@ -40,7 +40,7 @@ public class ButtonActions {
 
                 if (MenuUI.OPENEDSTAGESINWORLD[0] == 1){     //открываем следующий уровень
                     MenuUI.OPENEDSTAGESINWORLD[0]++;
-                    Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);
+                    Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
                 }
                 break;
             case PAUSE_ACT:

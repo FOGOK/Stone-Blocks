@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.CustomFormButton;
@@ -24,6 +23,10 @@ import com.java4game.cuadro.utils.FloatAnimator;
 import com.java4game.cuadro.utils.Prefers;
 
 import java.util.Random;
+
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
 /**
  * Created by FOGOK on 13.10.2016 0:55.
@@ -59,7 +62,7 @@ public class MenuUI {
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
     public static int[] OPENEDSTAGESINWORLD;
-    public static final int[] COUNTSTAGESINWORLD = new int[] {102, 30, 30, 30, 30};
+    public static final int[] COUNTSTAGESINWORLD = new int[] {102, 22, 30, 30, 30};
     ///
 
     private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
@@ -74,10 +77,10 @@ public class MenuUI {
 
     private FlyingGlass[] flyingGlasses;
 
-    private List stageList;
+    private List stepsList, timedList;
     private TextBlock /*stageText, worldText, */starsText;
 
-    private StageButton[] stageButtons;
+    private StageButton[] stepsStagesButtons, timedStagesButtons;
 
     private FloatAnimator[] objectAnimations;
     private float[] posYs;
@@ -99,7 +102,7 @@ public class MenuUI {
 
 
 
-        addTestedValues();
+        setMainVars();
 
         setSelectStageTextAndBottomBar();
 
@@ -111,7 +114,8 @@ public class MenuUI {
 
         initSelectWorld(textureGen);
 
-        setStageList(textureGen);
+        initStepsList();
+        initTimedList();
 
         initBlinks();
         initBlockAnimation();
@@ -152,11 +156,12 @@ public class MenuUI {
         blinks[8] = new Blink(posXStart + widthText * 0.899f, posYStart + heightText * 0.471f);
     }
 
-    private void addTestedValues(){
+    private void setMainVars(){
         SELECTEDWORLD = 0;
         OPENED_WORLDS = 2;  ///количество открытых миров
-        OPENEDSTAGESINWORLD = new int[] {1, 12, 17, 18, 28};    ///количество уровней, открытых на каждых мирах
-        OPENEDSTAGESINWORLD[0] = Prefers.getInt(Prefers.KeyOpenedStages);
+        OPENEDSTAGESINWORLD = new int[2];    ///количество уровней, открытых на каждых мирах
+        OPENEDSTAGESINWORLD[0] = Prefers.getInt(Prefers.KeyOpenedStagesSteps);
+        OPENEDSTAGESINWORLD[1] = Prefers.getInt(Prefers.KeyOpenedStagesTimed);
 
         refreshStarsData();
 
@@ -233,31 +238,31 @@ public class MenuUI {
 //        worldText.setPositionToCenter();
 //    }
     private Random rnd = new Random();
-    private void setStageList(TextureGen textureGen){
+    private void initStepsList(){
         final float widthList = Gm.WIDTH * 0.76f;
         final float heightList = selectStageText.getY();
         final int columns = 3, rows = 34;
-        stageList = new List(textureGen, (Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
-        stageList.setPaddingBottom(0.5f + bottomBar.getHeight());
-        stageButtons = new StageButton[columns * rows];
+        stepsList = new List((Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
+        stepsList.setPaddingBottom(0.5f + bottomBar.getHeight());
+        stepsStagesButtons = new StageButton[columns * rows];
 
         for (int i = 0; i < columns * rows; i++) {
             if (i != 0)
-                stageButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
+                stepsStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
             else
-                stageButtons[i] = new StageButton(ButtonActions.All.START_LEARN, 2.43f, i + 1, this);
+                stepsStagesButtons[i] = new StageButton(ButtonActions.All.START_LEARN, 2.43f, i + 1, this);
         }
-        setStageListPoperties();
+        setStepsListProporties();
     }
 
-    private void setStageListPoperties(){
+    private void setStepsListProporties(){
         final int columns = 3, rows = 34;
-        final int countOpened = OPENEDSTAGESINWORLD[SELECTEDWORLD];
+        final int countOpened = OPENEDSTAGESINWORLD[0];
         for (int i = 0; i < columns * rows; i++) {
-            stageButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[SELECTEDWORLD] == i, STARS[i]);
-            stageButtons[i].setLockedStage(i >= countOpened);
+            stepsStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[0] == i, STARS[i]);
+            stepsStagesButtons[i].setLockedStage(i >= countOpened);
 //            if (i < countOpened)
-//                stageButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+//                stepsStagesButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
         }
         int i = 0, selectedRow = 0;
         boolean isSelectedRow = false;
@@ -268,9 +273,9 @@ public class MenuUI {
         }
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                stageList.set(stageButtons[i], column, row);
+                stepsList.set(stepsStagesButtons[i], column, row);
                 if (!isSelectedRow){
-                    if (stageButtons[i + 1].isLockedStage()){
+                    if (stepsStagesButtons[i + 1].isLockedStage()){
                         isSelectedRow = true;
                         selectedRow = row;
                     }
@@ -278,8 +283,54 @@ public class MenuUI {
                 i++;
             }
         }
-        stageList.calculatePadding(0, 0);
-        stageList.setToCenter(selectedRow);
+        stepsList.calculatePadding(0, 0);
+        stepsList.setToCenter(selectedRow);
+    }
+
+    private void initTimedList(){
+        final float widthList = Gm.WIDTH * 0.76f;
+        final float heightList = selectStageText.getY();
+        final int columns = 3, rows = 7;
+        timedList = new List((Gm.WIDTH - widthList) / 2f, 0, widthList, heightList, columns, rows);
+        timedList.setPaddingBottom(0.5f + bottomBar.getHeight());
+        timedStagesButtons = new StageButton[columns * rows];
+
+        for (int i = 0; i < columns * rows; i++) {
+            timedStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 2, this);
+        }
+        setStepsListProporties();
+    }
+
+    private void setTimedListProporties(){
+        final int columns = 3, rows = 7;
+        final int countOpened = OPENEDSTAGESINWORLD[1];
+        for (int i = 0; i < columns * rows; i++) {
+            timedStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[1] == i, StarBlock.Star.None);
+            timedStagesButtons[i].setLockedStage(i >= countOpened);
+//            if (i < countOpened)
+//                stepsStagesButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+        }
+        int i = 0, selectedRow = 0;
+        boolean isSelectedRow = false;
+        boolean isAllStagesOpened = (columns * rows) <= OPENEDSTAGESINWORLD[1];
+        if (isAllStagesOpened){
+            selectedRow = rows - 1;
+            isSelectedRow = true;
+        }
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                timedList.set(timedStagesButtons[i], column, row);
+                if (!isSelectedRow){
+                    if (timedStagesButtons[i + 1].isLockedStage()){
+                        isSelectedRow = true;
+                        selectedRow = row;
+                    }
+                }
+                i++;
+            }
+        }
+        timedList.calculatePadding(0, 0);
+        timedList.setToCenter(selectedRow);
     }
 
     private void setGameNameTex(){
@@ -424,7 +475,8 @@ public class MenuUI {
             case SELECTSTAGE:
                 if (SETSTAGEPROP){
                     SETSTAGEPROP = false;
-                    setStageListPoperties();
+                    setStepsListProporties();
+                    setTimedListProporties();
                 }
 
                 for (int i = 0; i < flyingGlasses.length; i++) {
@@ -451,12 +503,20 @@ public class MenuUI {
 
 
 
+                switch (SELECTED_BTN){
+                    case TYPE_STEPS:
+                        stepsList.draw(batch);
+                        break;
+                    case TYPE_TIMED:
+                        timedList.draw(batch);
+                        break;
+                }
 
 
-
-                stageList.draw(batch);
                 selectStageText.draw(batch);
                 bottomBar.draw(batch);
+
+
                 typeGameBottomBar.draw(batch);
 
                 break;

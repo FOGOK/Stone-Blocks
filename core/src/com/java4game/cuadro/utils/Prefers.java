@@ -17,7 +17,8 @@ public class Prefers {
     private static Preferences prefs;
 
     /////// DO NOT CHANGE FINAL STRINGS
-    public static final String KeyOpenedStages = "KeyOpenedStages";
+    public static final String KeyOpenedStagesSteps = "KeyOpenedStages";
+    public static final String KeyOpenedStagesTimed = "KeyOpenedStagesTimed";
     public static final String KeyStars = "KeyStars";
     /////// DO NOT CHANGE FINAL STRINGS
 

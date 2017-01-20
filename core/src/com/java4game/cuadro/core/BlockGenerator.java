@@ -14,6 +14,10 @@ import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 import com.java4game.cuadro.utils.Timer;
 
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
+
 /**
  * Created by FOGOK on 03.01.2017 15:59.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -63,7 +67,7 @@ public class BlockGenerator {
 
         isEndLevel = false;
 
-        BlockAndHolesPositions.Level level = BlockAndHolesPositions.getLevel(LEVEL);
+        InitLevels.Level level = InitLevels.getStepsLevels(LEVEL);
 
         endGameTimer = new Timer(1f);
 
@@ -136,24 +140,47 @@ public class BlockGenerator {
             MenuUI.SETSTAGEPROP = true;
             MusicCore.play(MusicCore.MENU);
 
-            //setStar
-            final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
-            final int curStar = starBlock.getCurrentStar().ordinal();
-            if (curStar > Character.getNumericValue(chars[LEVEL]))
-                chars[LEVEL] = Integer.toString(curStar).charAt(0);
-            Prefers.putString(Prefers.KeyStars, new String(chars));
-            levelGen.refreshStars();
+            int curStar = 1;
 
+            //setStar
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
+                    curStar = starBlock.getCurrentStar().ordinal();
+                    if (curStar > Character.getNumericValue(chars[LEVEL]))
+                        chars[LEVEL] = Integer.toString(curStar).charAt(0);
+                    Prefers.putString(Prefers.KeyStars, new String(chars));
+                    levelGen.refreshStars();
+                    break;
+                case TYPE_TIMED:
+
+                    break;
+            }
+            //
 
 //            chars[LEVEL] =
             ///
 
-            if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
-                if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
-                    MenuUI.OPENEDSTAGESINWORLD[0]++;
-                    Prefers.putInt(Prefers.KeyOpenedStages, MenuUI.OPENEDSTAGESINWORLD[0]);
-                }
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
+                            MenuUI.OPENEDSTAGESINWORLD[0]++;
+                            Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
+                        }
+                    }
+                    break;
+                case TYPE_TIMED:
+                    if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
+                            MenuUI.OPENEDSTAGESINWORLD[1]++;
+                            Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
+                        }
+                    }
+                    break;
             }
+
+
 //            }
         }
 
