@@ -8,14 +8,16 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
-import com.java4game.cuadro.core.uiwidgets.PauseButton;
+import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.usie.GameOverUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.StarBlock;
-import com.java4game.cuadro.objects.Timer;
+import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Prefers;
 
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
@@ -43,6 +45,7 @@ public class LevelGen {
 
 
     public static boolean REFRESH_REFRESH;
+    public static boolean ISGAMEOVER;
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
@@ -52,8 +55,9 @@ public class LevelGen {
     //ui
     private FlyingStage flyingStage;
     private StarBlock starBlock;
-    private Timer timerBlock;
-    private PauseButton pauseButton;
+    private TimerBlock timerBlock;
+    private RestartButton restartButton;
+    private GameOverUI gameOverUI;
     ///
 
     private MenuUI menuUI;
@@ -69,7 +73,7 @@ public class LevelGen {
                 background = Assets.getNewSprite(InitLevels.getTimeLevels(StageButton.LEVEL - 1).getBackgroundColor());
                 break;
         }
-
+        ISGAMEOVER = false;
         final float hDivW = 1.7777f;
         background.setSize(Gm.WIDTH, Gm.WIDTH * hDivW);
         background.setPosition(0f, (Gm.HEIGHT - background.getHeight()) / 2f);
@@ -114,25 +118,32 @@ public class LevelGen {
             flyingStage.refreshRefresh();
         //
         InitLevels.Level currLevel;
+        float starSize = 0f;
         switch (SELECTED_BTN){
             case TYPE_STEPS:
                 currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
                 starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
                 blockGenerator.setStarBlock(starBlock);
+                starSize = starBlock.getStarSize();
                 break;
             case TYPE_TIMED:
                  currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
-                timerBlock = new Timer(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 5.20f : currLevel.getAllSeconds());
-                blockGenerator.setTimerBlock(timerBlock);
+                timerBlock = new TimerBlock(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 6f : currLevel.getAllSeconds());
+                blockGenerator.setTimerBlockBlock(timerBlock);
+                starSize = timerBlock.getStarSize();
                 break;
         }
 
+        gameOverUI = new GameOverUI(starSize, fieldBounds.getY());
+
         final float sizePauseBtn = 2.3f;
-        pauseButton = new PauseButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
-        pauseButton.setPositionToCenter();
-        pauseButton.completeX();
+        restartButton = new RestartButton(ButtonActions.All.RESTART_PAUSE_ACTION, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
+        restartButton.setPositionToCenter();
+        restartButton.completeX();
 
         pauseBInterp = Interpolation.exp5Out;
+
+
 
         MusicCore.playSound(8);
 
@@ -152,26 +163,38 @@ public class LevelGen {
 
             switch (SELECTED_BTN){
                 case TYPE_STEPS:
+
                     if (flyingStage.getProgressEnd() != 1f)
-                        starBlock.handle(flyingStage.getProgressEnd());
-                    else
-                        starBlock.handle();
+                        starBlock.handle(flyingStage.getProgressEnd(), false);
+                    else{
+                        if (!ISGAMEOVER)
+                            starBlock.handle();
+                        else
+                            starBlock.handle(gameOverUI.getTime(), true);
+                    }
+
+
                     break;
                 case TYPE_TIMED:
                     if (flyingStage.getProgressEnd() != 1f)
-                        timerBlock.handle(flyingStage.getProgressEnd());
-                    else
-                        timerBlock.handle();
-                    if (!Handler.ISPAUSE)
+                        timerBlock.handle(flyingStage.getProgressEnd(), false);
+                    else{
+                        if (!ISGAMEOVER)
+                            timerBlock.handle();
+                        else
+                            timerBlock.handle(gameOverUI.getTime(), true);
+                    }
+                    if (!Handler.ISPAUSE && !ISGAMEOVER)
                         timerBlock.handleLogic();
+
                     break;
             }
 
 
-            pauseButton.setOffsetX(pauseBInterp.apply(-pauseButton.getWidth(), 0f, flyingStage.getProgressEnd()));
-            pauseButton.setAlpha(pauseBInterp.apply(0f, 1f, flyingStage.getProgressEnd()));
-            pauseButton.setEnabled(!Handler.ISPAUSE);
-            pauseButton.draw(batch);
+            restartButton.setOffsetX(pauseBInterp.apply(-restartButton.getWidth(), 0f, flyingStage.getProgressEnd()));
+            restartButton.setAlpha(pauseBInterp.apply(0f, 1f, flyingStage.getProgressEnd()));
+            restartButton.setEnabled(!Handler.ISPAUSE && !ISGAMEOVER);
+            restartButton.draw(batch);
         }
 
 
@@ -201,15 +224,36 @@ public class LevelGen {
 
             switch (SELECTED_BTN){
                 case TYPE_STEPS:
-                    starBlock.drawGlass(batch);
-                    starBlock.drawMetalAndText(batch);
+                    if (ISGAMEOVER){
+                        starBlock.draw(batch); //текст
+                        gameOverUI.drawBack(batch);     //чёрная подложка
+                        starBlock.drawStar(batch);     //звезда
+                        gameOverUI.draw(batch); //текст окончания игры и кнопки
+                        starBlock.drawBlinks(batch);     //блики
+                    }else {
+                        starBlock.drawStar(batch);     //звезда
+                        starBlock.draw(batch); //текст
+                        starBlock.drawBlinks(batch);     //блики
+                    }
                     break;
                 case TYPE_TIMED:
-                    timerBlock.draw(batch);
+
+                    if (ISGAMEOVER){
+                        timerBlock.draw(batch); //текст
+                        gameOverUI.drawBack(batch);     //чёрная подложка
+                        timerBlock.drawStar(batch);     //звезда
+                        gameOverUI.draw(batch); //текст окончания игры и кнопки
+                        timerBlock.drawStarBlinks(batch);     //блики
+                    }else {
+                        timerBlock.drawStar(batch);     //звезда
+                        timerBlock.draw(batch); //текст
+                        timerBlock.drawStarBlinks(batch);     //блики
+                    }
+
                     break;
             }
 
-            pauseButton.drawIcon(batch);
+            restartButton.drawIcon(batch);
         }
         flyingStage.drawText(batch);
 
@@ -239,7 +283,67 @@ public class LevelGen {
         }
     }
 
+    public void win(int LEVEL){
+//        Handler.state = Handler.State.Menu;
+//        MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
+//        MenuUI.SETSTAGEPROP = true;
+//        MusicCore.play(MusicCore.MENU);
+
+        int curStar = 1;
+        char[] chars;
+        //setStar
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
+                curStar = starBlock.getCurrentStar().ordinal();
+                if (curStar > Character.getNumericValue(chars[LEVEL]))
+                    chars[LEVEL] = Integer.toString(curStar).charAt(0);
+                Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
+                refreshStars();
+                break;
+            case TYPE_TIMED:
+                chars = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
+                curStar = timerBlock.getCurrentStar().ordinal();
+                if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
+                    chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
+                Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
+                refreshStars();
+                break;
+        }
+        //
+
+//            chars[LEVEL] =
+        ///
+
+        switch (SELECTED_BTN){
+            case TYPE_STEPS:
+                if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
+                    if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
+                        MenuUI.OPENEDSTAGESINWORLD[0]++;
+                        Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
+                    }
+                }
+                break;
+            case TYPE_TIMED:
+                if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
+                    if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
+                        MenuUI.OPENEDSTAGESINWORLD[1]++;
+                        Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
+                    }
+                }
+                break;
+        }
+
+        ISGAMEOVER = true;
+        gameOverUI.setText(true);
+    }
+
     public void lose(){
-        ButtonActions.activateAction(ButtonActions.All.TOMAINMENU_PAUSE_ACTION);
+        ISGAMEOVER = true;
+        gameOverUI.setText(false);
+    }
+
+    public void dispose(){
+        gameOverUI.dispose();
     }
 }

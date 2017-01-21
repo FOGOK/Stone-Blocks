@@ -1,5 +1,7 @@
 package com.java4game.cuadro.core;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.PauseUI;
@@ -74,7 +76,7 @@ public class Handler {
 
 
 
-        if (isBackPressed){
+        if (isBackPressed || Gdx.input.isKeyJustPressed(Input.Keys.P)){
             isBackPressed = false;
 
             if (Handler.state == Handler.State.Pause)
@@ -96,6 +98,7 @@ public class Handler {
         atls.dispose();
         menuUI.dispose();
 //        gameUi.dispose();
+        levelGen.dispose();
         pauseUI.dispose();
     }
 }

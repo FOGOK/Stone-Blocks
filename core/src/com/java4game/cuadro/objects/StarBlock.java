@@ -27,6 +27,7 @@ public class StarBlock {
     private Sprite noneStar, bronzeStar, silverStar, goldStar;
     private TextBlock allStepsBlock, starStepsBlock, stepsLetter;
     private int goldSteps, silverSteps, bronzeSteps, allSteps;
+    private float startPostion;
 
     private float thisIters = 1f;
     private boolean isStartAnimThisIters;
@@ -41,24 +42,28 @@ public class StarBlock {
         initStepsLetter();
         initStarSteps();
         initAllSteps();
-        initBlinks();
+        initBlinks(goldStar);
     }
 
-    private void initBlinks(){
+    private void initBlinks(Sprite currStar){
         blinks = new Blink[5];
 
-        blinks[0] = new Blink(goldStar.getX() + goldStar.getWidth() * 0.197f, goldStar.getY());
-        blinks[1] = new Blink(goldStar.getX() + goldStar.getWidth() * 0.798f, goldStar.getY());
-        blinks[2] = new Blink(goldStar.getX(), goldStar.getY() + goldStar.getHeight() * 0.615f);
-        blinks[3] = new Blink(goldStar.getX() + goldStar.getWidth(), goldStar.getY() + goldStar.getHeight() * 0.615f);
-        blinks[4] = new Blink(goldStar.getX() + goldStar.getWidth() * 0.5f, goldStar.getY() + goldStar.getHeight());
+        float xDifference = (currStar.getScaleX() - 1f) / 2f * currStar.getWidth();
+        float yDifference = (currStar.getScaleY() - 1f) / 2f * currStar.getHeight();
+
+        blinks[0] = new Blink(currStar.getX() + currStar.getWidth() * 0.197f * currStar.getScaleX() - xDifference, currStar.getY() - yDifference);
+        blinks[1] = new Blink(currStar.getX() + currStar.getWidth() * 0.798f * currStar.getScaleX() - xDifference, currStar.getY() - yDifference);
+        blinks[2] = new Blink(currStar.getX() - xDifference, currStar.getY() + currStar.getHeight() * 0.615f * currStar.getScaleY() - yDifference);
+        blinks[3] = new Blink(currStar.getX() + currStar.getWidth() * currStar.getScaleX() - xDifference, currStar.getY() + currStar.getHeight() * 0.615f * currStar.getScaleY() - yDifference);
+        blinks[4] = new Blink(currStar.getX() + currStar.getWidth() * 0.5f * currStar.getScaleX() - xDifference, currStar.getY() + currStar.getHeight() * currStar.getScaleY() - yDifference);
     }
+
     private void initVars(int goldSteps){
         this.goldSteps = goldSteps;
         silverSteps = 1;
         bronzeSteps = 1;
         allSteps = goldSteps + 2;
-        allSteps = (int) ((goldSteps + 3) * 1.2f);
+//        allSteps = (int) ((goldSteps + 3) * 1.2f);
         currentStar = Star.Gold;
     }
     private void initStarSprites(){
@@ -66,12 +71,14 @@ public class StarBlock {
         noneStar.setSize(3f, 3f);
         noneStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         noneStar.setOriginCenter();
+        startPostion = noneStar.getY();
 
         goldStar = Assets.getNewSprite(35);
         goldStar.setSize(3f, 3f);
         goldStar.setPosition((Gm.WIDTH - noneStar.getWidth()) / 2f, Gm.HEIGHT - 3.1f);
         goldStar.setOriginCenter();
         goldStarInterpolation = Interpolation.exp5Out;
+        reversInterpolation = Interpolation.exp5In;
 
 
         silverStar = Assets.getNewSprite(34);
@@ -108,10 +115,12 @@ public class StarBlock {
                 noneStar.getY() + noneStar.getHeight() * 0.168f);
     }
 
-    private Interpolation goldStarInterpolation;
+    private Interpolation goldStarInterpolation, reversInterpolation;
     private boolean isPlayGoldS;
-    public void handle(float alpha){
-        if (!isPlayGoldS){
+    private boolean isEndedL;
+    private boolean isAnimationQ;
+    public void handle(float alpha, boolean isRevers){
+        if (!isPlayGoldS && !isRevers){
             MusicCore.playSound(0);
             isPlayGoldS = true;
         }
@@ -125,8 +134,23 @@ public class StarBlock {
             case Bronze: curStar = bronzeStar; break;
             default: curStar = noneStar; break;
         }
-        curStar.setAlpha(alpha);
-        curStar.setRotation(goldStarInterpolation.apply(360f, 0f, alpha / 1f));
+
+        if (isRevers){
+            curStar.setRotation(reversInterpolation.apply(360f, 0f, alpha));
+            curStar.setScale(goldStarInterpolation.apply(1.5f, 1f, alpha));
+            curStar.setY(reversInterpolation.apply(startPostion, (Gm.HEIGHT - curStar.getHeight()) / 2f, 1f - alpha));
+            curStar.setAlpha(1f);
+            if (!isEndedL && alpha == 0f){
+                initBlinks(curStar);
+                isEndedL = true;
+                isAnimationQ = false;
+            }else if (!isEndedL)
+                isAnimationQ = true;
+        }
+        else{
+            curStar.setAlpha(alpha);
+            curStar.setRotation(goldStarInterpolation.apply(360f, 0f, alpha / 1f));
+        }
         allStepsBlock.setAlpha(alpha);
         allStepsBlock.setOffsetX(goldStarInterpolation.apply(stepsLetter.getBounds().getWidth() / 2f, 0f, alpha / 1f));
         starStepsBlock.setAlpha(alpha);
@@ -143,16 +167,11 @@ public class StarBlock {
             thisIters = 0f;
         }
 
-        handle(GMUtils.normalizeOneZero(thisIters));
+        handle(GMUtils.normalizeOneZero(thisIters), false);
     }
 
-    public void drawGlass(SpriteBatch batch){
-        if (currentStar == Star.None)
-            noneStar.draw(batch);
-    }
 
-    public void drawMetalAndText(SpriteBatch batch){
-        stepsLetter.draw(batch);
+    public void drawStar(SpriteBatch batch){
         switch (currentStar){
             case Gold:
                 goldStar.draw(batch);
@@ -163,11 +182,22 @@ public class StarBlock {
             case Bronze:
                 bronzeStar.draw(batch);
                 break;
+            case None:
+                noneStar.draw(batch);
+                break;
         }
+    }
+
+    public void draw(SpriteBatch batch){
+        stepsLetter.draw(batch);
         starStepsBlock.draw(batch);
-        if (currentStar != Star.None){
+        if (currentStar != Star.Bronze && currentStar != Star.None)
             allStepsBlock.draw(batch);
-            if (thisIters == 1f){
+    }
+
+    public void drawBlinks(SpriteBatch batch){
+        if (currentStar != Star.None){
+            if (thisIters == 1f && !isAnimationQ){
                 for (int i = 0; i < blinks.length; i++) {
                     blinks[i].draw(batch);
                 }
@@ -223,19 +253,24 @@ public class StarBlock {
             case Bronze:
                 if (bronzeSteps < 1){
                     currentStar = Star.None;
-                    starStepsBlock.setText(allSteps + "");
-                    isStartAnimThisIters = true;
+//                    starStepsBlock.setText(allSteps + "");
+//                    isStartAnimThisIters = true;
+                    levelGen.lose();
                 }
                 break;
             case None:
-                if (allSteps < 1){
-                    levelGen.lose();
-                }
+//                if (allSteps < 1){
+//                    levelGen.lose();
+//                }
                 break;
         }
         starStepsBlock.setPosition(noneStar.getX() + noneStar.getWidth() / 2f,
                 noneStar.getY() + noneStar.getHeight() / 2f);
         starStepsBlock.setPositionToCenter();
+    }
+
+    public float getStarSize(){
+        return goldStar.getHeight();
     }
 
     public Star getCurrentStar() {

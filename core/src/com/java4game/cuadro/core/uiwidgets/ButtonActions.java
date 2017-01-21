@@ -19,13 +19,14 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, START_LEARN
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_LEARN
     }
 
     public static void activateAction(All action){
         switch (action){
             case CHANGE_GAME_MODE:
                 TypeGameBottomBar.SELECTED_BTN = TypeGameButton.TOUCHED_B;
+                MusicCore.playSound(4);
                 break;
             case START_LEARN:
                 activateAction(All.COMPLETE_LEARN);
@@ -77,9 +78,11 @@ public class ButtonActions {
                 MenuUI.SELECTEDWORLD = 0;
                 MenuUI.SETSTAGEPROP = true;
                 MenuUI.MENUSTATE = 2;
+                MusicCore.playSound(4);
                 break;
             case START_GAME_ACTION:
                 Handler.state = Handler.State.Game;
+
                 break;
 
             case CONTINUE_PAUSE_ACTION:
@@ -90,15 +93,21 @@ public class ButtonActions {
             case RESTART_PAUSE_ACTION:
                 Handler.ISRESTART = true;
                 Handler.ISPAUSE = false;
+                LevelGen.ISGAMEOVER = false;
                 Handler.state = Handler.State.Game;
                 LevelGen.REFRESH_REFRESH = false;
                 break;
-
+            case NEXT_LEVEL_ACT:
+                Handler.ISRESTART = true;
+                LevelGen.ISGAMEOVER = false;
+                Handler.ISPAUSE = false;
+                LevelGen.REFRESH_REFRESH = false;
+                break;
             case QUESTION_ACT:
-
+                MusicCore.playSound(7);
                 break;
             case INFO_ACT:
-
+                MusicCore.playSound(7);
                 break;
 
             case SETTINGS_PAUSE_ACTION:
@@ -108,9 +117,11 @@ public class ButtonActions {
             case TOMAINMENU_PAUSE_ACTION:
                 Handler.state = Handler.State.Menu;
                 Handler.ISPAUSE = false;
-
                 MenuUI.RESETANIMATION = true;
-                MenuUI.MENUSTATE = 0;
+                MenuUI.SETSTAGEPROP = true;
+
+                MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
+
                 MusicCore.play(MusicCore.MENU);
                 break;
         }

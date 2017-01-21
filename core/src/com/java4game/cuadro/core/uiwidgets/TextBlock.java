@@ -12,7 +12,7 @@ import com.java4game.cuadro.core.usie.UI;
  */
 public class TextBlock extends BaseObject {
 
-    private Color textColor = Color.valueOf("2c2c36");
+    private Color textColor = Color.valueOf("323232");
     private boolean isTitle;
     private float customCff;
     private float alpha;
@@ -77,7 +77,7 @@ public class TextBlock extends BaseObject {
         UI.drawText(batch, isTitle, text, bounds.x + offsetX, bounds.y + bounds.height);
 
         if (alpha != 1f){
-            UI.setAlpha(1f, isTitle);
+            UI.setColor(textColor, isTitle);
         }
         if (customCff != -1f) UI.setDefaultCff();
     }

@@ -64,7 +64,7 @@ public class MainBlock extends FieldObject{
                 setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
                 break;
             case TYPE_TIMED:
-                setPositionToCorner(false, 2);
+                setPositionToCorner(false, 0);
                 break;
         }
     }
@@ -104,7 +104,7 @@ public class MainBlock extends FieldObject{
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
-        if (!Handler.ISPAUSE)
+        if (!Handler.ISPAUSE && !LevelGen.ISGAMEOVER)
             blockMove();
         setDebugText();
     }

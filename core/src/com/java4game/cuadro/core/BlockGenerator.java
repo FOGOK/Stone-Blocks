@@ -4,19 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.Block;
 import com.java4game.cuadro.objects.FieldObject;
 import com.java4game.cuadro.objects.Hole;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.StarBlock;
+import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
-import com.java4game.cuadro.utils.Prefers;
-import com.java4game.cuadro.utils.Timer;
-
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
 /**
  * Created by FOGOK on 03.01.2017 15:59.
@@ -38,15 +32,13 @@ public class BlockGenerator {
 
     private boolean isEndLevel;
 
-    private Timer endGameTimer;
-
     private boolean isCleanedCollision; //это значит, что мы ждём, пока не будет ни одной коллизии с блоком
 
     private float cellSize;
 
     private Rectangle fieldBounds;
     private StarBlock starBlock;
-    private com.java4game.cuadro.objects.Timer timerBlock;
+    private TimerBlock timerBlockBlock;
     private LevelGen levelGen;
 
     public BlockGenerator(LevelGen levelGen, MainBlock mainBlock, Rectangle fieldBounds, int LEVEL) {
@@ -70,8 +62,6 @@ public class BlockGenerator {
 
         InitLevels.Level level = InitLevels.getStepsLevels(LEVEL);
 
-        endGameTimer = new Timer(1f);
-
         fieldObjects = new FieldObject[level.getObjects().length];
         for (int i = 0; i < fieldObjects.length; i++) {
             if (level.getObjects()[i].isCube()){
@@ -91,8 +81,8 @@ public class BlockGenerator {
         this.starBlock = starBlock;
     }
 
-    public void setTimerBlock(com.java4game.cuadro.objects.Timer timerBlock) {
-        this.timerBlock = timerBlock;
+    public void setTimerBlockBlock(TimerBlock timerBlockBlock) {
+        this.timerBlockBlock = timerBlockBlock;
     }
 
     private void calculateCountMinSteps(){
@@ -138,60 +128,9 @@ public class BlockGenerator {
                 fieldObjects[i].draw(batch);
         }
 
-        if (isEndLevel || endGameTimer.isStarted()){
-//            if (endGameTimer.next()){
-            Handler.state = Handler.State.Menu;
-            MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
-            MenuUI.SETSTAGEPROP = true;
-            MusicCore.play(MusicCore.MENU);
-
-            int curStar = 1;
-            char[] chars;
-            //setStar
-            switch (SELECTED_BTN){
-                case TYPE_STEPS:
-                    chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
-                    curStar = starBlock.getCurrentStar().ordinal();
-                    if (curStar > Character.getNumericValue(chars[LEVEL]))
-                        chars[LEVEL] = Integer.toString(curStar).charAt(0);
-                    Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
-                    levelGen.refreshStars();
-                    break;
-                case TYPE_TIMED:
-                    chars = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
-                    curStar = timerBlock.getCurrentStar().ordinal();
-                    if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
-                        chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
-                    Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
-                    levelGen.refreshStars();
-                    break;
-            }
-            //
-
-//            chars[LEVEL] =
-            ///
-
-            switch (SELECTED_BTN){
-                case TYPE_STEPS:
-                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
-                        if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
-                            MenuUI.OPENEDSTAGESINWORLD[0]++;
-                            Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
-                        }
-                    }
-                    break;
-                case TYPE_TIMED:
-                    if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
-                        if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
-                            MenuUI.OPENEDSTAGESINWORLD[1]++;
-                            Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
-                        }
-                    }
-                    break;
-            }
-
-
-//            }
+        if (isEndLevel){
+            isEndLevel = false;
+            levelGen.win(LEVEL);
         }
 
 //        dotq.setPosition(cornTrainX, cornTrainY);

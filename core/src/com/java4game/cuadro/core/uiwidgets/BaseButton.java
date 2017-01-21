@@ -79,7 +79,7 @@ abstract class BaseButton extends BaseObject{
     }
 
     protected void playSound(){
-        MusicCore.playSound(4);
+
     }
 
     @Override

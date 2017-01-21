@@ -10,11 +10,11 @@ import com.java4game.cuadro.utils.Assets;
  * кожи разлагающегося бомжа лежащего на гнилой
  * лавочке возле остановки автобуса номер 985
  */
-public class PauseButton extends BaseButton{
+public class RestartButton extends BaseButton{
 
     private Sprite icon;
     private float xQ;
-    public PauseButton(ButtonActions.All action, float x, float y, float h) {
+    public RestartButton(ButtonActions.All action, float x, float y, float h) {
         super(action, x, y, h, 30, 30);
         Sprite first = Assets.getNewSprite(30);
         Sprite second = Assets.getNewSprite(36);
@@ -24,10 +24,10 @@ public class PauseButton extends BaseButton{
         setFirstTexture(first);
         setSecondTexture(second);
 
-        icon = Assets.getNewSprite(37);
+        icon = Assets.getNewSprite(56);
         final float size = h * 0.42f;
-        icon.setFlip(true, false);
-        icon.setSize(size * 0.77f, size);
+        icon.setFlip(false, false);
+        icon.setSize(size, size);
     }
 
     public void drawIcon(SpriteBatch batch){
