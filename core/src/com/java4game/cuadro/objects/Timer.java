@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.LevelGen;
+import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
@@ -109,7 +110,12 @@ public class Timer {
     }
 
     private Interpolation coverInterpolation;
+    private boolean isPlayGoldS;
     public void handle(float alpha){
+        if (!isPlayGoldS){
+            MusicCore.playSound(0);
+            isPlayGoldS = true;
+        }
         Sprite curStar;
         switch (currentStar){
             case Gold: curStar = goldStar; break;
@@ -145,6 +151,7 @@ public class Timer {
                 if (goldSeconds - Gdx.graphics.getDeltaTime() < 0f){
                     goldSeconds = 0f;
                     currentStar = StarBlock.Star.Silver;
+                    MusicCore.playSound(2);
                     isStartAnimThisIters = true;
                 }
                 else
@@ -156,6 +163,7 @@ public class Timer {
                 if (silverSeconds - Gdx.graphics.getDeltaTime() < 0f){
                     silverSeconds = 0f;
                     currentStar = StarBlock.Star.Bronze;
+                    MusicCore.playSound(1);
                     isStartAnimThisIters = true;
                 }
                 else
