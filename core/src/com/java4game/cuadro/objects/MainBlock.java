@@ -12,6 +12,10 @@ import com.java4game.cuadro.core.MusicCore;
 
 import java.util.Random;
 
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
+
 /**
  * Created by FOGOK on 02.01.2017 17:31.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -55,7 +59,14 @@ public class MainBlock extends FieldObject{
 
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
         isDirectionChanged = true;
-        setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
+        switch (SELECTED_BTN) {
+            case TYPE_STEPS:
+                setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
+                break;
+            case TYPE_TIMED:
+                setPositionToCorner(false, 2);
+                break;
+        }
     }
 
     public void setBlockGenerator(BlockGenerator blockGenerator) {

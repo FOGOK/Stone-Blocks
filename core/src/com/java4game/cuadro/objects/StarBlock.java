@@ -117,7 +117,7 @@ public class StarBlock {
         }
         noneStar.setAlpha(alpha);
         stepsLetter.setAlpha(alpha);
-        stepsLetter.setOffsetX((1f - alpha) * (-stepsLetter.getBounds().getWidth() / 4f));
+        stepsLetter.setOffsetX(goldStarInterpolation.apply(-stepsLetter.getBounds().getWidth() / 2f, 0f, alpha / 1f));
         Sprite curStar;
         switch (currentStar){
             case Gold: curStar = goldStar; break;
@@ -128,7 +128,7 @@ public class StarBlock {
         curStar.setAlpha(alpha);
         curStar.setRotation(goldStarInterpolation.apply(360f, 0f, alpha / 1f));
         allStepsBlock.setAlpha(alpha);
-        allStepsBlock.setOffsetX((1f - alpha) * (allStepsBlock.getBounds().getWidth() / 4f));
+        allStepsBlock.setOffsetX(goldStarInterpolation.apply(stepsLetter.getBounds().getWidth() / 2f, 0f, alpha / 1f));
         starStepsBlock.setAlpha(alpha);
     }
 

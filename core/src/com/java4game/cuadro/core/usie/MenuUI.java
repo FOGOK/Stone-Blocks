@@ -57,7 +57,8 @@ public class MenuUI {
 
     private int OPENED_WORLDS;
     public static int SELECTEDWORLD;
-    private StarBlock.Star[] STARS = new StarBlock.Star[10];
+    private StarBlock.Star[] STARS_STEPS = new StarBlock.Star[10];
+    private StarBlock.Star[] STARS_TIMED = new StarBlock.Star[10];
 
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
@@ -169,8 +170,8 @@ public class MenuUI {
 //        for (int i = 0; i < 5; i++) {
 //            addTo = 0;
 //            for (int i2 = 0; i2 < OPENEDSTAGESINWORLD[i]; i2++) {
-//                STARS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
-//                addTo += STARS[i][i2];
+//                STARS_STEPS[i][i2] = 1 + rnd.nextInt(3);      //количество звёзд на каждом уровне в каждом мире
+//                addTo += STARS_STEPS[i][i2];
 //            }
 //            STARSINSTAGES[i][0] = addTo;
 //            STARSINSTAGES[i][1] = COUNTSTAGESINWORLD[i] * 3;
@@ -178,27 +179,50 @@ public class MenuUI {
     }
 
     public void refreshStarsData(){
-        STARS = new StarBlock.Star[COUNTSTAGESINWORLD[0]];
-        final char[] starsS = Prefers.getString(Prefers.KeyStars).toCharArray();
+        STARS_STEPS = new StarBlock.Star[COUNTSTAGESINWORLD[0]];
+        char[] starsS = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
         for (int i = 0; i < COUNTSTAGESINWORLD[0]; i++) {
             if (i < OPENEDSTAGESINWORLD[0]){
                 int key = Character.getNumericValue(starsS[i]);
                 switch (key){
                     case 0:
-                        STARS[i] = StarBlock.Star.None;
+                        STARS_STEPS[i] = StarBlock.Star.None;
                         break;
                     case 1:
-                        STARS[i] = StarBlock.Star.Bronze;
+                        STARS_STEPS[i] = StarBlock.Star.Bronze;
                         break;
                     case 2:
-                        STARS[i] = StarBlock.Star.Silver;
+                        STARS_STEPS[i] = StarBlock.Star.Silver;
                         break;
                     case 3:
-                        STARS[i] = StarBlock.Star.Gold;
+                        STARS_STEPS[i] = StarBlock.Star.Gold;
                         break;
                 }
             }else
-                STARS[i] = StarBlock.Star.None;
+                STARS_STEPS[i] = StarBlock.Star.None;
+        }
+
+        STARS_TIMED = new StarBlock.Star[COUNTSTAGESINWORLD[1]];
+        starsS = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
+        for (int i = 0; i < COUNTSTAGESINWORLD[1]; i++) {
+            if (i < OPENEDSTAGESINWORLD[1]){
+                int key = Character.getNumericValue(starsS[i]);
+                switch (key){
+                    case 0:
+                        STARS_TIMED[i] = StarBlock.Star.None;
+                        break;
+                    case 1:
+                        STARS_TIMED[i] = StarBlock.Star.Bronze;
+                        break;
+                    case 2:
+                        STARS_TIMED[i] = StarBlock.Star.Silver;
+                        break;
+                    case 3:
+                        STARS_TIMED[i] = StarBlock.Star.Gold;
+                        break;
+                }
+            }else
+                STARS_TIMED[i] = StarBlock.Star.None;
         }
     }
 
@@ -219,7 +243,7 @@ public class MenuUI {
 //        int starsCount = 0;
 //        for (int i = 0; i < 5; i++) {
 //            for (int i2 = 0; i2 < COUNTSTAGESINWORLD[i]; i2++) {
-//                starsCount += STARS[i][i2];
+//                starsCount += STARS_STEPS[i][i2];
 //            }
 //        }
 //        starsText = new TextBlock(starIco.getX() + starIco.getWidth() + otstf, starIco.getY() + 0.15f, true, "" + starsCount);
@@ -259,10 +283,10 @@ public class MenuUI {
         final int columns = 3, rows = 34;
         final int countOpened = OPENEDSTAGESINWORLD[0];
         for (int i = 0; i < columns * rows; i++) {
-            stepsStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[0] == i, STARS[i]);
+            stepsStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[0] == i, STARS_STEPS[i]);
             stepsStagesButtons[i].setLockedStage(i >= countOpened);
 //            if (i < countOpened)
-//                stepsStagesButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+//                stepsStagesButtons[i].setStarCount(STARS_STEPS[SELECTEDWORLD][i]);
         }
         int i = 0, selectedRow = 0;
         boolean isSelectedRow = false;
@@ -298,17 +322,17 @@ public class MenuUI {
         for (int i = 0; i < columns * rows; i++) {
             timedStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 2, this);
         }
-        setStepsListProporties();
+        setTimedListProporties();
     }
 
     private void setTimedListProporties(){
         final int columns = 3, rows = 7;
         final int countOpened = OPENEDSTAGESINWORLD[1];
         for (int i = 0; i < columns * rows; i++) {
-            timedStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[1] == i, StarBlock.Star.None);
+            timedStagesButtons[i].setCompleteStage(i < countOpened - 1 || OPENEDSTAGESINWORLD[1] == i, STARS_TIMED[i]);
             timedStagesButtons[i].setLockedStage(i >= countOpened);
 //            if (i < countOpened)
-//                stepsStagesButtons[i].setStarCount(STARS[SELECTEDWORLD][i]);
+//                stepsStagesButtons[i].setStarCount(STARS_STEPS[SELECTEDWORLD][i]);
         }
         int i = 0, selectedRow = 0;
         boolean isSelectedRow = false;

@@ -19,7 +19,8 @@ public class Prefers {
     /////// DO NOT CHANGE FINAL STRINGS
     public static final String KeyOpenedStagesSteps = "KeyOpenedStages";
     public static final String KeyOpenedStagesTimed = "KeyOpenedStagesTimed";
-    public static final String KeyStars = "KeyStars";
+    public static final String KeyStarsSteps = "KeyStars";
+    public static final String KeyStarsTimed = "KeyStarsTimed";
     /////// DO NOT CHANGE FINAL STRINGS
 
     public static void initPrefs(){

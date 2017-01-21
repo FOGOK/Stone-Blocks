@@ -31,9 +31,9 @@ public class ButtonActions {
                 activateAction(All.COMPLETE_LEARN);
                 break;
             case COMPLETE_LEARN:
-                final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
+                final char[] chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
                 chars[0] = '3';
-                Prefers.putString(Prefers.KeyStars, new String(chars));
+                Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
 
 //            chars[LEVEL] =
                 ///

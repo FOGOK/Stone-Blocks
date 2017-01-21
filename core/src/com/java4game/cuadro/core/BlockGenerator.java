@@ -46,6 +46,7 @@ public class BlockGenerator {
 
     private Rectangle fieldBounds;
     private StarBlock starBlock;
+    private com.java4game.cuadro.objects.Timer timerBlock;
     private LevelGen levelGen;
 
     public BlockGenerator(LevelGen levelGen, MainBlock mainBlock, Rectangle fieldBounds, int LEVEL) {
@@ -88,6 +89,10 @@ public class BlockGenerator {
 
     public void setStarBlock(StarBlock starBlock) {
         this.starBlock = starBlock;
+    }
+
+    public void setTimerBlock(com.java4game.cuadro.objects.Timer timerBlock) {
+        this.timerBlock = timerBlock;
     }
 
     private void calculateCountMinSteps(){
@@ -141,19 +146,24 @@ public class BlockGenerator {
             MusicCore.play(MusicCore.MENU);
 
             int curStar = 1;
-
+            char[] chars;
             //setStar
             switch (SELECTED_BTN){
                 case TYPE_STEPS:
-                    final char[] chars = Prefers.getString(Prefers.KeyStars).toCharArray();
+                    chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
                     curStar = starBlock.getCurrentStar().ordinal();
                     if (curStar > Character.getNumericValue(chars[LEVEL]))
                         chars[LEVEL] = Integer.toString(curStar).charAt(0);
-                    Prefers.putString(Prefers.KeyStars, new String(chars));
+                    Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
                     levelGen.refreshStars();
                     break;
                 case TYPE_TIMED:
-
+                    chars = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
+                    curStar = timerBlock.getCurrentStar().ordinal();
+                    if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
+                        chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
+                    Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
+                    levelGen.refreshStars();
                     break;
             }
             //

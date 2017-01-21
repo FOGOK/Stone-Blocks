@@ -52,7 +52,7 @@ public class LevelGen {
     //ui
     private FlyingStage flyingStage;
     private StarBlock starBlock;
-    private Timer timer;
+    private Timer timerBlock;
     private PauseButton pauseButton;
     ///
 
@@ -122,7 +122,8 @@ public class LevelGen {
                 break;
             case TYPE_TIMED:
                  currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
-                timer = new Timer(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 5.20f : currLevel.getAllSeconds());
+                timerBlock = new Timer(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 5.20f : currLevel.getAllSeconds());
+                blockGenerator.setTimerBlock(timerBlock);
                 break;
         }
 
@@ -158,9 +159,11 @@ public class LevelGen {
                     break;
                 case TYPE_TIMED:
                     if (flyingStage.getProgressEnd() != 1f)
-                        timer.handle(flyingStage.getProgressEnd());
+                        timerBlock.handle(flyingStage.getProgressEnd());
                     else
-                        timer.handle();
+                        timerBlock.handle();
+                    if (!Handler.ISPAUSE)
+                        timerBlock.handleLogic();
                     break;
             }
 
@@ -202,7 +205,7 @@ public class LevelGen {
                     starBlock.drawMetalAndText(batch);
                     break;
                 case TYPE_TIMED:
-                    timer.draw(batch);
+                    timerBlock.draw(batch);
                     break;
             }
 

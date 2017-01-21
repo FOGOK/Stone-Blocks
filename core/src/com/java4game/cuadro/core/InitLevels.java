@@ -71,6 +71,10 @@ public class InitLevels {
             return allSeconds;
         }
 
+        public void setGoldSeconds(float allSeconds) {
+            this.allSeconds = allSeconds;
+        }
+
         public void setMinSteps(int minSteps) {
             this.minSteps = minSteps;
         }
