@@ -73,7 +73,7 @@ public class Gm extends ApplicationAdapter {
     }
 
     private void setStagesOpened(){
-        if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0 || true){
+        if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0){
             Prefers.putInt(Prefers.KeyOpenedStagesSteps, 1);
             Prefers.putInt(Prefers.KeyOpenedStagesTimed, 1);
 

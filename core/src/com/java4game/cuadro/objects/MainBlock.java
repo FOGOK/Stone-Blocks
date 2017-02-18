@@ -9,6 +9,7 @@ import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.core.uiwidgets.StageButton;
 
 import java.util.Random;
 
@@ -31,7 +32,8 @@ public class MainBlock extends FieldObject{
     private boolean isDirectionChanged;  //поворачивали ли мы направление кубика
     private boolean lockChangeInTouch, startChangeDir;
 
-    private float speed = 0.11f;
+    private float speed;
+    private static final float SPEED_START = 0.055f;
     private float currentRotation, speedRotation = 120f, rotationMax = 180;
 
     private boolean isRotationStart;
@@ -55,6 +57,8 @@ public class MainBlock extends FieldObject{
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
         this.block.setOriginCenter();
 
+
+        speed = StageButton.LEVEL <= 25 ? (StageButton.LEVEL / 25f + 1f) * SPEED_START : SPEED_START * 2f;
 
 
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
