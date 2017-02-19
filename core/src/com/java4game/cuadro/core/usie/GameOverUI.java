@@ -17,7 +17,7 @@ import com.java4game.cuadro.utils.GameUtils;
  */
 public class GameOverUI {
 
-    private float time, allTime = 1.3f;
+    private float time, allTime = 0.8f;
     private float time2, allTime2 = 0.8f;
     private Sprite blackSprite;
     private float sizeStar, ySquare;

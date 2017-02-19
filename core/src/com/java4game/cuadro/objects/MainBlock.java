@@ -57,8 +57,9 @@ public class MainBlock extends FieldObject{
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
         this.block.setOriginCenter();
 
-
-        speed = StageButton.LEVEL <= 25 ? (StageButton.LEVEL / 25f + 1f) * SPEED_START : SPEED_START * 2f;
+        float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
+        lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
+        speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
 
 
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
