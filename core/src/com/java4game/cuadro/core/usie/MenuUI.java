@@ -44,6 +44,9 @@ public class MenuUI {
     final float sizeButtonMains = 3.43f;
 
 
+    public static boolean TEST;
+
+
     public static boolean RESETANIMATION;
     public static boolean SETSTAGEPROP;
 
@@ -362,6 +365,8 @@ public class MenuUI {
         final float cffHeight = 0.9446f;
         gameNameTex.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         gameNameTex.setPosition(0f, Gm.HEIGHT - gameNameTex.getHeight());
+
+        gameNameTex.setFlip(false, TEST);
         posYs[GAME_NAME] = gameNameTex.getHeight();
     }
 

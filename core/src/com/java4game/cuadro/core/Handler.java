@@ -3,6 +3,7 @@ package com.java4game.cuadro.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.PauseUI;
 import com.java4game.cuadro.utils.Atalas;
@@ -44,6 +45,8 @@ public class Handler {
         Game, Pause, Menu
     }
 
+    public static String TEST_STRING;
+
     public Handler(){
         ISPAUSE = ISRESTART = false;
 
@@ -53,7 +56,13 @@ public class Handler {
 //        gameUi = new GameUI(textureGen);
         pauseUI = new PauseUI(textureGen);
         menuUI = new MenuUI(textureGen);
-        state = State.Menu;
+        if (!MenuUI.TEST)
+            state = State.Menu;
+        else{
+            state = State.Game;
+            StageButton.LEVEL = -1;
+            levelGen = new LevelGen(menuUI);
+        }
 
 //        state = State.Game;
 //        StageButton.LEVEL = 83;
@@ -76,7 +85,7 @@ public class Handler {
 
 
 
-        if (isBackPressed || Gdx.input.isKeyJustPressed(Input.Keys.P)){
+        if (isBackPressed /*|| Gdx.input.isKeyJustPressed(Input.Keys.P)*/){
             isBackPressed = false;
 
             if (Handler.state == Handler.State.Pause)

@@ -8,6 +8,7 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
 
@@ -151,9 +152,9 @@ public class StarBlock {
             curStar.setAlpha(alpha);
             curStar.setRotation(goldStarInterpolation.apply(360f, 0f, alpha / 1f));
         }
-        allStepsBlock.setAlpha(alpha);
+        allStepsBlock.setAlpha(MenuUI.TEST ? 1f : alpha);
         allStepsBlock.setOffsetX(goldStarInterpolation.apply(stepsLetter.getBounds().getWidth() / 2f, 0f, alpha / 1f));
-        starStepsBlock.setAlpha(alpha);
+        starStepsBlock.setAlpha(MenuUI.TEST ? 1f : alpha);
     }
 
     public void handle(){

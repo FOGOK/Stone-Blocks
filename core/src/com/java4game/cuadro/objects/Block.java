@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.BlockGenerator;
+import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.utils.Assets;
 
@@ -30,7 +31,7 @@ public class Block extends FieldObject{
     private BlockGenerator blockGenerator;
 
     public Block(int type, Sprite block, float customSize, int x, int y, Rectangle fieldBounds, MainBlock mainBlock, FieldObject[] fieldObjects) {
-        super(block, fieldBounds, true);
+        super(block, fieldBounds, InitLevels.BLOCK);
         this.block.setSize(customSize, customSize);
 
         this.fieldObjects = fieldObjects;
@@ -91,7 +92,7 @@ public class Block extends FieldObject{
     private void setIsHoledVarCleaned(int sqX, int sqY){
         boolean isForTrued = false;
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.HOLE && fieldObjects[i].getSQX(true) == sqX && fieldObjects[i].getSQY(true) == sqY){
                 if (((Hole)fieldObjects[i]).getType() == type){
                     if (!isHoled){
                         MusicCore.playSound(10);

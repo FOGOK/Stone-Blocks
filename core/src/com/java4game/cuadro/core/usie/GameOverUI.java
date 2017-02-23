@@ -41,12 +41,12 @@ public class GameOverUI {
     private void initButtons(){
         final float sizeB = sizeStar / 2f;
 
-        mainMenuB = new GameOverButton(ButtonActions.All.TOMAINMENU_PAUSE_ACTION,
+        mainMenuB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.TOMAINMENU_PAUSE_ACTION,
                 (Gm.WIDTH - sizeStar) / 2f,
                 ySquare / 2f,   sizeB, 57, "MENU");
         mainMenuB.setPositionToCenter();
 
-        nextLevelB = new GameOverButton(ButtonActions.All.NEXT_LEVEL_ACT,
+        nextLevelB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.NEXT_LEVEL_ACT,
                 (Gm.WIDTH - sizeStar) / 2f + sizeStar,
                 ySquare / 2f,   sizeB, 58, "NEXT");
         nextLevelB.setPositionToCenter();

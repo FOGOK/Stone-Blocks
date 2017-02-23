@@ -19,6 +19,10 @@ import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 
+import static com.java4game.cuadro.core.InitLevels.BACK_COLOR_GRAY;
+import static com.java4game.cuadro.core.InitLevels.BLOCK;
+import static com.java4game.cuadro.core.InitLevels.COLOR_WHITE;
+import static com.java4game.cuadro.core.InitLevels.HOLE;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
@@ -62,16 +66,27 @@ public class LevelGen {
 
     private MenuUI menuUI;
 
+    private InitLevels.Level levelTEST;
+
     public LevelGen(MenuUI menuUI) {
         //инициализируем фон
         this.menuUI = menuUI;
-        switch (SELECTED_BTN){
-            case TYPE_STEPS:
-                background = Assets.getNewSprite(InitLevels.getStepsLevels(StageButton.LEVEL - 1).getBackgroundColor());
-                break;
-            case TYPE_TIMED:
-                background = Assets.getNewSprite(InitLevels.getTimeLevels(StageButton.LEVEL - 1).getBackgroundColor());
-                break;
+        InitLevels.Level currLevel = null;
+        if (MenuUI.TEST){
+            createTESTLevel();
+            currLevel = levelTEST;
+            background = Assets.getNewSprite(currLevel.getBackgroundColor());
+        }else{
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
+                    background = Assets.getNewSprite(currLevel.getBackgroundColor());
+                    break;
+                case TYPE_TIMED:
+                    currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
+                    background = Assets.getNewSprite(currLevel.getBackgroundColor());
+                    break;
+            }
         }
         ISGAMEOVER = false;
         final float hDivW = 1.7777f;
@@ -88,7 +103,7 @@ public class LevelGen {
 
         ///инициализируем кубик и устанавливаем размер кубика
         mainBlock = new MainBlock(this, Assets.getNewSprite(12), fieldBounds);
-        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, StageButton.LEVEL - 1);
+        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, currLevel);
         mainBlock.setBlockGenerator(blockGenerator);
         //
 
@@ -117,17 +132,14 @@ public class LevelGen {
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
         //
-        InitLevels.Level currLevel;
         float starSize = 0f;
         switch (SELECTED_BTN){
             case TYPE_STEPS:
-                currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
                 starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
                 blockGenerator.setStarBlock(starBlock);
                 starSize = starBlock.getStarSize();
                 break;
             case TYPE_TIMED:
-                 currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
                 timerBlock = new TimerBlock(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 6f : currLevel.getAllSeconds());
                 blockGenerator.setTimerBlockBlock(timerBlock);
                 starSize = timerBlock.getStarSize();
@@ -149,6 +161,44 @@ public class LevelGen {
 
 
     }
+
+
+
+
+    private void createTESTLevel(){
+        String[] mainParts = Handler.TEST_STRING.split(",");
+        String[] allObjects = mainParts[2].split("_");
+
+        SELECTED_BTN = Integer.parseInt(mainParts[0]);
+        StageButton.LEVEL = Integer.parseInt(mainParts[1]) + 1;
+
+
+        levelTEST = new InitLevels.Level(allObjects.length, Integer.parseInt(mainParts[3]));
+
+        for (int i = 0; i < allObjects.length; i++) {
+            levelTEST.setObject(new InitLevels.Object(
+                    Character.getNumericValue(allObjects[i].charAt(0)),
+                    Character.getNumericValue(allObjects[i].charAt(1)),
+                    Character.getNumericValue(allObjects[i].charAt(2)),
+                    Character.getNumericValue(allObjects[i].charAt(3))), i);
+        }
+
+
+        if (Integer.parseInt(mainParts[4]) != -1){
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    levelTEST.setMinSteps(Integer.parseInt(mainParts[4]));
+                    break;
+                case TYPE_TIMED:
+                    levelTEST.setGoldSeconds(Float.parseFloat(mainParts[4]));
+                    break;
+            }
+        }
+    }
+
+
+
+
     private Interpolation pauseBInterp;
     public void draw(SpriteBatch batch){
 
@@ -284,54 +334,54 @@ public class LevelGen {
     }
 
     public void win(int LEVEL){
-//        Handler.state = Handler.State.Menu;
-//        MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
-//        MenuUI.SETSTAGEPROP = true;
-//        MusicCore.play(MusicCore.MENU);
 
-        int curStar = 1;
-        char[] chars;
-        //setStar
-        switch (SELECTED_BTN){
-            case TYPE_STEPS:
-                chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
-                curStar = starBlock.getCurrentStar().ordinal();
-                if (curStar > Character.getNumericValue(chars[LEVEL]))
-                    chars[LEVEL] = Integer.toString(curStar).charAt(0);
-                Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
-                refreshStars();
-                break;
-            case TYPE_TIMED:
-                chars = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
-                curStar = timerBlock.getCurrentStar().ordinal();
-                if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
-                    chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
-                Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
-                refreshStars();
-                break;
-        }
-        //
+        if (!MenuUI.TEST){
+
+            int curStar = 1;
+            char[] chars;
+            //setStar
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
+                    curStar = starBlock.getCurrentStar().ordinal();
+                    if (curStar > Character.getNumericValue(chars[LEVEL]))
+                        chars[LEVEL] = Integer.toString(curStar).charAt(0);
+                    Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
+                    refreshStars();
+                    break;
+                case TYPE_TIMED:
+                    chars = Prefers.getString(Prefers.KeyStarsTimed).toCharArray();
+                    curStar = timerBlock.getCurrentStar().ordinal();
+                    if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
+                        chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
+                    Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
+                    refreshStars();
+                    break;
+            }
+            //
 
 //            chars[LEVEL] =
-        ///
+            ///
 
-        switch (SELECTED_BTN){
-            case TYPE_STEPS:
-                if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
-                    if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
-                        MenuUI.OPENEDSTAGESINWORLD[0]++;
-                        Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
+            switch (SELECTED_BTN){
+                case TYPE_STEPS:
+                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
+                            MenuUI.OPENEDSTAGESINWORLD[0]++;
+                            Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
+                        }
                     }
-                }
-                break;
-            case TYPE_TIMED:
-                if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
-                    if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
-                        MenuUI.OPENEDSTAGESINWORLD[1]++;
-                        Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
+                    break;
+                case TYPE_TIMED:
+                    if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
+                            MenuUI.OPENEDSTAGESINWORLD[1]++;
+                            Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
+                        }
                     }
-                }
-                break;
+                    break;
+            }
+
         }
 
         ISGAMEOVER = true;

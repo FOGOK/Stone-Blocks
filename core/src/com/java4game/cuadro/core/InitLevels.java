@@ -8,23 +8,27 @@ package com.java4game.cuadro.core;
  */
 public class InitLevels {
 
+    public static final int COLOR_BLUE = 0, COLOR_GREEN = 1, COLOR_RED = 2, COLOR_WHITE = 3, COLOR_YELLOW = 4;
+    public static final int BACK_COLOR_BLUE = 0, BACK_COLOR_GREEN = 2, BACK_COLOR_GRAY = 3, BACK_COLOR_RED = 4, BACK_COLOR_YELLOW = 5;
+    public static final int BLOCK = 0, HOLE = 1;
+
     public static class Object {
         private int x, y, type;
-        private boolean isCube;
+        private int blockType;
 
-        public Object(int x, int y, int type, boolean isCube) {
+        public Object(int x, int y, int type, int blockType) {
             this.x = x;
             this.y = y;
             this.type = type;
-            this.isCube = isCube;
+            this.blockType = blockType;
         }
 
-        public void setCube(boolean cube) {
-            isCube = cube;
+        public void setCube(int blockType) {
+            blockType = blockType;
         }
 
-        public boolean isCube() {
-            return isCube;
+        public int getBlockType() {
+            return blockType;
         }
 
         public int getX() {
@@ -61,6 +65,17 @@ public class InitLevels {
             this.backgroundColor = backgroundColor;
             minSteps = 0;
             allSeconds = 0f;
+        }
+
+        public Level(int sizeObjects, int backgroundColor){
+            objects = new Object[sizeObjects];
+            this.backgroundColor = backgroundColor;
+            minSteps = 0;
+            allSeconds = 0f;
+        }
+
+        public void setObject(Object object, int index){
+            objects[index] = object;
         }
 
         public int getMinSteps() {
@@ -112,9 +127,9 @@ public class InitLevels {
 //                new Object(0, 0, COLOR_, HOLE),
 //                new Object(0, 0, COLOR_, HOLE),
 //
-//                new Object(0, 0, COLOR_, CUBE),
-//                new Object(0, 0, COLOR_, CUBE),
-//                new Object(0, 0, COLOR_, CUBE)
+//                new Object(0, 0, COLOR_, BLOCK),
+//                new Object(0, 0, COLOR_, BLOCK),
+//                new Object(0, 0, COLOR_, BLOCK)
 //    }, BACK_COLOR_);
     //
 }

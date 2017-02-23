@@ -12,6 +12,8 @@ import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
 
+import static com.java4game.cuadro.core.uiwidgets.StageButton.LEVEL;
+
 /**
  * Created by FOGOK on 03.01.2017 15:59.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -20,7 +22,6 @@ import com.java4game.cuadro.utils.Assets;
  */
 public class BlockGenerator {
 
-    private int LEVEL;
 //    private Block blocks[];
     private FieldObject fieldObjects[];
     private int countMinSteps;
@@ -41,12 +42,10 @@ public class BlockGenerator {
     private TimerBlock timerBlockBlock;
     private LevelGen levelGen;
 
-    public BlockGenerator(LevelGen levelGen, MainBlock mainBlock, Rectangle fieldBounds, int LEVEL) {
+    public BlockGenerator(LevelGen levelGen, MainBlock mainBlock, Rectangle fieldBounds, InitLevels.Level level) {
         this.mainBlock = mainBlock;
         this.fieldBounds = fieldBounds;
         this.levelGen = levelGen;
-
-        this.LEVEL = LEVEL;
 
         mainBlockBounds = mainBlock.getBlockBounds();
         cellSize = mainBlock.getCellSize();
@@ -60,19 +59,20 @@ public class BlockGenerator {
 
         isEndLevel = false;
 
-        InitLevels.Level level = InitLevels.getStepsLevels(LEVEL);
-
         fieldObjects = new FieldObject[level.getObjects().length];
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (level.getObjects()[i].isCube()){
-                fieldObjects[i] = new Block(level.getObjects()[i].getType(), Assets.getNewSprite(7 + level.getObjects()[i].getType()),
-                        cellSize * 1.3f, level.getObjects()[i].getX(), level.getObjects()[i].getY(),
-                        fieldBounds, mainBlock, fieldObjects);
-                ((Block)fieldObjects[i]).setBlockGenerator(this);
+            switch (level.getObjects()[i].getBlockType()){
+                case InitLevels.BLOCK:
+                    fieldObjects[i] = new Block(level.getObjects()[i].getType(), Assets.getNewSprite(7 + level.getObjects()[i].getType()),
+                            cellSize * 1.3f, level.getObjects()[i].getX(), level.getObjects()[i].getY(),
+                            fieldBounds, mainBlock, fieldObjects);
+                    ((Block)fieldObjects[i]).setBlockGenerator(this);
+                    break;
+                case InitLevels.HOLE:
+                    fieldObjects[i] = new Hole(Assets.getNewSprite(13 + level.getObjects()[i].getType()), fieldBounds,
+                            level.getObjects()[i].getX(), level.getObjects()[i].getY(), level.getObjects()[i].getType());
+                    break;
             }
-            else
-                fieldObjects[i] = new Hole(Assets.getNewSprite(13 + level.getObjects()[i].getType()), fieldBounds,
-                        level.getObjects()[i].getX(), level.getObjects()[i].getY(), level.getObjects()[i].getType());
         }
         calculateCountMinSteps();
     }
@@ -87,7 +87,7 @@ public class BlockGenerator {
 
     private void calculateCountMinSteps(){
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 countMinSteps += isOneLineInHoles(fieldObjects[i].getSQX(true), fieldObjects[i].getSQY(true), ((Block)fieldObjects[i]).getType()) ? 1 : 2;
             }
         }
@@ -95,7 +95,7 @@ public class BlockGenerator {
 
     private boolean isOneLineInHoles(int x, int y, int type){
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (!fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() != InitLevels.BLOCK){
                 if (((Hole)fieldObjects[i]).getType() == type){
                     if (x == fieldObjects[i].getSQX(true) || y == fieldObjects[i].getSQY(true))
                         return true;
@@ -107,7 +107,7 @@ public class BlockGenerator {
 
     public void drawHoles(SpriteBatch batch){
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (!fieldObjects[i].isCube())
+            if (fieldObjects[i].getTypeBlock() != InitLevels.BLOCK)
                 fieldObjects[i].draw(batch);
         }
     }
@@ -124,13 +124,13 @@ public class BlockGenerator {
             waitToNoCollision();
 
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube())
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK)
                 fieldObjects[i].draw(batch);
         }
 
         if (isEndLevel){
             isEndLevel = false;
-            levelGen.win(LEVEL);
+            levelGen.win(LEVEL - 1);
         }
 
 //        dotq.setPosition(cornTrainX, cornTrainY);
@@ -149,7 +149,7 @@ public class BlockGenerator {
 
     public void reversInspect(){
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && (!isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i) || !isNextTypeEqCurrentType())){
                     mainBlock.blockHasComedHole();
                 }
@@ -160,7 +160,7 @@ public class BlockGenerator {
     private boolean isOtherBlockTargetTypeAvailable(int targetType, int targetCube){   ///есть ли в стаке ещё такие блоки, как этот и в лунках ли они
         for (int i = 0; i < fieldObjects.length; i++) {
             if (i != targetCube){
-                if (fieldObjects[i].isCube()){
+                if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                     if (((Block)fieldObjects[i]).isStacked() && !((Block)fieldObjects[i]).isHoled() && ((Block)fieldObjects[i]).getType() == targetType){
                         return true;
                     }
@@ -172,7 +172,7 @@ public class BlockGenerator {
 
     private boolean isNextTypeEqCurrentType(){
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).getStackedPosition() == stackedCount)
                     return nextTypeEqualsCurrentType(i, true);
             }
@@ -203,7 +203,7 @@ public class BlockGenerator {
         int currentY = fieldObjects[currentBlock].getSQY(true);
         int currentType = ((Block)fieldObjects[currentBlock]).getType();
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (!fieldObjects[i].isCube() && fieldObjects[i].getSQX(true) == currentX + nextX
+            if (fieldObjects[i].getTypeBlock() != InitLevels.BLOCK && fieldObjects[i].getSQX(true) == currentX + nextX
                                           && fieldObjects[i].getSQY(true) == currentY + nextY){
                 if (currentType == ((Hole)fieldObjects[i]).getType())
                     return true;
@@ -217,7 +217,7 @@ public class BlockGenerator {
         isCleanedCollision = false;
         stackedTrain.set(mainBlockBounds);
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube())
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK)
                 ((Block)fieldObjects[i]).clearStacked(x, y);
         }
         inspectHolesAndBlocks();
@@ -226,7 +226,7 @@ public class BlockGenerator {
     private void inspectHolesAndBlocks(){
         isEndLevel = true;
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 if (!((Block)fieldObjects[i]).isHoled()){
                     isEndLevel = false;
                     break;
@@ -246,7 +246,7 @@ public class BlockGenerator {
     private void waitToNoCollision(){
         boolean result = false;
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 if (stackedTrain.overlaps(fieldObjects[i].getBlockBounds())){
                     result = true;
                     break;
@@ -270,7 +270,7 @@ public class BlockGenerator {
 
     private void handleLogic(){  //логика столкновений главного кубика и всех остальных
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].isCube()){
+            if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
                 if (!((Block)fieldObjects[i]).isStacked()){
                     if (fieldObjects[i].getBlockBounds().contains(cornTrainX, cornTrainY)){
                         stackedCount++;

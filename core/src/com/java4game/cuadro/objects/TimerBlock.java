@@ -8,8 +8,11 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
+
+import java.math.BigDecimal;
 
 /**
  * Created by FOGOK on 20.01.2017 16:23.
@@ -25,6 +28,8 @@ public class TimerBlock {
     private Blink blinks[];
     private float goldSeconds, silverSeconds, bronzeSecond, allSeconds;
     private float startPostion;
+
+    private float testTIMER;
 
     private float thisIters = 1f;
     private boolean isStartAnimThisIters;
@@ -48,6 +53,7 @@ public class TimerBlock {
         allSeconds = goldSeconds + silverSeconds + bronzeSecond;
 
         currentStar = StarBlock.Star.Gold;
+        testTIMER = 0f;
     }
 
     private void initTimeBlock(){
@@ -148,11 +154,13 @@ public class TimerBlock {
         }
 
 
-        starTimeBlock.setAlpha(alpha);
+        starTimeBlock.setAlpha(MenuUI.TEST ? 1f : alpha);
         timeLetter.setAlpha(alpha);
         timeLetter.setOffsetX(coverInterpolation.apply(-timeLetter.getBounds().getWidth() / 2f, 0f, alpha));
         allTimeBlock.setAlpha(alpha);
         allTimeBlock.setOffsetX(coverInterpolation.apply(timeLetter.getBounds().getWidth() / 2f, 0f, alpha));
+        if (alpha == 0 && MenuUI.TEST)
+            setStarTimeblockText(testTIMER, true, true);
     }
 
     public void handle(){
@@ -168,33 +176,35 @@ public class TimerBlock {
         handle(GMUtils.normalizeOneZero(thisIters), false);
     }
     public void handleLogic(){
+        float minQ = Math.min(Gdx.graphics.getDeltaTime(), 0.032f);
+        
         switch (currentStar){
             case Gold:
-                if (goldSeconds - Gdx.graphics.getDeltaTime() < 1f){
+                if (goldSeconds - minQ < 1f){
                     silverSeconds += goldSeconds;
                     currentStar = StarBlock.Star.Silver;
                     MusicCore.playSound(2);
                     isStartAnimThisIters = true;
                 }
                 else
-                    goldSeconds -= Gdx.graphics.getDeltaTime();
+                    goldSeconds -= minQ;
 
-                setStarTimeblockText(goldSeconds, true);
+                setStarTimeblockText(goldSeconds, true, false);
                 break;
             case Silver:
-                if (silverSeconds - Gdx.graphics.getDeltaTime() < 1f){
+                if (silverSeconds - minQ < 1f){
                     bronzeSecond += silverSeconds;
                     currentStar = StarBlock.Star.Bronze;
                     MusicCore.playSound(1);
                     isStartAnimThisIters = true;
                 }
                 else
-                    silverSeconds -= Gdx.graphics.getDeltaTime();
+                    silverSeconds -= minQ;
 
-                setStarTimeblockText(silverSeconds, true);
+                setStarTimeblockText(silverSeconds, true, false);
                 break;
             case Bronze:
-                if (bronzeSecond - Gdx.graphics.getDeltaTime() < 1f){
+                if (bronzeSecond - minQ < 1f){
                     bronzeSecond = 0f;
                     allSeconds = 0f;
                     currentStar = StarBlock.Star.None;
@@ -202,25 +212,27 @@ public class TimerBlock {
                     levelGen.lose();
                 }
                 else
-                    bronzeSecond -= Gdx.graphics.getDeltaTime();
+                    bronzeSecond -= minQ;
 
-                setStarTimeblockText(bronzeSecond, true);
+                setStarTimeblockText(bronzeSecond, true, false);
                 break;
             case None:
-//                if (allSeconds - Gdx.graphics.getDeltaTime() < 0f){
+//                if (allSeconds - minQ < 0f){
 //                    allSeconds = 0f;
 //                    levelGen.lose();
 //                }
 //                else
-//                    allSeconds -= Gdx.graphics.getDeltaTime();
+//                    allSeconds -= minQ;
 //
 //                setStarTimeblockText(allSeconds, true);
                 break;
         }
+        
+        if (allSeconds - minQ > 0f)
+            allSeconds -= minQ;
+        setStarTimeblockText(allSeconds, false, false);
 
-        if (allSeconds - Gdx.graphics.getDeltaTime() > 0f)
-            allSeconds -= Gdx.graphics.getDeltaTime();
-        setStarTimeblockText(allSeconds, false);
+        testTIMER += minQ;
 
 //        if (currentStar != StarBlock.Star.None){
 //            if (allSeconds - Gdx.graphics.getDeltaTime() < 0f){
@@ -236,34 +248,57 @@ public class TimerBlock {
     }
 
     private StringBuilder stringBuilder = new StringBuilder(100);
-//    private final String twoDots = ":";
-//    private final String nullS = "0";
-//    private final String secText = " sec";
+    private final String twoDots = ":";
+    private final String nullS = "0";
+    private final String secText = " sec";
     private int lastSeconds;
-    private void setStarTimeblockText(float targetSeconds, boolean isStarTimeBlock){
-        final int seconds = (int) targetSeconds;
-//        final int milliseconds = (int) (new BigDecimal(targetSeconds - seconds).setScale(1, BigDecimal.ROUND_FLOOR).floatValue() * 10f);
-        stringBuilder.setLength(0);
+    private void setStarTimeblockText(float targetSeconds, boolean isStarTimeBlock, boolean MEGATEST){
+        if (MenuUI.TEST){
+            //
+            final int seconds = (int) targetSeconds;
+            final int milliseconds = (int) (new BigDecimal(targetSeconds - seconds).setScale(1, BigDecimal.ROUND_FLOOR).floatValue() * 10f);
+            stringBuilder.setLength(0);
 
-//        if (seconds < 10) stringBuilder.append(nullS);
-        stringBuilder.append(String.valueOf(seconds));
+            if (seconds < 10) stringBuilder.append(nullS);
+            stringBuilder.append(String.valueOf(seconds));
 
-        if (lastSeconds != seconds && seconds < 4 && seconds > 0 && isStarTimeBlock){
-            MusicCore.playSound(13);
-            lastSeconds = seconds;
+            if (lastSeconds != seconds && seconds < 4 && seconds > 0 && isStarTimeBlock){
+                MusicCore.playSound(13);
+                lastSeconds = seconds;
+            }
+
+            stringBuilder.append(twoDots);
+
+            stringBuilder.append(String.valueOf(milliseconds));
+            stringBuilder.append(nullS);
+            //
+        }else{
+            //
+            final int seconds = (int) targetSeconds;
+            stringBuilder.setLength(0);
+            stringBuilder.append(String.valueOf(seconds));
+
+            if (lastSeconds != seconds && seconds < 4 && seconds > 0 && isStarTimeBlock){
+                MusicCore.playSound(13);
+                lastSeconds = seconds;
+            }
+            //
         }
-//
-//        stringBuilder.append(String.valueOf(milliseconds));
-//        stringBuilder.append(nullS);
 
-
-        if (isStarTimeBlock){
-            starTimeBlock.setText(stringBuilder.toString());
-            starTimeBlock.setPosition(goldStar.getX() + goldStar.getWidth() / 2f,
-                    goldStar.getY() + goldStar.getHeight() / 2f);
+        if (MEGATEST){
+            starTimeBlock.setText("ALLTIME: " + stringBuilder.toString());
+            starTimeBlock.setPosition(Gm.WIDTH / 2f,
+                    Gm.HEIGHT * 0.9f);
             starTimeBlock.setPositionToCenter();
         }else{
-            allTimeBlock.setText(stringBuilder.toString());
+            if (isStarTimeBlock){
+                starTimeBlock.setText(stringBuilder.toString());
+                starTimeBlock.setPosition(goldStar.getX() + goldStar.getWidth() / 2f,
+                        goldStar.getY() + goldStar.getHeight() / 2f);
+                starTimeBlock.setPositionToCenter();
+            }else{
+                allTimeBlock.setText(stringBuilder.toString());
+            }
         }
 
     }

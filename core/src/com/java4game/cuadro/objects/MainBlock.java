@@ -7,9 +7,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.usie.MenuUI;
 
 import java.util.Random;
 
@@ -51,7 +53,7 @@ public class MainBlock extends FieldObject{
     //corner = угол поля
 
     public MainBlock(LevelGen levelGen, Sprite block, Rectangle fieldBounds) {
-        super(block, fieldBounds, true);
+        super(block, fieldBounds, InitLevels.BLOCK);
         this.levelGen = levelGen;
 
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
@@ -60,7 +62,8 @@ public class MainBlock extends FieldObject{
         float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
         lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
         speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
-
+        if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
+            speed = SPEED_START * 2f;
 
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
         isDirectionChanged = true;
@@ -304,7 +307,6 @@ public class MainBlock extends FieldObject{
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
 //            block.setX(block.getX() + speed * Gm.mdT);
-//
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.UP))
 //            block.setY(block.getY() + speed * Gm.mdT);

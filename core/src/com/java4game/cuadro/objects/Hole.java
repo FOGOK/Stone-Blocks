@@ -2,6 +2,7 @@ package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.java4game.cuadro.core.InitLevels;
 
 /**
  * Created by FOGOK on 04.01.2017 9:16.
@@ -13,7 +14,7 @@ public class Hole extends FieldObject{
 
     private int type;
     public Hole(Sprite block, Rectangle fieldBounds, int x, int y, int type) {
-        super(block, fieldBounds, false);
+        super(block, fieldBounds, InitLevels.HOLE);
         setSQPos(x, y);
         this.type = type;
     }

@@ -20,11 +20,11 @@ public class FieldObject {
     Rectangle fieldBounds;
     float cellSize;  //размер ячейки без отступов // (т.е. тупое деление размера поля на количество клеток)
 
-    boolean isCube;
+    int typeBlock;
 
-    FieldObject(Sprite block, Rectangle fieldBounds, boolean isCube) {
+    FieldObject(Sprite block, Rectangle fieldBounds, int typeBlock) {
         this.block = block;
-        this.isCube = isCube;
+        this.typeBlock = typeBlock;
         this.fieldBounds = fieldBounds;
         cellSize = fieldBounds.getWidth() / (LevelGen.SQSIZE + 3);
         blockBounds = new Rectangle();
@@ -148,7 +148,7 @@ public class FieldObject {
         block.setY(y - (block.getWidth() - blockBounds.getWidth()) / 2f);
     }
 
-    public boolean isCube() {
-        return isCube;
+    public int getTypeBlock() {
+        return typeBlock;
     }
 }
