@@ -52,7 +52,7 @@ public class Gm extends ApplicationAdapter {
 
     private void initGame(){
         Prefers.initPrefs();
-//        setStagesOpened();
+        setStagesOpened();
         ///
 
         //initDebug
