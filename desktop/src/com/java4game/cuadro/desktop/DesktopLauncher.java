@@ -17,7 +17,7 @@ public class DesktopLauncher {
 
         Handler.TEST_STRING = "1,3,1641_2841_6340_5640,3,12";
 
-        TEST = true;
+        TEST = false;
         if (arg != null){
             if (arg.length > 0){
                 if (arg[0] != null){
