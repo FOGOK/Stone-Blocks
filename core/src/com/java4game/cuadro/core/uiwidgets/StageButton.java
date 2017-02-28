@@ -18,6 +18,8 @@ public class StageButton extends TextButton {
 
     public static int LEVEL;
 
+    public static final int ARKADE_LEVEL = 2000;
+
     private int starCount;
     private int stage;
     private boolean isLockedStage;

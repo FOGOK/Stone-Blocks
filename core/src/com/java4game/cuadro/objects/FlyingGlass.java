@@ -53,7 +53,7 @@ public class FlyingGlass {
                 glass.rotate(speedRot);
                 glass.draw(batch);
             }
-            floatAnimator.update(Math.min(Gdx.graphics.getDeltaTime(), 0.016f));
+            floatAnimator.update(Math.min(Gdx.graphics.getDeltaTime(), 0.016f) * size);
         }
 
     }

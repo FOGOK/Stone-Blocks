@@ -3,11 +3,16 @@ package com.java4game.cuadro.core.usie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
+import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Prefers;
 
 /**
  * Created by FOGOK on 21.01.2017 11:17.
@@ -19,16 +24,31 @@ public class GameOverUI {
 
     private float time, allTime = 0.8f;
     private float time2, allTime2 = 0.8f;
-    private Sprite blackSprite;
+    private Sprite blackSprite, arkadeWinSprite;
     private float sizeStar, ySquare;
-    private TextBlock loseWinText;
-    private boolean isWin;
+    private TextBlock loseWinText, arkadeRecord;
+    private boolean isWin, isArkade;
 
     private GameOverButton nextLevelB, mainMenuB, restartB;
 
-    public GameOverUI(float sizeStar, float ySquare) {
+    private Interpolation showRecord = Interpolation.swingOut;
+
+    public GameOverUI(float sizeStar, float ySquare, boolean isArkade) {
         this.sizeStar = sizeStar;
         this.ySquare = ySquare;
+        this.isArkade = isArkade;
+
+        if (isArkade){
+            arkadeWinSprite = Assets.getNewSprite(62);
+            float sizeArkWinSprite = 1.8f;
+            arkadeWinSprite.setSize(sizeArkWinSprite, sizeArkWinSprite);
+            arkadeWinSprite.setOriginCenter();
+
+            arkadeRecord = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT - 3.1f, true, "H");
+            arkadeRecord.setCustomCff(sizeArkWinSprite * 0.4f);
+            arkadeRecord.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT - 3.1f);
+            arkadeRecord.setPositionToCenter();
+        }
 
         time = allTime;
         time2 = allTime2;
@@ -69,8 +89,37 @@ public class GameOverUI {
         loseWinText.setPositionToCenter();
     }
 
+    public void setScoreText(int scoreText){
+        this.isWin = false;
+        loseWinText.setText(scoreText + "");
+        loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
+        loseWinText.setPositionToCenter();
+    }
+
+    public void setRecord(boolean isNewRecord){
+        if (isNewRecord){
+            arkadeRecord.setText("NEW RECORD: " + loseWinText.getText() + "!");
+        }else{
+            switch (TypeGameButton.TOUCHED_ARK){
+                case 0:
+                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordBronze));
+                    break;
+                case 1:
+                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordSilver));
+                    break;
+                case 2:
+                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordGold));
+                    break;
+            }
+        }
+        arkadeRecord.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT - 3.1f);
+        arkadeRecord.setPositionToCenter();
+        arkadeWinSprite.setCenter(arkadeRecord.getBounds().getX() + arkadeRecord.getBounds().getWidth() / 2, arkadeRecord.getBounds().getY() + arkadeWinSprite.getHeight() / 2f + arkadeRecord.getBounds().getHeight() * 1.3f);
+    }
+
+
     public void drawBack(SpriteBatch batch) {
-        blackSprite.setAlpha((1f - time / allTime) * 0.5f);
+        blackSprite.setAlpha((1f - time / allTime) * 0.4f);
         blackSprite.draw(batch);
     }
 
@@ -88,6 +137,13 @@ public class GameOverUI {
         }else{
             restartB.setAlpha(alpha);
             restartB.draw(batch);
+            if (isArkade){
+                arkadeWinSprite.setScale(showRecord.apply(0, 1f, alpha / 1f));
+                arkadeWinSprite.setRotation(showRecord.apply(0, 360, alpha / 1f));
+                arkadeWinSprite.draw(batch, alpha);
+                arkadeRecord.setAlpha(alpha);
+                arkadeRecord.draw(batch);
+            }
         }
     }
 

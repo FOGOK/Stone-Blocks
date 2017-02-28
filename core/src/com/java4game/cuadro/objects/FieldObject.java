@@ -2,6 +2,7 @@ package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.LevelGen;
 
@@ -15,11 +16,14 @@ import java.math.BigDecimal;
  */
 public class FieldObject {
 
+    public static final int BLOCK = 0, HOLE = 1, BOOSTER = 2, SLOWER = 3, REVERS = 4, ROTATE90 = 5, ROTATEM90 = 6, BOMB = 7, NULLTYPE = 8;
+
     Sprite block;
     Rectangle blockBounds;
     Rectangle fieldBounds;
     float cellSize;  //размер ячейки без отступов // (т.е. тупое деление размера поля на количество клеток)
-
+    private Interpolation blockAnim = Interpolation.elasticOut;
+    private boolean isReversAlpha;
     int typeBlock;
 
     FieldObject(Sprite block, Rectangle fieldBounds, int typeBlock) {
@@ -30,19 +34,49 @@ public class FieldObject {
         blockBounds = new Rectangle();
         blockBounds.setSize(cellSize);
         block.setSize(cellSize, cellSize);
+        if (typeBlock == BLOCK)
+            block.setOrigin(block.getWidth() * 0.589f, block.getHeight() * 0.679f);
+        else
+            block.setOriginCenter();
     }
 
     public void draw(SpriteBatch batch){
         block.draw(batch);
     }
 
-    void setSQPos(int iX, int iY){
+    public void setSQPos(int iX, int iY){
         setSQX(iX);
         setSQY(iY);
     }
 
     public void setAlpha(float alpha){
         block.setAlpha(alpha);
+        if (!isReversAlpha)
+            block.setScale(blockAnim.apply(alpha, 1f, alpha / 1f));
+        else
+            block.setScale(alpha / 1f);
+    }
+
+    public void setReversAlpha(boolean reversAlpha) {
+        isReversAlpha = reversAlpha;
+    }
+
+    public boolean updateAlpha(float f, boolean revers){
+        if (revers){
+            isReversAlpha = true;
+            if (block.getColor().a - f >= 0f){
+                setAlpha(block.getColor().a - f);
+                return true;
+            }else
+                return false;
+        }else{
+            isReversAlpha = false;
+            if (block.getColor().a + f <= 1f){
+                setAlpha(block.getColor().a + f);
+                return true;
+            }else
+                return false;
+        }
     }
 
     //устанавливаем позицию по x | y в клетках
@@ -150,5 +184,9 @@ public class FieldObject {
 
     public int getTypeBlock() {
         return typeBlock;
+    }
+
+    public void setTypeBlock(int typeBlock) {
+        this.typeBlock = typeBlock;
     }
 }

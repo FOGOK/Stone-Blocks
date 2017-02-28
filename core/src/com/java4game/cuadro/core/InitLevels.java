@@ -8,9 +8,11 @@ package com.java4game.cuadro.core;
  */
 public class InitLevels {
 
+    public static final int STEPS_LEVELS = 102, TIME_LEVELS = 22;
+
     public static final int COLOR_BLUE = 0, COLOR_GREEN = 1, COLOR_RED = 2, COLOR_WHITE = 3, COLOR_YELLOW = 4;
     public static final int BACK_COLOR_BLUE = 0, BACK_COLOR_GREEN = 2, BACK_COLOR_GRAY = 3, BACK_COLOR_RED = 4, BACK_COLOR_YELLOW = 5;
-    public static final int BLOCK = 0, HOLE = 1;
+    public static final int BLOCK = 0, HOLE = 1, ARKADE_BOOSTER = 2, ARKADE_SLOWER = 3;
 
     public static class Object {
         private int x, y, type;
@@ -24,7 +26,7 @@ public class InitLevels {
         }
 
         public void setCube(int blockType) {
-            blockType = blockType;
+            this.blockType = blockType;
         }
 
         public int getBlockType() {
@@ -106,10 +108,10 @@ public class InitLevels {
     private static Level stepsLevels[], timeLevels[];
 
     static {
-        stepsLevels = new Level[102];
+        stepsLevels = new Level[STEPS_LEVELS];
         InitStepsLevels.init(stepsLevels);
 
-        timeLevels = new Level[22];
+        timeLevels = new Level[TIME_LEVELS];
         InitTimeLevels.init(timeLevels);
     }
 ///whoH =
@@ -120,6 +122,13 @@ public class InitLevels {
     public static Level getTimeLevels(int level) {
         return timeLevels[level];
     }
+
+
+    public static void dispose(){
+        stepsLevels = null;
+        timeLevels = null;
+    }
+
 
     ///blankLevel
 //    stepsLevels[] = new Level(new Object[]{

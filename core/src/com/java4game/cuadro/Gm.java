@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
+import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.UI;
@@ -207,6 +208,7 @@ public class Gm extends ApplicationAdapter {
         MusicCore.dispose();
         Assets.dispose();
         startTexture.dispose();
+        InitLevels.dispose();
 
 
         super.dispose();

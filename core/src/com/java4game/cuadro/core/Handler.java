@@ -107,7 +107,9 @@ public class Handler {
         atls.dispose();
         menuUI.dispose();
 //        gameUi.dispose();
-        levelGen.dispose();
-        pauseUI.dispose();
+        if (levelGen != null)
+            levelGen.dispose();
+        if (pauseUI != null)
+            pauseUI.dispose();
     }
 }

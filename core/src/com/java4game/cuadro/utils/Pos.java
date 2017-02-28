@@ -18,6 +18,10 @@ public class Pos {
         set(pos.x, pos.y);
     }
 
+    public void set(Pos pos){
+        set(pos.x, pos.y);
+    }
+
     public void set(final int x, final int y){
         this.x = x;
         this.y = y;
@@ -25,5 +29,9 @@ public class Pos {
 
     public boolean equals(final int x, final int y){
         return this.x == x && this.y == y;
+    }
+
+    public boolean equals(Pos pos){
+        return pos.x == x && pos.y == y;
     }
 }

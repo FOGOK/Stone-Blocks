@@ -28,7 +28,6 @@ public class Block extends FieldObject{
 
     private MainBlock mainBlock;
     private FieldObject fieldObjects[]; //ccылка на все объекты
-    private BlockGenerator blockGenerator;
 
     public Block(int type, Sprite block, float customSize, int x, int y, Rectangle fieldBounds, MainBlock mainBlock, FieldObject[] fieldObjects) {
         super(block, fieldBounds, InitLevels.BLOCK);
@@ -51,10 +50,6 @@ public class Block extends FieldObject{
     public void setStacked(int stackedPosition){
         this.stackedPosition = stackedPosition;
         stacked = true;
-    }
-
-    public void setBlockGenerator(BlockGenerator blockGenerator) {
-        this.blockGenerator = blockGenerator;
     }
 
     public void clearStacked(float ssqX, float ssqY){
@@ -105,10 +100,14 @@ public class Block extends FieldObject{
         }
         if (!isForTrued && isHoled){
             isHoled = false;
-            MusicCore.playSound(9);
+            if (!BlockGenerator.ISARKADE)
+                MusicCore.playSound(9);
         }
     }
 
+    public void setHoleNone(){
+        isHoled = false;
+    }
 
     public boolean isHoled() {
         return isHoled;
@@ -122,8 +121,12 @@ public class Block extends FieldObject{
     public void draw(SpriteBatch batch){
         handleMove();
         super.draw(batch);
-        if (isHoled)
-            blockCompleted.draw(batch);
+        if (isHoled){
+            if (typeBlock != NULLTYPE)
+                blockCompleted.draw(batch);
+            else
+                super.updateAlpha(0.02f, true);
+        }
     }
 
     private int sQX, sQY, lastSQX, lastSQY;

@@ -2,9 +2,6 @@ package com.java4game.cuadro.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.java4game.cuadro.objects.StarBlock;
-
-import java.util.Map;
 
 /**
  * Created by FOGOK on 25.10.2016 7:58.
@@ -21,10 +18,14 @@ public class Prefers {
     public static final String KeyOpenedStagesTimed = "KeyOpenedStagesTimed";
     public static final String KeyStarsSteps = "KeyStars";
     public static final String KeyStarsTimed = "KeyStarsTimed";
+    public static final String KeyRecordBronze = "KeyRecordBronze";
+    public static final String KeyRecordSilver = "KeyRecordSilver";
+    public static final String KeyRecordGold = "KeyRecordGold";
+    public static final String KeyOpenedArkadeModes = "KeyOpenedArkadeModes";
     /////// DO NOT CHANGE FINAL STRINGS
 
     public static void initPrefs(){
-        prefs = Gdx.app.getPreferences("My Preferences");
+        prefs = Gdx.app.getPreferences("com.java4game.blockmover");
     }
 
 

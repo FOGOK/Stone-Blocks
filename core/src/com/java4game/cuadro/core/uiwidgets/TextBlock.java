@@ -16,7 +16,8 @@ public class TextBlock extends BaseObject {
     private boolean isTitle;
     private float customCff;
     private float alpha;
-    private float offsetX;
+    private float offsetX, offsetY;
+    private float scale = 1f;
     private String text;
     public TextBlock(float x, float y, final boolean isTitle, String text) {
         super(x, y, 0, 0);
@@ -24,6 +25,7 @@ public class TextBlock extends BaseObject {
         customCff = -1f;
         alpha = 1f;
         offsetX = 0f;
+        offsetY = 0f;
         setText(text);
     }
 
@@ -33,6 +35,10 @@ public class TextBlock extends BaseObject {
 
     public void setOffsetX(float offsetX) {
         this.offsetX = offsetX;
+    }
+
+    public void setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
     }
 
     public void setText(String text) {
@@ -47,6 +53,10 @@ public class TextBlock extends BaseObject {
     public void setCustomCff(float customCff) {
         this.customCff = customCff;
         refreshBounds();
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public void setDefaultCff(){
@@ -67,18 +77,19 @@ public class TextBlock extends BaseObject {
     }
     @Override
     public void draw(final SpriteBatch batch) {
-        if (customCff != -1f) UI.setCff(isTitle, customCff);
+        if (customCff != -1f || scale != -1f) UI.setCff(isTitle, customCff * scale);
 
 
         UI.setColor(textColor, isTitle);
         if (alpha != 1f){
             UI.setAlpha(alpha, isTitle);
         }
-        UI.drawText(batch, isTitle, text, bounds.x + offsetX, bounds.y + bounds.height);
+
+        UI.drawText(batch, isTitle, text, bounds.x + offsetX - (bounds.width * scale - bounds.width) / 2f, bounds.y + offsetY +  bounds.height + (bounds.height * scale - bounds.height) / 2f);
 
         if (alpha != 1f){
             UI.setColor(textColor, isTitle);
         }
-        if (customCff != -1f) UI.setDefaultCff();
+        if (customCff != -1f || scale != -1f) UI.setDefaultCff();
     }
 }

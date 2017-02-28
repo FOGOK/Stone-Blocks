@@ -10,8 +10,10 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GameOverUI;
 import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.objects.ArkadeBlock;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.StarBlock;
@@ -19,11 +21,8 @@ import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 
-import static com.java4game.cuadro.core.InitLevels.BACK_COLOR_GRAY;
-import static com.java4game.cuadro.core.InitLevels.BLOCK;
-import static com.java4game.cuadro.core.InitLevels.COLOR_WHITE;
-import static com.java4game.cuadro.core.InitLevels.HOLE;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_ARKADE;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
@@ -46,20 +45,22 @@ public class LevelGen {
     private Rectangle fieldBounds;
     private Sprite background, field;
 
-
+    private boolean ISARKADE;
 
     public static boolean REFRESH_REFRESH;
     public static boolean ISGAMEOVER;
+
+    private boolean isStartAnimNewRecord;
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
 
 
-
     //ui
-    private FlyingStage flyingStage;
+    private FlyingStage flyingStage, arkadeNewRecord;
     private StarBlock starBlock;
     private TimerBlock timerBlock;
+    private ArkadeBlock arkadeBlock;
     private RestartButton restartButton;
     private GameOverUI gameOverUI;
     ///
@@ -69,6 +70,8 @@ public class LevelGen {
     private InitLevels.Level levelTEST;
 
     public LevelGen(MenuUI menuUI) {
+        ISARKADE = StageButton.ARKADE_LEVEL == StageButton.LEVEL;
+
         //инициализируем фон
         this.menuUI = menuUI;
         InitLevels.Level currLevel = null;
@@ -85,6 +88,9 @@ public class LevelGen {
                 case TYPE_TIMED:
                     currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
                     background = Assets.getNewSprite(currLevel.getBackgroundColor());
+                    break;
+                case TYPE_ARKADE:
+                    background = Assets.getNewSprite(0);
                     break;
             }
         }
@@ -103,7 +109,7 @@ public class LevelGen {
 
         ///инициализируем кубик и устанавливаем размер кубика
         mainBlock = new MainBlock(this, Assets.getNewSprite(12), fieldBounds);
-        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, currLevel);
+        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, currLevel, ISARKADE);
         mainBlock.setBlockGenerator(blockGenerator);
         //
 
@@ -127,8 +133,8 @@ public class LevelGen {
 //                flyStageColor = Color.GOLDENROD.cpy();
 //                break;
 //        }
-        flyingStage = new FlyingStage();
-        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor);
+        flyingStage = new FlyingStage(true);
+        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor, ISARKADE);
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
         //
@@ -136,17 +142,21 @@ public class LevelGen {
         switch (SELECTED_BTN){
             case TYPE_STEPS:
                 starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
-                blockGenerator.setStarBlock(starBlock);
                 starSize = starBlock.getStarSize();
                 break;
             case TYPE_TIMED:
                 timerBlock = new TimerBlock(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 6f : currLevel.getAllSeconds());
-                blockGenerator.setTimerBlockBlock(timerBlock);
                 starSize = timerBlock.getStarSize();
+                break;
+            case TYPE_ARKADE:
+                arkadeBlock = new ArkadeBlock(TypeGameButton.TOUCHED_ARK);
+                arkadeBlock.showAnimate();
+                blockGenerator.setArkadeBlock(arkadeBlock);
+                starSize = arkadeBlock.getStarSize();
                 break;
         }
 
-        gameOverUI = new GameOverUI(starSize, fieldBounds.getY());
+        gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), ISARKADE);
 
         final float sizePauseBtn = 2.3f;
         restartButton = new RestartButton(ButtonActions.All.RESTART_PAUSE_ACTION, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
@@ -155,16 +165,13 @@ public class LevelGen {
 
         pauseBInterp = Interpolation.exp5Out;
 
-
+        if (ISARKADE){
+            arkadeNewRecord = new FlyingStage(false);
+            arkadeNewRecord.refreshRefresh();
+        }
 
         MusicCore.playSound(8);
-
-
     }
-
-
-
-
     private void createTESTLevel(){
         String[] mainParts = Handler.TEST_STRING.split(",");
         String[] allObjects = mainParts[2].split("_");
@@ -197,9 +204,9 @@ public class LevelGen {
     }
 
 
-
-
     private Interpolation pauseBInterp;
+
+    private boolean arkadeSpecialAlphaFlag;
     public void draw(SpriteBatch batch){
 
 
@@ -207,8 +214,14 @@ public class LevelGen {
         flyingStage.handle();
         flyingStage.drawGlass(batch);
 
+        arkadeNewRecord.handle();
+        arkadeNewRecord.drawGlass(batch);
+
+        float gameTransparency = ISARKADE ? arkadeNewRecord.getAlphaInNewRecordArkade() : flyingStage.getProgressEnd();
+
         if (!flyingStage.isFlying()){
-            field.setAlpha(flyingStage.getProgressEnd());
+
+            field.setAlpha(gameTransparency);
             field.draw(batch);
 
             switch (SELECTED_BTN){
@@ -236,6 +249,9 @@ public class LevelGen {
                     }
                     if (!Handler.ISPAUSE && !ISGAMEOVER)
                         timerBlock.handleLogic();
+
+                    break;
+                case TYPE_ARKADE:
 
                     break;
             }
@@ -266,9 +282,15 @@ public class LevelGen {
 
 
         if (!flyingStage.isFlying()){
-            blockGenerator.setAlpha(flyingStage.getProgressEnd());
+            if (flyingStage.getProgressEnd() != 1f)
+                blockGenerator.setAlpha(flyingStage.getProgressEnd());
+            else if (!arkadeSpecialAlphaFlag){
+                arkadeSpecialAlphaFlag = true;
+                blockGenerator.setAlpha(1f);
+            }
+
             blockGenerator.drawHoles(batch);
-            mainBlock.setAlpha(flyingStage.getProgressEnd());
+            mainBlock.setAlpha(gameTransparency);
             mainBlock.draw(batch);
             blockGenerator.draw(batch);
 
@@ -301,11 +323,28 @@ public class LevelGen {
                     }
 
                     break;
+                case TYPE_ARKADE:
+                    if (ISGAMEOVER){
+                        gameOverUI.drawBack(batch);     //чёрная подложка
+                        arkadeBlock.drawStar(batch);     //звезда
+                        gameOverUI.draw(batch); //текст окончания игры и кнопки
+                        arkadeBlock.drawStarBlinks(batch);     //блики
+                    }else{
+                        arkadeBlock.draw(batch);
+
+                        if (isStartAnimNewRecord){
+                            blockGenerator.setAlpha(gameTransparency);
+                            isStartAnimNewRecord = arkadeNewRecord.isShow();
+                            Handler.ISPAUSE = arkadeNewRecord.isShow();
+                        }
+                    }
+                    break;
             }
 
             restartButton.drawIcon(batch);
         }
         flyingStage.drawText(batch);
+        arkadeNewRecord.drawText(batch);
 
     }
 
@@ -391,6 +430,17 @@ public class LevelGen {
     public void lose(){
         ISGAMEOVER = true;
         gameOverUI.setText(false);
+    }
+
+    public void startNewRecord(boolean isOpenedNewMode){
+        isStartAnimNewRecord = true;
+        arkadeNewRecord.startT("NEW", isOpenedNewMode ? "MODE!" : "RECORD!");
+    }
+
+    public void arkadeLose(int score, boolean isNewRecord){
+        ISGAMEOVER = true;
+        gameOverUI.setScoreText(score);
+        gameOverUI.setRecord(isNewRecord);
     }
 
     public void dispose(){

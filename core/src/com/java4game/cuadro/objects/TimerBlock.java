@@ -219,7 +219,7 @@ public class TimerBlock {
             case None:
 //                if (allSeconds - minQ < 0f){
 //                    allSeconds = 0f;
-//                    levelGen.lose();
+//                    levelGen.arkadeLose();
 //                }
 //                else
 //                    allSeconds -= minQ;
@@ -237,7 +237,7 @@ public class TimerBlock {
 //        if (currentStar != StarBlock.Star.None){
 //            if (allSeconds - Gdx.graphics.getDeltaTime() < 0f){
 //                allSeconds = 0f;
-//                levelGen.lose();
+//                levelGen.arkadeLose();
 //            }
 //            else
 //                allSeconds -= Gdx.graphics.getDeltaTime();

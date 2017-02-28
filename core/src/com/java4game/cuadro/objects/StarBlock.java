@@ -261,7 +261,7 @@ public class StarBlock {
                 break;
             case None:
 //                if (allSteps < 1){
-//                    levelGen.lose();
+//                    levelGen.arkadeLose();
 //                }
                 break;
         }

@@ -15,11 +15,11 @@ import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 public class TypeGameBottomBar extends BaseObject {
 
     public static int SELECTED_BTN;
-    private int lastSelectedBtn;
+    private int lastSelectedBtn = 2;
     private TypeGameButton tgButtons[];
 
 
-    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1;
+    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1, TYPE_ARKADE = 2;
 
     private MenuUI menuUI;
 
@@ -27,12 +27,12 @@ public class TypeGameBottomBar extends BaseObject {
         super(0, 0, Gm.WIDTH, h);
         this.menuUI = menuUI;
         final int btnsCount = 5;
-        SELECTED_BTN = 0;
+        SELECTED_BTN = 2;
         tgButtons = new TypeGameButton[btnsCount];
         final float cellW = Gm.WIDTH / btnsCount;
         for (int i = 0; i < tgButtons.length; i++) {
             tgButtons[i] = new TypeGameButton(ButtonActions.All.CHANGE_GAME_MODE,
-                    cellW * i + cellW / 2f, h / 2f, h / 2f, 41 + i, i);
+                    cellW * i + cellW / 2f, h / 2f, h / 2f, 41 + i, i, true);
             tgButtons[i].setPositionToCenter();
         }
     }

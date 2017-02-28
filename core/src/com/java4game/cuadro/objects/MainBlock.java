@@ -1,6 +1,7 @@
 package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,12 +13,11 @@ import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.utils.Timer;
 
 import java.util.Random;
 
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
 
 /**
  * Created by FOGOK on 02.01.2017 17:31.
@@ -34,7 +34,11 @@ public class MainBlock extends FieldObject{
     private boolean isDirectionChanged;  //поворачивали ли мы направление кубика
     private boolean lockChangeInTouch, startChangeDir;
 
-    private float speed;
+    private float speed, speedCff;
+    private Timer timerSpeedChange;
+    private boolean isSlow;
+
+
     private static final float SPEED_START = 0.055f;
     private float currentRotation, speedRotation = 120f, rotationMax = 180;
 
@@ -42,6 +46,7 @@ public class MainBlock extends FieldObject{
     private boolean isBlockMovedOneSquare;
 
     private boolean isReversTrued;
+    private boolean isNextDirectionTrued;
 
     private BlockGenerator blockGenerator;
     private LevelGen levelGen;
@@ -58,17 +63,20 @@ public class MainBlock extends FieldObject{
 
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
         this.block.setOriginCenter();
+        
+        timerSpeedChange = new Timer(0f);
 
         float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
         lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
         speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
         if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
             speed = SPEED_START * 2f;
-
+        isNextDirectionTrued = true;
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
         isDirectionChanged = true;
         switch (SELECTED_BTN) {
             case TYPE_STEPS:
+            case TYPE_ARKADE:
                 setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
                 break;
             case TYPE_TIMED:
@@ -112,9 +120,30 @@ public class MainBlock extends FieldObject{
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
+        handleSpeedCff();
         if (!Handler.ISPAUSE && !LevelGen.ISGAMEOVER)
             blockMove();
         setDebugText();
+    }
+    
+    private void handleSpeedCff(){
+        if (!timerSpeedChange.next()){
+            speedCff = isSlow ? 0.5f : 1.5f;
+            block.setColor(isSlow ? Color.BLUE : Color.WHITE);
+        }else{
+            speedCff = 1f;
+            block.setColor(Color.WHITE);
+        }
+    }
+
+    public void setSlow(float time){
+        isSlow = true;
+        timerSpeedChange.reset(time);
+    }
+
+    public void setBoost(float time){
+        isSlow = false;
+        timerSpeedChange.reset(time);
     }
 
     private void setDebugText(){
@@ -139,19 +168,19 @@ public class MainBlock extends FieldObject{
 
 
     private void blockMove(){   ///ездием по кругу
-//        float speed = !lockChangeInTouch ? this.speed : this.speed * 0.8f;
+//        float speed * speedCff = !lockChangeInTouch ? this.speed * speedCff : this.speed * speedCff * 0.8f;
         switch (direction){
             case BOTTOM:
-                setY(block.getY() - speed * Gm.mdT);
+                setY(block.getY() - speed * speedCff * Gm.mdT);
                 break;
             case TOP:
-                setY(block.getY() + speed * Gm.mdT);
+                setY(block.getY() + speed * speedCff * Gm.mdT);
                 break;
             case LEFT:
-                setX(block.getX() - speed * Gm.mdT);
+                setX(block.getX() - speed * speedCff * Gm.mdT);
                 break;
             case RIGHT:
-                setX(block.getX() + speed * Gm.mdT);
+                setX(block.getX() + speed * speedCff * Gm.mdT);
                 break;
         }
 
@@ -164,7 +193,7 @@ public class MainBlock extends FieldObject{
             if (!lockChangeInTouch)
                 startChangeDir = true;
             if (blockGenerator.isStackAvailable())
-                revers();
+                revers(false);
 
         }
 
@@ -172,6 +201,7 @@ public class MainBlock extends FieldObject{
             startChangeDir = false;
             nextDirection();
             startRotation();
+            isNextDirectionTrued = true;
             MusicCore.playSound(11, 0.3f);
             lockChangeInTouch = true;
             levelGen.minusStep();  //отнимаем один ход
@@ -183,15 +213,20 @@ public class MainBlock extends FieldObject{
 
         if (isCornered(0) && !isDirectionChanged){
             nextDirection();
-            if (lockChangeInTouch)
+            if (lockChangeInTouch){
                 levelGen.inspectIsChangeStar();
+                blockGenerator.refreshArkObjects();
+            }
             isReversTrued = lockChangeInTouch = false;
         }
         else if (isDirectionChanged)
             isDirectionChanged = !(sQX != lastSQX || sQY != lastSQY);
 
-        if ((NCsQX != NClastSQX || NCsQY != NClastSQY) && isBlockMovedOneSquare)
-            blockGenerator.reversInspect();
+        if (NCsQX != NClastSQX || NCsQY != NClastSQY){
+            if (isBlockMovedOneSquare)
+                blockGenerator.reversInspect();
+            blockGenerator.inspectArkObjectsEffects();
+        }
 
 
         if (blockGenerator.isStackAvailable()){
@@ -206,17 +241,21 @@ public class MainBlock extends FieldObject{
         NClastSQY = NCsQY;
     }
 
-    public void blockHasComedHole(){
-        revers();
+    public void blockHasComedHole(boolean isArkade){
+        revers(isArkade);
     }
-    public void revers(){
+    public void revers(boolean isArkade){
 //        isTrueRevers = true;
 
-        if (!isReversTrued){
-            isReversTrued = true;
+        if (!isArkade){
+            if (!isReversTrued){
+                isReversTrued = true;
+                blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+                nextDirection();
+                nextDirection();    //поворачиваемся на 180 градусов
+            }
+        }else{
             blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
-            nextDirection();
-            nextDirection();    //поворачиваемся на 180 градусов
         }
     }
 
@@ -229,7 +268,7 @@ public class MainBlock extends FieldObject{
         if (!isRotationStart){
             startRotation();
         }
-        float rotateAngle = speedRotation * speed * Gm.mdT;
+        float rotateAngle = speedRotation * speed * speedCff * Gm.mdT;
         if (!isRevers) rotateAngle *= -1f;
         block.rotate(rotateAngle);
         currentRotation += Math.abs(rotateAngle);
@@ -251,15 +290,30 @@ public class MainBlock extends FieldObject{
 
     private boolean isCornered(float offset){   //если при следующей итерации мы выходим за край, тогда возвращаем тру, иначе фолс
         switch (direction){
-            case BOTTOM: return blockBounds.getY() - speed * Gm.mdT < fieldBounds.getY() + offset;
-            case TOP: return blockBounds.getY() + blockBounds.getWidth() + speed * Gm.mdT > fieldBounds.getY() + fieldBounds.getWidth() - offset;
-            case LEFT: return blockBounds.getX() - speed * Gm.mdT < fieldBounds.getX() + offset;
-            case RIGHT: return blockBounds.getX() + blockBounds.getWidth() + speed * Gm.mdT > fieldBounds.getX() + fieldBounds.getWidth() - offset;
+            case BOTTOM: return blockBounds.getY() - speed * speedCff * Gm.mdT < fieldBounds.getY() + offset;
+            case TOP: return blockBounds.getY() + blockBounds.getWidth() + speed * speedCff * Gm.mdT > fieldBounds.getY() + fieldBounds.getWidth() - offset;
+            case LEFT: return blockBounds.getX() - speed * speedCff * Gm.mdT < fieldBounds.getX() + offset;
+            case RIGHT: return blockBounds.getX() + blockBounds.getWidth() + speed * speedCff * Gm.mdT > fieldBounds.getX() + fieldBounds.getWidth() - offset;
             default: return false;
         }
     }
 
+    public void nextDirectionQ(boolean ssRevers){
+        if (isNextDirectionTrued){
+            blockHasComedHole(true);
+            nextDirection(ssRevers);
+            isNextDirectionTrued = false;
+        }
+    }
+
     private void nextDirection(){
+        nextDirection(false);
+    }
+
+    private void nextDirection(boolean ssRevers){
+        if (ssRevers)
+            isRevers = !isRevers;
+
         switch (direction){
             case TOP:
                 direction = !isRevers ? RIGHT : LEFT;
@@ -294,7 +348,7 @@ public class MainBlock extends FieldObject{
 
 
     public float getSpeed() {
-        return speed;
+        return speed * speedCff;
     }
 
     public float getCellSize() {
@@ -303,16 +357,16 @@ public class MainBlock extends FieldObject{
 
     ///                     trash
 //    if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            block.setX(block.getX() - speed * Gm.mdT);
+//            block.setX(block.getX() - speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            block.setX(block.getX() + speed * Gm.mdT);
+//            block.setX(block.getX() + speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.UP))
-//            block.setY(block.getY() + speed * Gm.mdT);
+//            block.setY(block.getY() + speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-//            block.setY(block.getY() - speed * Gm.mdT);
+//            block.setY(block.getY() - speed * speedCff * Gm.mdT);
 //
 //    Gm.DEBUG_VALUE1 = "X: " + getSQX() + " Y: " + getSQY();
 }

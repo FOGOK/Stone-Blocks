@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
 
@@ -23,8 +24,13 @@ public class FlyingStage {
     private FloatAnimator flyingAnimatorFrom, flyingAnimatorTo, flyingAnimatorToTo;
 
     private float size;
-    public FlyingStage() {
+    private boolean isStage, show;
+
+    public FlyingStage(boolean isStage) {
+        this.isStage = isStage;
         size = 2.3f;
+
+        show = false;
 
         flyingAnimatorFrom = new FloatAnimator(Gm.HEIGHT + size, Gm.HEIGHT / 2f, 1f, Interpolation.exp10Out);
         flyingAnimatorTo = new FloatAnimator(Gm.HEIGHT / 2f, -size, 1f, Interpolation.exp10In);
@@ -41,16 +47,53 @@ public class FlyingStage {
         numberT.setCustomCff(size * 0.3f);
     }
 
-    public void setNew(int level, Color color){
+    public void setNew(int level, Color color, boolean ISARKADE){
         flyingAnimatorFrom.resetTime();
         flyingAnimatorTo.resetTime();
         flyingAnimatorToTo.resetTime();
 
-        stageT.setText("STAGE");
-        stageT.setTextColor(color);
+        if (isStage){
+            if (ISARKADE){
+                String text = "";
+                switch (TypeGameButton.TOUCHED_ARK){
+                    case 0:
+                        text = "BRONZE";
+                        break;
+                    case 1:
+                        text = "SILVER";
+                        break;
+                    case 2:
+                        text = "GOLD";
+                        break;
+                }
+                stageT.setText(text);
+                stageT.setTextColor(color);
 
-        numberT.setText(level + "");
-        numberT.setTextColor(color);
+                numberT.setText("ARKADE");
+                numberT.setTextColor(color);
+
+                stageT.setCustomCff(size * 0.25f);
+                numberT.setCustomCff(size * 0.25f);
+            }else{
+                stageT.setText("STAGE");
+                stageT.setTextColor(color);
+
+                numberT.setText(level + "");
+                numberT.setTextColor(color);
+            }
+        }
+
+        setPositionX(Gm.WIDTH / 2f);
+    }
+
+    public void startT(String text1, String text2){
+        show = true;
+        flyingAnimatorFrom.resetTime();
+        flyingAnimatorTo.resetTime();
+        flyingAnimatorToTo.resetTime();
+
+        stageT.setText(text1);
+        numberT.setText(text2);
 
         setPositionX(Gm.WIDTH / 2f);
     }
@@ -78,18 +121,24 @@ public class FlyingStage {
     }
 
     public void handle(){
-        if (flyingAnimatorTo.isNeedToUpdate()){
-            if (flyingAnimatorFrom.isNeedToUpdate()){
-                flyingAnimatorFrom.update(Gdx.graphics.getDeltaTime());
-                setPositionY(flyingAnimatorFrom.current);
+        if (show || isStage){
+            if (flyingAnimatorTo.isNeedToUpdate()){
+                if (flyingAnimatorFrom.isNeedToUpdate()){
+                    flyingAnimatorFrom.update(Gdx.graphics.getDeltaTime());
+                    setPositionY(flyingAnimatorFrom.current);
+                }else{
+                    flyingAnimatorTo.update(Gdx.graphics.getDeltaTime());
+                    setPositionY(flyingAnimatorTo.current);
+                }
             }else{
-                flyingAnimatorTo.update(Gdx.graphics.getDeltaTime());
-                setPositionY(flyingAnimatorTo.current);
+                if (isStage){
+                    flyingAnimatorToTo.update(Gdx.graphics.getDeltaTime());
+                    setPositionY(Gm.HEIGHT - size * 0.4f);
+                    setPositionX(flyingAnimatorToTo.current);
+                }else{
+                    show = false;
+                }
             }
-        }else{
-            flyingAnimatorToTo.update(Gdx.graphics.getDeltaTime());
-            setPositionY(Gm.HEIGHT - size * 0.4f);
-            setPositionX(flyingAnimatorToTo.current);
         }
     }
 
@@ -103,12 +152,32 @@ public class FlyingStage {
     }
 
     public void drawGlass(SpriteBatch batch){
-        glassCover.draw(batch);
+        if (show || isStage)
+            glassCover.draw(batch);
     }
 
     public void drawText(SpriteBatch batch){
-        stageT.draw(batch);
-        numberT.draw(batch);
+        if (show || isStage){
+            stageT.draw(batch);
+            numberT.draw(batch);
+        }
+    }
+
+    private Interpolation exp10In = Interpolation.exp10Out, exp10Out = Interpolation.exp10In;
+    public float getAlphaInNewRecordArkade(){
+        float returnQ;
+        if (show){
+            if (flyingAnimatorFrom.isNeedToUpdate())
+                returnQ = exp10In.apply(1f, 0f, flyingAnimatorFrom.getProgress() / 1f);
+            else
+                returnQ = exp10Out.apply(0f, 1f, flyingAnimatorTo.getProgress() / 1f);
+        }else
+            returnQ = 1f;
+        return returnQ;
+    }
+
+    public boolean isShow() {
+        return show;
     }
 
     public void dispose() {

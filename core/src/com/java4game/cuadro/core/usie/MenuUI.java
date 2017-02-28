@@ -13,6 +13,7 @@ import com.java4game.cuadro.core.uiwidgets.List;
 import com.java4game.cuadro.core.uiwidgets.SelectWorldButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.objects.Blink;
 import com.java4game.cuadro.objects.BlockAnimation;
 import com.java4game.cuadro.objects.FlyingGlass;
@@ -24,9 +25,7 @@ import com.java4game.cuadro.utils.Prefers;
 
 import java.util.Random;
 
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
 
 /**
  * Created by FOGOK on 13.10.2016 0:55.
@@ -60,8 +59,8 @@ public class MenuUI {
 
     private int OPENED_WORLDS;
     public static int SELECTEDWORLD;
-    private StarBlock.Star[] STARS_STEPS = new StarBlock.Star[10];
-    private StarBlock.Star[] STARS_TIMED = new StarBlock.Star[10];
+    private StarBlock.Star[] STARS_STEPS;
+    private StarBlock.Star[] STARS_TIMED;
 
 //    public static int[][] STARSINSTAGES = new int[5][2];
 
@@ -73,6 +72,8 @@ public class MenuUI {
 //    private TextButton startButton;
     private CustomFormButton startButton, infoButton, qButton;
     private Sprite backMain, /*upBarMenu, downBarMenu,*/ gameNameTex, selectStageText, bottomBar;
+
+    private TypeGameButton bronzeB, silverB, goldB;
 
     public static int MENUSTATE;
     public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
@@ -117,6 +118,7 @@ public class MenuUI {
         setInfoButton();
 
         initSelectWorld(textureGen);
+        initArkadeButtons();
 
         initStepsList();
         initTimedList();
@@ -158,6 +160,35 @@ public class MenuUI {
         blinks[6] = new Blink(posXStart + widthText * 0.4f, posYStart + heightText * 0.471f);
         blinks[7] = new Blink(posXStart + widthText * 0.602f, posYStart + heightText * 0.463f);
         blinks[8] = new Blink(posXStart + widthText * 0.899f, posYStart + heightText * 0.471f);
+    }
+
+    public static final int ARKADE_TARGET_SILVER = 100, ARKADE_TARGET_GOLD = 1000;
+
+    private final float otstArkButtons = 3.2f;
+    private void initArkadeButtons(){
+        bronzeB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f + otstArkButtons * 1.2f, otstArkButtons, 33, 0, false);
+        silverB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f, otstArkButtons, 34, 1, false);
+        goldB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f, otstArkButtons, 35, 2, false);
+        refreshArkadeButtons();
+    }
+
+    private void refreshArkadeButtons(){
+        bronzeB.setText(Prefers.getInt(Prefers.KeyRecordBronze) + "");
+        bronzeB.setText2(ARKADE_TARGET_SILVER + "");
+        bronzeB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f + otstArkButtons * 1.2f);
+        bronzeB.setPositionToCenter();
+
+        silverB.setText(Prefers.getInt(Prefers.KeyRecordSilver) + "");
+        silverB.setText2(ARKADE_TARGET_GOLD + "");
+        silverB.setLocked(Prefers.getInt(Prefers.KeyOpenedArkadeModes) < 1);
+        silverB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f);
+        silverB.setPositionToCenter();
+
+        goldB.setText(Prefers.getInt(Prefers.KeyRecordGold) + "");
+        goldB.setText2("infinity");
+        goldB.setLocked(Prefers.getInt(Prefers.KeyOpenedArkadeModes) < 2);
+        goldB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f);
+        goldB.setPositionToCenter();
     }
 
     private void setMainVars(){
@@ -389,7 +420,7 @@ public class MenuUI {
         bottomBar.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         bottomBar.setPosition(0f, 0f);
 
-        refreshTopBar(0);
+        refreshTopBar(2);
     }
 
     public void refreshTopBar(int i){
@@ -506,6 +537,7 @@ public class MenuUI {
                     SETSTAGEPROP = false;
                     setStepsListProporties();
                     setTimedListProporties();
+                    refreshArkadeButtons();
                 }
 
                 for (int i = 0; i < flyingGlasses.length; i++) {
@@ -538,6 +570,11 @@ public class MenuUI {
                         break;
                     case TYPE_TIMED:
                         timedList.draw(batch);
+                        break;
+                    case TYPE_ARKADE:
+                        bronzeB.draw(batch);
+                        silverB.draw(batch);
+                        goldB.draw(batch);
                         break;
                 }
 
