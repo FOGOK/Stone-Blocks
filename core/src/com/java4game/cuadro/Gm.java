@@ -75,18 +75,18 @@ public class Gm extends ApplicationAdapter {
 
     private void setStagesOpened(){
         if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0){
-            Prefers.putInt(Prefers.KeyOpenedStagesSteps, 1);
-            Prefers.putInt(Prefers.KeyOpenedStagesTimed, 1);
+            Prefers.putInt(Prefers.KeyOpenedStagesSteps, 1);  //103
+            Prefers.putInt(Prefers.KeyOpenedStagesTimed, 1);   //22
 
             char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[0]; i++) {
-                chars[i] = '0';
+                chars[i] = '3';
             }
             Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
 
             chars = new char[MenuUI.COUNTSTAGESINWORLD[1]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[1]; i++) {
-                chars[i] = '0';
+                chars[i] = '3';
             }
             Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
         }

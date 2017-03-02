@@ -145,13 +145,13 @@ public class BlockGenerator {
                 int color = 0;
                 switch (types[i]){
                     case BLOCK:
-//                        color = ((Hole)fieldObjects[i - arkadeCubesAndHolesSize / 2]).getType();
+                        color = ((Hole)fieldObjects[i - arkadeCubesAndHolesSize / 2]).getType();
                         fieldObjects[i] = new Block(color, Assets.getNewSprite(7 + color),
                                 cellSize * 1.3f, arkadePositions[i].x, arkadePositions[i].y,
                                 fieldBounds, mainBlock, fieldObjects);
                         break;
                     case HOLE:
-//                        color = rnd.nextInt(5);
+                        color = rnd.nextInt(5);
                         fieldObjects[i] = new Hole(Assets.getNewSprite(13 + color), fieldBounds,
                                 arkadePositions[i].x, arkadePositions[i].y, color);
                         break;
