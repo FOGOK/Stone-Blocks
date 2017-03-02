@@ -214,8 +214,10 @@ public class LevelGen {
         flyingStage.handle();
         flyingStage.drawGlass(batch);
 
-        arkadeNewRecord.handle();
-        arkadeNewRecord.drawGlass(batch);
+        if (arkadeNewRecord != null){
+            arkadeNewRecord.handle();
+            arkadeNewRecord.drawGlass(batch);
+        }
 
         float gameTransparency = ISARKADE ? arkadeNewRecord.getAlphaInNewRecordArkade() : flyingStage.getProgressEnd();
 
@@ -344,7 +346,8 @@ public class LevelGen {
             restartButton.drawIcon(batch);
         }
         flyingStage.drawText(batch);
-        arkadeNewRecord.drawText(batch);
+        if (arkadeNewRecord != null)
+            arkadeNewRecord.drawText(batch);
 
     }
 

@@ -30,7 +30,7 @@ public class DesktopLauncher {
 
 
 
-        config.samples = 8;
+        config.samples = 10;
         config.resizable = false;
 
         if (Oleg){

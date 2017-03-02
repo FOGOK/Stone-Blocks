@@ -1,8 +1,10 @@
 package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.InitLevels;
+import com.java4game.cuadro.utils.Assets;
 
 /**
  * Created by FOGOK on 04.01.2017 9:16.
@@ -17,6 +19,13 @@ public class Hole extends FieldObject{
         super(block, fieldBounds, InitLevels.HOLE);
         setSQPos(x, y);
         this.type = type;
+    }
+
+    public void setColor(int color){
+        type = color;
+        int rgI = 13 + color;
+        TextureRegion textureRegion = Assets.getTextureAtlas().findRegion(rgI + "");
+        block.setRegion(textureRegion.getU(), textureRegion.getV(), textureRegion.getU2(), textureRegion.getV2());
     }
 
     public int getType() {

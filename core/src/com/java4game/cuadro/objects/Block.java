@@ -2,6 +2,7 @@ package com.java4game.cuadro.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.InitLevels;
@@ -20,6 +21,7 @@ public class Block extends FieldObject{
     private boolean stacked;
     private int stackedPosition;
     private boolean isHoled;
+    private int holeIndex;
 
     private Sprite blockCompleted;
 
@@ -45,6 +47,13 @@ public class Block extends FieldObject{
         isHoled = stacked = false;
 
         setSQPos(x, y);
+    }
+
+    public void setColor(int color){
+        type = color;
+        int rgI = 7 + color;
+        TextureRegion textureRegion = Assets.getTextureAtlas().findRegion(rgI + "");
+        block.setRegion(textureRegion.getU(), textureRegion.getV(), textureRegion.getU2(), textureRegion.getV2());
     }
 
     public void setStacked(int stackedPosition){
@@ -92,6 +101,7 @@ public class Block extends FieldObject{
                     if (!isHoled){
                         MusicCore.playSound(10);
                         isHoled = true;
+                        holeIndex = i;
                     }
                     isForTrued = true;
                     break;
@@ -100,6 +110,7 @@ public class Block extends FieldObject{
         }
         if (!isForTrued && isHoled){
             isHoled = false;
+            holeIndex = -1;
             if (!BlockGenerator.ISARKADE)
                 MusicCore.playSound(9);
         }
@@ -161,5 +172,10 @@ public class Block extends FieldObject{
 
     public int getType() {
         return type;
+    }
+
+
+    public int getHoleIndex() {
+        return holeIndex;
     }
 }

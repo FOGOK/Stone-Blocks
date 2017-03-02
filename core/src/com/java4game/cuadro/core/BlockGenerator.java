@@ -23,6 +23,7 @@ import java.util.Random;
 
 import static com.java4game.cuadro.core.uiwidgets.StageButton.LEVEL;
 import static com.java4game.cuadro.objects.FieldObject.*;
+import static com.java4game.cuadro.objects.MainBlock.*;
 
 /**
  * Created by FOGOK on 03.01.2017 15:59.
@@ -51,6 +52,9 @@ public class BlockGenerator {
     private boolean isCleanedCollision; //это значит, что мы ждём, пока не будет ни одной коллизии с блоком
 
     private float cellSize;
+
+    private int[] refFiskIndexes, refBlockIndexes, refHoleIndexes;
+    private int refFiskCount, refBlockAndHoleCount;
 
     private Rectangle fieldBounds;
     private ArkadeBlock arkadeBlock;
@@ -106,7 +110,12 @@ public class BlockGenerator {
                     needOpenNextMode = false;
                     break;
             }
+
             fieldObjects = new FieldObject[arkObjectsSize + arkadeCubesAndHolesSize];
+            refFiskIndexes = new int[fieldObjects.length];
+            refBlockIndexes = new int[fieldObjects.length];
+            refHoleIndexes = new int[fieldObjects.length];
+
             //randomize arkadePositions
             arkadePositions = new Pos[fieldObjects.length];
             for (int i = 0; i < fieldObjects.length; i++) {
@@ -132,22 +141,19 @@ public class BlockGenerator {
             ///
 
             //initObjects
-            int color = 0;
             for (int i = 0; i < fieldObjects.length; i++) {
-                if (i == arkadeCubesAndHolesSize / 2)
-                    color = 0;
-
+                int color = 0;
                 switch (types[i]){
                     case BLOCK:
+//                        color = ((Hole)fieldObjects[i - arkadeCubesAndHolesSize / 2]).getType();
                         fieldObjects[i] = new Block(color, Assets.getNewSprite(7 + color),
                                 cellSize * 1.3f, arkadePositions[i].x, arkadePositions[i].y,
                                 fieldBounds, mainBlock, fieldObjects);
-                        color++;
                         break;
                     case HOLE:
+//                        color = rnd.nextInt(5);
                         fieldObjects[i] = new Hole(Assets.getNewSprite(13 + color), fieldBounds,
                                 arkadePositions[i].x, arkadePositions[i].y, color);
-                        color++;
                         break;
                     case BOOSTER:
                         fieldObjects[i] = new BoosterSlower(fieldBounds, true, arkadePositions[i].x, arkadePositions[i].y);
@@ -159,10 +165,10 @@ public class BlockGenerator {
                         fieldObjects[i] = new Revers(fieldBounds, arkadePositions[i].x, arkadePositions[i].y);
                         break;
                     case ROTATE90:
-                        fieldObjects[i] = new Rotate90(fieldBounds, false, arkadePositions[i].x, arkadePositions[i].y);
+                        fieldObjects[i] = new Rotate90(fieldBounds, false, arkadePositions[i].x, arkadePositions[i].y, mainBlock);
                         break;
                     case ROTATEM90:
-                        fieldObjects[i] = new Rotate90(fieldBounds, true, arkadePositions[i].x, arkadePositions[i].y);
+                        fieldObjects[i] = new Rotate90(fieldBounds, true, arkadePositions[i].x, arkadePositions[i].y, mainBlock);
                         break;
                     case BOMB:
                         fieldObjects[i] = new Bomb(fieldBounds, arkadePositions[i].x, arkadePositions[i].y);
@@ -176,7 +182,7 @@ public class BlockGenerator {
                 switch (level.getObjects()[i].getBlockType()){
                     case BLOCK:
                         fieldObjects[i] = new Block(level.getObjects()[i].getType(), Assets.getNewSprite(7 + level.getObjects()[i].getType()),
-                                cellSize * 1.3f, level.getObjects()[i].getX(), level.getObjects()[i].getY(),
+                                cellSize * 1.3f, level. getObjects()[i].getX(), level.getObjects()[i].getY(),
                                 fieldBounds, mainBlock, fieldObjects);
                         break;
                     case HOLE:
@@ -189,15 +195,36 @@ public class BlockGenerator {
         }
     }
 
-    private void refreshAllPositions(){
-        for (int i = 0; i < fieldObjects.length; i++) {
-            refreshOnePosition(i);
+    public void refreshArkObjects(){
+        if (ISARKADE){
+            if (refBlockAndHoleCount != 0){
+
+                updateArkadePositions();
+
+                for (int i = 0; i < refBlockAndHoleCount; i++) {
+                    refreshOnePosition(refBlockIndexes[i]);
+                    refreshOnePosition(refHoleIndexes[i]);
+                }
+
+
+                refreshFishk();
+
+                refBlockAndHoleCount = 0;
+            }else if (refFiskCount != 0){
+
+                updateArkadePositions();
+
+                for (int i = 0; i < refFiskCount; i++) {
+                    refreshOnePosition(refFiskIndexes[i]);
+                }
+
+                refFiskCount = 0;
+            }
         }
     }
 
-    public void refreshArkObjects(){
+    private void refreshFishk(){
         if (ISARKADE){
-            updateArkadePositions();
             for (int i = 0; i < fieldObjects.length; i++) {
                 if (fieldObjects[i].getTypeBlock() != BLOCK && fieldObjects[i].getTypeBlock() != NULLTYPE && fieldObjects[i].getTypeBlock() != HOLE) {
                     refreshOnePosition(i);
@@ -213,6 +240,8 @@ public class BlockGenerator {
         }
     }
 
+
+    private int timeredColorThisMethod = 0;
     private void refreshOnePosition(int i){
         arkadeRefresh = true;
 
@@ -222,9 +251,16 @@ public class BlockGenerator {
         if (fieldObjects[i].getTypeBlock() == ROTATE90 || fieldObjects[i].getTypeBlock() == ROTATEM90)
             ((Rotate90)fieldObjects[i]).nextBS();
 
+
         if (fieldObjects[i].getTypeBlock() == NULLTYPE){
             fieldObjects[i].setTypeBlock(BLOCK);
             ((Block)fieldObjects[i]).setHoleNone();
+            timeredColorThisMethod = rnd.nextInt(5);
+            ((Block)fieldObjects[i]).setColor(timeredColorThisMethod);
+        }
+
+        if (fieldObjects[i].getTypeBlock() == HOLE){
+            ((Hole)fieldObjects[i]).setColor(timeredColorThisMethod);
         }
 
         setValRandomPos();
@@ -294,8 +330,6 @@ public class BlockGenerator {
             }
         }
 
-        Gm.DEBUG_VALUE2 = arkadeCompletePositions + "";
-
         if (isCornered(cellSize) && isStackAvailable())
             mainBlock.revers(false);
 
@@ -313,16 +347,10 @@ public class BlockGenerator {
             isEndLevel = false;
             if (ISARKADE){
                 arkadeCompletePositions = 0;
-                refreshAllPositions();
             }else{
                 levelGen.win(LEVEL - 1);
             }
         }
-
-//        dotq.setPosition(cornTrainX, cornTrainY);
-//
-//        DebugDrawer.drawRect(batch, dotq);
-//        DebugDrawer.drawRect(batch, stackedTrain);
     }
 
 
@@ -336,10 +364,8 @@ public class BlockGenerator {
     public void reversInspect(){
         for (int i = 0; i < fieldObjects.length; i++) {
             if (fieldObjects[i].getTypeBlock() == InitLevels.BLOCK){
-                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && (!isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i) || !isNextTypeEqCurrentType())){
+                if (((Block)fieldObjects[i]).isStacked() && ((Block)fieldObjects[i]).isHoled() && (!isOtherBlockTargetTypeAvailable(((Block)fieldObjects[i]).getType(), i) || !isNextTypeEqCurrentType()))
                     mainBlock.blockHasComedHole(ISARKADE);
-//                    mainBlock.blockHasComedHole(ISARKADE && arkadeCompletePositions == arkadeCubesAndHolesSize / 2 - 1);
-                }
             }
         }
     }
@@ -351,18 +377,50 @@ public class BlockGenerator {
                     switch (fieldObjects[i].getTypeBlock()){
                         case BOOSTER:
                             mainBlock.setBoost(4f);
+                            refFiskIndexes[refFiskCount] = i;
+                            refFiskCount++;
                             break;
                         case SLOWER:
                             mainBlock.setSlow(4f);
+                            refFiskIndexes[refFiskCount] = i;
+                            refFiskCount++;
                             break;
                         case REVERS:
-                            mainBlock.blockHasComedHole(false);
+                            mainBlock.specialRevers();
+                            refFiskIndexes[refFiskCount] = i;
+                            refFiskCount++;
+                            for (int j = 0; j < fieldObjects.length; j++) {
+                                if (fieldObjects[j].getTypeBlock() == ROTATE90 || fieldObjects[j].getTypeBlock() == ROTATEM90)
+                                    ((Rotate90)fieldObjects[j]).setDirection(false);
+                            }
                             break;
                         case ROTATE90:
-                            mainBlock.nextDirectionQ(false);
-                            break;
                         case ROTATEM90:
-                            mainBlock.nextDirectionQ(true);
+
+                            int target = 0;
+                            switch (((Rotate90)fieldObjects[i]).getDirection()){
+                                case TOP:
+                                    target = BOTTOM;
+                                    break;
+                                case BOTTOM:
+                                    target = TOP;
+                                    break;
+                                case LEFT:
+                                    target = RIGHT;
+                                    break;
+                                case RIGHT:
+                                    target = LEFT;
+                                    break;
+                            }
+
+                            if (mainBlock.getDirection() == target){
+                                mainBlock.nextDirectionN(fieldObjects[i].getTypeBlock() == ROTATEM90);
+
+                                refFiskIndexes[refFiskCount] = i;
+                                refFiskCount++;
+                            } else
+                                mainBlock.blockHasComedHole(false);
+
                             break;
                         case BOMB:
                             levelGen.arkadeLose(arkadeBlock.getScore(), isNewRecord);
@@ -419,7 +477,7 @@ public class BlockGenerator {
         int currentY = fieldObjects[currentBlock].getSQY(true);
         int currentType = ((Block)fieldObjects[currentBlock]).getType();
         for (int i = 0; i < fieldObjects.length; i++) {
-            if (fieldObjects[i].getTypeBlock() != InitLevels.BLOCK && fieldObjects[i].getSQX(true) == currentX + nextX
+            if (fieldObjects[i].getTypeBlock() == HOLE && fieldObjects[i].getSQX(true) == currentX + nextX
                                           && fieldObjects[i].getSQY(true) == currentY + nextY){
                 if (currentType == ((Hole)fieldObjects[i]).getType())
                     return true;
@@ -459,13 +517,21 @@ public class BlockGenerator {
                                     break;
                             }
                         }
-                        if (arkadeCompletePositions == arkadeCubesAndHolesSize / 2)
+                        if (arkadeCompletePositions > 0){
                             isEndLevel = true;
+
+                            refBlockIndexes[refBlockAndHoleCount] = i;
+                            refHoleIndexes[refBlockAndHoleCount] = i - arkadeCubesAndHolesSize / 2;
+
+                            refBlockAndHoleCount++;
+                        }
                     }
                 }
             }
         }
     }
+
+
 
     private void inspectUpdatedScore(){
         if (arkadeBlock.getScore() > oldRecord){

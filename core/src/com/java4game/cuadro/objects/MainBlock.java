@@ -46,7 +46,7 @@ public class MainBlock extends FieldObject{
     private boolean isBlockMovedOneSquare;
 
     private boolean isReversTrued;
-    private boolean isNextDirectionTrued;
+    private boolean isNextDirectionTrued, isNextDirectionTrued2;
 
     private BlockGenerator blockGenerator;
     private LevelGen levelGen;
@@ -123,13 +123,12 @@ public class MainBlock extends FieldObject{
         handleSpeedCff();
         if (!Handler.ISPAUSE && !LevelGen.ISGAMEOVER)
             blockMove();
-        setDebugText();
+//        setDebugText();
     }
     
     private void handleSpeedCff(){
         if (!timerSpeedChange.next()){
             speedCff = isSlow ? 0.5f : 1.5f;
-            block.setColor(isSlow ? Color.BLUE : Color.WHITE);
         }else{
             speedCff = 1f;
             block.setColor(Color.WHITE);
@@ -199,11 +198,12 @@ public class MainBlock extends FieldObject{
 
         if (startChangeDir && !isDirectionChanged && !positionIsCorner()){
             startChangeDir = false;
+            lockChangeInTouch = true;
             nextDirection();
             startRotation();
             isNextDirectionTrued = true;
+            isNextDirectionTrued2 = true;
             MusicCore.playSound(11, 0.3f);
-            lockChangeInTouch = true;
             levelGen.minusStep();  //отнимаем один ход
         }
 
@@ -225,8 +225,10 @@ public class MainBlock extends FieldObject{
         if (NCsQX != NClastSQX || NCsQY != NClastSQY){
             if (isBlockMovedOneSquare)
                 blockGenerator.reversInspect();
-            blockGenerator.inspectArkObjectsEffects();
         }
+
+        if (sQX != lastSQX || sQY != lastSQY)
+            blockGenerator.inspectArkObjectsEffects();
 
 
         if (blockGenerator.isStackAvailable()){
@@ -256,6 +258,15 @@ public class MainBlock extends FieldObject{
             }
         }else{
             blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+        }
+    }
+
+    public void specialRevers(){
+        if (!isReversTrued){
+            isReversTrued = true;
+            blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+            nextDirectionQ(true);
+            nextDirection();    //поворачиваемся на 180 градусов
         }
     }
 
@@ -301,37 +312,45 @@ public class MainBlock extends FieldObject{
     public void nextDirectionQ(boolean ssRevers){
         if (isNextDirectionTrued){
             blockHasComedHole(true);
-            nextDirection(ssRevers);
+            nextDirection(ssRevers, false);
             isNextDirectionTrued = false;
         }
     }
 
-    private void nextDirection(){
-        nextDirection(false);
+    public void nextDirectionN(boolean isRevDir){
+        if (isNextDirectionTrued2){
+            blockHasComedHole(true);
+            nextDirection(false, isRevDir);
+            isNextDirectionTrued2 = false;
+        }
     }
 
-    private void nextDirection(boolean ssRevers){
+    private void nextDirection(){
+        nextDirection(false, false);
+    }
+
+    private void nextDirection(boolean ssRevers, boolean isRevDir){
         if (ssRevers)
             isRevers = !isRevers;
 
         switch (direction){
             case TOP:
-                direction = !isRevers ? RIGHT : LEFT;
+                direction = !isRevDir ? !isRevers ? RIGHT : LEFT : isRevers ? RIGHT : LEFT;
 //                setSQY(LevelGen.SQSIZE + 2);
 //                setPositionToCorner(isRevers, !isRevers ? TOP_LEFT : TOP_RIGHT);
                 break;
             case BOTTOM:
-                direction = !isRevers ? LEFT : RIGHT;
+                direction = !isRevDir ? !isRevers ? LEFT : RIGHT : isRevers ? LEFT : RIGHT;
 //                setSQY(0);
 //                setPositionToCorner(isRevers, !isRevers ? BOTTOM_RIGHT : BOTTOM_LEFT);
                 break;
             case RIGHT:
-                direction = !isRevers ? BOTTOM : TOP;
+                direction = !isRevDir ? !isRevers ? BOTTOM : TOP : isRevers ? BOTTOM : TOP;
 //                setSQX(LevelGen.SQSIZE + 2);
 //                setPositionToCorner(isRevers, !isRevers ? TOP_RIGHT : BOTTOM_RIGHT);
                 break;
             case LEFT:
-                direction = !isRevers ? TOP : BOTTOM;
+                direction = !isRevDir ? !isRevers ? TOP : BOTTOM : isRevers ? TOP : BOTTOM;
 //                setSQX(0);
 //                setPositionToCorner(isRevers, !isRevers ? BOTTOM_LEFT : TOP_LEFT);
                 break;
@@ -339,13 +358,15 @@ public class MainBlock extends FieldObject{
         isDirectionChanged = true;
         setSQX(getSQX(true));
         setSQY(getSQY(true));
-
     }
 
     public int getDirection() {
         return direction;
     }
 
+    public boolean isRevers() {
+        return isRevers;
+    }
 
     public float getSpeed() {
         return speed * speedCff;

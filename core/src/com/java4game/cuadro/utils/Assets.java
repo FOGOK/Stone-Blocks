@@ -21,6 +21,10 @@ public class Assets {
         return new Sprite(textureAtlas.findRegion(String.valueOf(who)));
     }
 
+    public static TextureAtlas getTextureAtlas() {
+        return textureAtlas;
+    }
+
     public static void dispose(){
         textureAtlas.dispose();
     }

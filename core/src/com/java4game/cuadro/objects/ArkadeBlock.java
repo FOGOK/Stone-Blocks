@@ -48,7 +48,7 @@ public class ArkadeBlock {
 
     private void updateScoreTextPosition(){
         scoreText.setPosition(currStar.getX() + currStar.getWidth() / 2f,
-                currStar.getY() + currStar.getHeight() / 2f);
+                posYStar + currStar.getHeight() / 2f);
         scoreText.setPositionToCenter();
     }
 
@@ -100,6 +100,7 @@ public class ArkadeBlock {
             }
             else{
                 currStar.setAlpha(1f);
+                currStar.setScale(1f);
                 currStar.setY(posYStar);
                 interpTimer = interpMax;
             }
@@ -139,12 +140,15 @@ public class ArkadeBlock {
 
     public void drawText(SpriteBatch batch){
         if (updateScoreAnimation || showAnimation){
-            if (showAnimation)
+            if (showAnimation){
                 scoreText.setAlpha(showAnimateInter.apply(0f, 1f, interpTimer / interpMax));
-            else
+            }
+            else{
                 scoreText.setAlpha(1f);
-        }else
+            }
+        }else{
             scoreText.setAlpha(1f);
+        }
 
         scoreText.setOffsetY(currStar.getY() - posYStar);
         scoreText.draw(batch);
