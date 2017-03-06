@@ -53,7 +53,7 @@ public class BlockGenerator {
 
     private float cellSize;
 
-    private int[] refFiskIndexes, refBlockIndexes, refHoleIndexes;
+    private int[] refFiskIndexes, refBlockIndexes, refHoleIndexes, refDeletedHoles;
     private int refFiskCount, refBlockAndHoleCount;
 
     private Rectangle fieldBounds;
@@ -115,6 +115,7 @@ public class BlockGenerator {
             refFiskIndexes = new int[fieldObjects.length];
             refBlockIndexes = new int[fieldObjects.length];
             refHoleIndexes = new int[fieldObjects.length];
+            refDeletedHoles = new int[fieldObjects.length];
 
             //randomize arkadePositions
             arkadePositions = new Pos[fieldObjects.length];
@@ -384,6 +385,8 @@ public class BlockGenerator {
                             mainBlock.setSlow(4f);
                             refFiskIndexes[refFiskCount] = i;
                             refFiskCount++;
+
+                            arkadeBlock.updateScore(-3);
                             break;
                         case REVERS:
                             mainBlock.specialRevers();
@@ -415,6 +418,9 @@ public class BlockGenerator {
 
                             if (mainBlock.getDirection() == target){
                                 mainBlock.nextDirectionN(fieldObjects[i].getTypeBlock() == ROTATEM90);
+
+                                arkadeBlock.updateScore(3);
+                                inspectUpdatedScore();
 
                                 refFiskIndexes[refFiskCount] = i;
                                 refFiskCount++;
@@ -502,7 +508,29 @@ public class BlockGenerator {
                     if (((Block)fieldObjects[i]).isHoled()){
                         fieldObjects[i].setTypeBlock(NULLTYPE);
                         arkadeCompletePositions++;
-                        arkadeBlock.updateScore(3);
+                        int scoreUp = 0;
+                        switch (((Block)fieldObjects[i]).getType()){
+                            case 0:
+                                scoreUp = 2;
+                                break;
+                            case 1:
+                                scoreUp = 4;
+                                break;
+                            case 2:
+                                scoreUp = 5;
+                                break;
+                            case 3:
+                                scoreUp = 1;
+                                break;
+                            case 4:
+                                scoreUp = 3;
+                                break;
+                        }
+                        if (mainBlock.isBoost())
+                            scoreUp *= 2;
+
+                        arkadeBlock.updateScore(scoreUp);
+
                         inspectUpdatedScore();
                         if (isNewRecord){
                             switch (TypeGameButton.TOUCHED_ARK){
@@ -521,11 +549,32 @@ public class BlockGenerator {
                             isEndLevel = true;
 
                             refBlockIndexes[refBlockAndHoleCount] = i;
-                            refHoleIndexes[refBlockAndHoleCount] = i - arkadeCubesAndHolesSize / 2;
+                            if (refBlockAndHoleCount == 0){
+                                refHoleIndexes[refBlockAndHoleCount] = ((Block)fieldObjects[i]).getHoleIndex();
+                                refDeletedHoles[refBlockAndHoleCount] = refHoleIndexes[refBlockAndHoleCount];
+                            }
+                            else
+                                deleteAndAddNewHoleToRandomizeAdd(refBlockAndHoleCount, ((Block)fieldObjects[i]).getType());
 
                             refBlockAndHoleCount++;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private void deleteAndAddNewHoleToRandomizeAdd(int index, int colType){
+        for (int i = 0; i < fieldObjects.length; i++) {
+            if (fieldObjects[i].getTypeBlock() == HOLE){
+                boolean isAdd = true;
+                for (int j = 0; j < index; j++) {    ///проверяем, если такие блоки в массиве удалённых объектов
+                    if (refDeletedHoles[j] == i)
+                        isAdd = false;
+                }
+                if (isAdd && colType == ((Hole)fieldObjects[i]).getType()){
+                    refHoleIndexes[index] = i;
+                    refDeletedHoles[index] = refHoleIndexes[index];
                 }
             }
         }

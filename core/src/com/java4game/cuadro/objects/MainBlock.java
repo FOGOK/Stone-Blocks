@@ -145,6 +145,10 @@ public class MainBlock extends FieldObject{
         timerSpeedChange.reset(time);
     }
 
+    public boolean isBoost(){
+        return !isSlow && speedCff == 1f;
+    }
+
     private void setDebugText(){
         String dirS = "";
         switch (direction){

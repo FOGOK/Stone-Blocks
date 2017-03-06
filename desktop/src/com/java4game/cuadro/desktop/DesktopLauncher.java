@@ -13,7 +13,7 @@ public class DesktopLauncher {
 
 //        config.width = 160;
 //        config.height = 320;
-        boolean Oleg = false;
+        boolean Oleg = true;
 
         Handler.TEST_STRING = "1,3,1641_2841_6340_5640,3,12";
 
