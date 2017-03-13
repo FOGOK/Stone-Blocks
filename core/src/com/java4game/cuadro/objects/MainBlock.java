@@ -34,13 +34,14 @@ public class MainBlock extends FieldObject{
     private boolean isDirectionChanged;  //поворачивали ли мы направление кубика
     private boolean lockChangeInTouch, startChangeDir;
 
+    private boolean isNormalizeSpeed, isRotated;
+
     private float speed, speedCff;
-    private Timer timerSpeedChange;
     private boolean isSlow;
 
 
     private static final float SPEED_START = 0.055f;
-    private float currentRotation, speedRotation = 120f, rotationMax = 180;
+    private float currentRotation, speedRotation = 120f, rotationMax = 180, teleportAlpha = 1f;
 
     private boolean isRotationStart;
     private boolean isBlockMovedOneSquare;
@@ -63,8 +64,8 @@ public class MainBlock extends FieldObject{
 
         this.block.setSize(cellSize * 1.3f, cellSize * 1.3f);
         this.block.setOriginCenter();
-        
-        timerSpeedChange = new Timer(0f);
+
+        setReversAlpha(true);
 
         float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
         lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
@@ -83,6 +84,11 @@ public class MainBlock extends FieldObject{
                 setPositionToCorner(false, 0);
                 break;
         }
+        normalizeSpeed();
+    }
+
+    public void normalizeSpeed() {
+        isNormalizeSpeed = true;
     }
 
     public void setBlockGenerator(BlockGenerator blockGenerator) {
@@ -119,6 +125,7 @@ public class MainBlock extends FieldObject{
 
     @Override
     public void draw(SpriteBatch batch) {
+        handleTeleportAlpha();
         super.draw(batch);
         handleSpeedCff();
         if (!Handler.ISPAUSE && !LevelGen.ISGAMEOVER)
@@ -127,7 +134,7 @@ public class MainBlock extends FieldObject{
     }
     
     private void handleSpeedCff(){
-        if (!timerSpeedChange.next()){
+        if (!isNormalizeSpeed){
             speedCff = isSlow ? 0.5f : 1.5f;
         }else{
             speedCff = 1f;
@@ -135,18 +142,76 @@ public class MainBlock extends FieldObject{
         }
     }
 
-    public void setSlow(float time){
-        isSlow = true;
-        timerSpeedChange.reset(time);
+    private void handleTeleportAlpha(){
+        if (teleportAlpha != 1f){
+
+            teleportAlpha += 0.06f * Gm.mdT;
+            if (teleportAlpha > 1f)
+                teleportAlpha = 1f;
+
+            setAlpha(teleportAlpha);
+        }
     }
 
-    public void setBoost(float time){
-        isSlow = false;
-        timerSpeedChange.reset(time);
+    public void setSlow(){
+        isSlow = true;
+        isNormalizeSpeed = false;
+    }
+
+    private void setTeleport(int dir, boolean isRevers, int offset){
+        this.isRevers = isRevers;
+
+        boolean isSetOffset = offset != -1;
+        teleportAlpha = 0f;
+
+        switch (dir){
+            case BOTTOM:     //bot left
+                if (isSetOffset){
+                    setSQX(offset);
+                    direction = !isRevers ? LEFT : RIGHT;
+                }
+                setSQY(0);
+                break;
+            case TOP:     //top left
+                if (isSetOffset){
+                    setSQX(offset);
+                    direction = !isRevers ? RIGHT : LEFT;
+                }
+                setSQY(LevelGen.SQSIZE + 2);
+                break;
+            case RIGHT:     //top right
+                setSQX(LevelGen.SQSIZE + 2);
+                if (isSetOffset) {
+                    setSQY(offset);
+                    direction = !isRevers ? BOTTOM : TOP;
+                }
+                break;
+            case LEFT:     //bot right
+                setSQX(0);
+                if (isSetOffset) {
+                    setSQY(offset);
+                    direction = !isRevers ? TOP : BOTTOM;
+                }
+                break;
+        }
+
+        blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+    }
+
+    public void randomTeleport(){
+        setTeleport(rnd.nextInt(4), rnd.nextBoolean(), rnd.nextInt(10));
+    }
+
+    public void nextTeleport(){
+        setTeleport(direction, isRevers, -1);
+    }
+
+    public void setBoost(){
+        isNormalizeSpeed = isSlow = false;
     }
 
     public boolean isBoost(){
-        return !isSlow && speedCff == 1f;
+        return !isSlow && speedCff != 1f;
     }
 
     private void setDebugText(){
@@ -221,7 +286,7 @@ public class MainBlock extends FieldObject{
                 levelGen.inspectIsChangeStar();
                 blockGenerator.refreshArkObjects();
             }
-            isReversTrued = lockChangeInTouch = false;
+            isRotated = isReversTrued = lockChangeInTouch = false;
         }
         else if (isDirectionChanged)
             isDirectionChanged = !(sQX != lastSQX || sQY != lastSQY);
@@ -250,15 +315,17 @@ public class MainBlock extends FieldObject{
     public void blockHasComedHole(boolean isArkade){
         revers(isArkade);
     }
-    public void revers(boolean isArkade){
-//        isTrueRevers = true;
 
+    public void revers(boolean isArkade){
         if (!isArkade){
             if (!isReversTrued){
                 isReversTrued = true;
                 blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
-                nextDirection();
-                nextDirection();    //поворачиваемся на 180 градусов
+                if (!isRotated){
+                    nextDirection();
+                    nextDirection();    //поворачиваемся на 180 градусов
+                }else
+                    nextTeleport();
             }
         }else{
             blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
@@ -324,9 +391,14 @@ public class MainBlock extends FieldObject{
     public void nextDirectionN(boolean isRevDir){
         if (isNextDirectionTrued2){
             blockHasComedHole(true);
+            isRotated = true;
             nextDirection(false, isRevDir);
             isNextDirectionTrued2 = false;
         }
+    }
+
+    public boolean isRotated() {
+        return isRotated;
     }
 
     private void nextDirection(){

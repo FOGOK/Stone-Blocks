@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 public class FieldObject {
 
-    public static final int BLOCK = 0, HOLE = 1, BOOSTER = 2, SLOWER = 3, REVERS = 4, ROTATE90 = 5, ROTATEM90 = 6, BOMB = 7, NULLTYPE = 8;
+    public static final int BLOCK = 0, HOLE = 1, BOOSTER = 2, SLOWER = 3, REVERS = 4, ROTATE90 = 5, ROTATEM90 = 6, BOMB = 7, NULLTYPE = 8, TELEPORT = 9;
 
     Sprite block;
     Rectangle blockBounds;
@@ -180,6 +180,14 @@ public class FieldObject {
     void setBoundsY(float y){
         blockBounds.setY(y);
         block.setY(y - (block.getWidth() - blockBounds.getWidth()) / 2f);
+    }
+
+    public float getCenterFloatX(){
+        return block.getX() + block.getWidth() / 2f;
+    }
+
+    public float getCenterFloatY(){
+        return block.getY() + block.getHeight() / 2f;
     }
 
     public int getTypeBlock() {

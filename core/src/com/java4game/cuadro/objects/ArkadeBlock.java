@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.PosF;
+import com.java4game.cuadro.utils.Timer;
 
 import static com.java4game.cuadro.core.LevelGen.ISGAMEOVER;
 
@@ -24,19 +26,49 @@ public class ArkadeBlock {
     private int score = 0;
     private int currentStar;
 
+
+    //numbersUpdateScore
+    private final static int updScoreCount = 9;
+    private Sprite updScoreText[] = new Sprite[updScoreCount];
+    private Sprite updScoreMult[] = new Sprite[3];
+
+    private Timer updScoreTimers[] = new Timer[30];
+    private int updScoreTypes[] = new int[30];
+    private int updScoreMultiTypes[] = new int[30];
+    private boolean updScoreFirstG[] = new boolean[30];
+    private PosF updScorePosF[] = new PosF[30];
+    private int countUpdateScoreNow;
+
+    ///
+
     private float posYStar;
 
     private boolean showAnimation, updateScoreAnimation;
     private int endLevelFaza;
 
-    private Interpolation updateScoreAnimateInter = Interpolation.elasticOut, showAnimateInter = Interpolation.pow3Out;
+    private Interpolation updateScoreAnimateInter = Interpolation.elasticOut, showAnimateInter = Interpolation.pow3Out, updScoreInter = Interpolation.linear;
     private float interpTimer, interpMax = 1.2f;
 
     public ArkadeBlock(int currentStar) {
         this.currentStar = currentStar;
         initStar();
         initScoreText();
+        initUpdScoreAnimation();
         initBlinks(currStar);
+    }
+
+    private void initUpdScoreAnimation(){
+        float size = currStar.getHeight() * 0.4f;
+        for (int i = 0; i < updScoreCount; i++) {
+            updScoreText[i] = Assets.getNewSprite(i + 75);
+            updScoreText[i].setSize(size, size);
+            updScoreText[i].setOriginCenter();
+        }
+        for (int i = 0; i < updScoreMult.length; i++) {
+            updScoreMult[i] = Assets.getNewSprite(i + 84);
+            updScoreMult[i].setSize(size, size);
+            updScoreMult[i].setOriginCenter();
+        }
     }
 
     private void initScoreText(){
@@ -152,15 +184,55 @@ public class ArkadeBlock {
 
         scoreText.setOffsetY(currStar.getY() - posYStar);
         scoreText.draw(batch);
+
+        handleAndDrawUpdatedText(batch);
     }
 
-    public void updateScore(int scoreP){
+    private void handleAndDrawUpdatedText(SpriteBatch batch){
+        for (int i = 0; i < countUpdateScoreNow; i++) {
+            if (!updScoreTimers[i].next()){
+                final Sprite spr = updScoreText[updScoreTypes[i]];
+                if (!updScoreFirstG[i]){
+                    updScoreFirstG[i] = true;
+//                    spr.setCenter(updScorePosF[i].x, updScorePosF[i].y);
+//                    if (updScoreMultiTypes[i] != 0)
+//                        updScoreMult[updScoreMultiTypes[i]].setCenter(updScorePosF[i].x + spr.getWidth(), updScorePosF[i].y);
+                }
+
+                spr.setCenter(updScorePosF[i].x, updScorePosF[i].y + updScoreInter.apply(0f, 2f, updScoreTimers[i].getProgress()));
+                spr.setAlpha(1f - updScoreTimers[i].getProgress());
+                spr.draw(batch);
+
+                if (updScoreMultiTypes[i] != 0){
+                    final Sprite spr2 = updScoreMult[updScoreMultiTypes[i] - 1];
+                    spr2.setCenter(updScorePosF[i].x + spr.getWidth(), updScorePosF[i].y + updScoreInter.apply(0f, 2f, updScoreTimers[i].getProgress()));
+                    spr2.setAlpha(1f - updScoreTimers[i].getProgress());
+                    spr2.draw(batch);
+                }
+            }else{
+                updScoreTimers[i].set(updScoreTimers[countUpdateScoreNow - 1]);
+                updScoreMultiTypes[i] = updScoreMultiTypes[countUpdateScoreNow - 1];
+                updScoreFirstG[i] = updScoreFirstG[countUpdateScoreNow - 1];
+                updScoreTypes[i] = updScoreTypes[countUpdateScoreNow - 1];
+                countUpdateScoreNow--;
+                i--;
+            }
+        }
+    }
+
+    public void updateScore(int scoreP, int type, int mult, float x, float y){
         score += scoreP;
         scoreText.setText(score + "");
         updateScoreTextPosition();
         updateScoreAnimation = true;
         interpTimer = 0;
         showAnimation = false;
+        updScoreTypes[countUpdateScoreNow] = type;
+        updScoreMultiTypes[countUpdateScoreNow] = mult;
+        updScoreTimers[countUpdateScoreNow] = new Timer(1.4f);
+        updScoreFirstG[countUpdateScoreNow] = false;
+        updScorePosF[countUpdateScoreNow] = new PosF(x, y);
+        countUpdateScoreNow++;
     }
 
     public int getScore() {

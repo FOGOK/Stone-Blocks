@@ -165,7 +165,7 @@ public class FlyingStage {
 
     private Interpolation exp10In = Interpolation.exp10Out, exp10Out = Interpolation.exp10In;
     public float getAlphaInNewRecordArkade(){
-        float returnQ;
+        float returnQ = 0f;
         if (show){
             if (flyingAnimatorFrom.isNeedToUpdate())
                 returnQ = exp10In.apply(1f, 0f, flyingAnimatorFrom.getProgress() / 1f);

@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
@@ -15,6 +16,7 @@ import com.java4game.cuadro.objects.Hole;
 import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.Revers;
 import com.java4game.cuadro.objects.Rotate90;
+import com.java4game.cuadro.objects.Teleport;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Pos;
 import com.java4game.cuadro.utils.Prefers;
@@ -22,8 +24,20 @@ import com.java4game.cuadro.utils.Prefers;
 import java.util.Random;
 
 import static com.java4game.cuadro.core.uiwidgets.StageButton.LEVEL;
-import static com.java4game.cuadro.objects.FieldObject.*;
-import static com.java4game.cuadro.objects.MainBlock.*;
+import static com.java4game.cuadro.objects.FieldObject.BLOCK;
+import static com.java4game.cuadro.objects.FieldObject.BOMB;
+import static com.java4game.cuadro.objects.FieldObject.BOOSTER;
+import static com.java4game.cuadro.objects.FieldObject.HOLE;
+import static com.java4game.cuadro.objects.FieldObject.NULLTYPE;
+import static com.java4game.cuadro.objects.FieldObject.REVERS;
+import static com.java4game.cuadro.objects.FieldObject.ROTATE90;
+import static com.java4game.cuadro.objects.FieldObject.ROTATEM90;
+import static com.java4game.cuadro.objects.FieldObject.SLOWER;
+import static com.java4game.cuadro.objects.FieldObject.TELEPORT;
+import static com.java4game.cuadro.objects.MainBlock.BOTTOM;
+import static com.java4game.cuadro.objects.MainBlock.LEFT;
+import static com.java4game.cuadro.objects.MainBlock.RIGHT;
+import static com.java4game.cuadro.objects.MainBlock.TOP;
 
 /**
  * Created by FOGOK on 03.01.2017 15:59.
@@ -89,7 +103,7 @@ public class BlockGenerator {
 
 
         if (ISARKADE){
-            int arkObjectsSize = 4;
+            int arkObjectsSize = 5;
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
                     arkadeCubesAndHolesSize = 2;//2
@@ -138,6 +152,7 @@ public class BlockGenerator {
             types[index++] = REVERS;
             types[index++] = rnd.nextBoolean() ? ROTATE90 : ROTATEM90;
             types[index++] = BOMB;
+            types[index++] = TELEPORT;
 
             ///
 
@@ -173,6 +188,9 @@ public class BlockGenerator {
                         break;
                     case BOMB:
                         fieldObjects[i] = new Bomb(fieldBounds, arkadePositions[i].x, arkadePositions[i].y);
+                        break;
+                    case TELEPORT:
+                        fieldObjects[i] = new Teleport(fieldBounds, arkadePositions[i].x, arkadePositions[i].y);
                         break;
                 }
             }
@@ -373,20 +391,28 @@ public class BlockGenerator {
 
     public void inspectArkObjectsEffects(){
         if (ISARKADE){
+            int mult = 0;
+//            if (mainBlock.isBoost())
+//                mult = 1;
+//            else if (mainBlock.isRotated())
+//                mult = 2;
+//            else if (mainBlock.isRotated() && mainBlock.isBoost())
+//                mult = 3;
+
             for (int i = 0; i < fieldObjects.length; i++) {
                 if (mainBlock.getSQX(true) == fieldObjects[i].getSQX(true) && mainBlock.getSQY(true) == fieldObjects[i].getSQY(true)){
                     switch (fieldObjects[i].getTypeBlock()){
                         case BOOSTER:
-                            mainBlock.setBoost(4f);
+                            mainBlock.setBoost();
                             refFiskIndexes[refFiskCount] = i;
                             refFiskCount++;
                             break;
                         case SLOWER:
-                            mainBlock.setSlow(4f);
+                            mainBlock.setSlow();
                             refFiskIndexes[refFiskCount] = i;
                             refFiskCount++;
 
-                            arkadeBlock.updateScore(-3);
+                            arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
                             break;
                         case REVERS:
                             mainBlock.specialRevers();
@@ -396,6 +422,8 @@ public class BlockGenerator {
                                 if (fieldObjects[j].getTypeBlock() == ROTATE90 || fieldObjects[j].getTypeBlock() == ROTATEM90)
                                     ((Rotate90)fieldObjects[j]).setDirection(false);
                             }
+
+                            arkadeBlock.updateScore(1, 7, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
                             break;
                         case ROTATE90:
                         case ROTATEM90:
@@ -419,7 +447,7 @@ public class BlockGenerator {
                             if (mainBlock.getDirection() == target){
                                 mainBlock.nextDirectionN(fieldObjects[i].getTypeBlock() == ROTATEM90);
 
-                                arkadeBlock.updateScore(3);
+                                arkadeBlock.updateScore(3, 5, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
                                 inspectUpdatedScore();
 
                                 refFiskIndexes[refFiskCount] = i;
@@ -430,6 +458,9 @@ public class BlockGenerator {
                             break;
                         case BOMB:
                             levelGen.arkadeLose(arkadeBlock.getScore(), isNewRecord);
+                            break;
+                        case TELEPORT:
+                            mainBlock.randomTeleport();
                             break;
                     }
                 }
@@ -510,26 +541,42 @@ public class BlockGenerator {
                         arkadeCompletePositions++;
                         int scoreUp = 0;
                         switch (((Block)fieldObjects[i]).getType()){
-                            case 0:
-                                scoreUp = 2;
+                            case 0: //blue
+                                scoreUp = 25;
                                 break;
-                            case 1:
-                                scoreUp = 4;
+                            case 1: //green
+                                scoreUp = 20;
                                 break;
-                            case 2:
-                                scoreUp = 5;
+                            case 2: //red
+                                scoreUp = 30;
                                 break;
-                            case 3:
-                                scoreUp = 1;
+                            case 3: //white
+                                scoreUp = 10;
                                 break;
-                            case 4:
-                                scoreUp = 3;
+                            case 4: //yellow
+                                scoreUp = 15;
                                 break;
                         }
-                        if (mainBlock.isBoost())
+                        int mult = 0;
+                        if (mainBlock.isRotated() && mainBlock.isBoost()){
+                            scoreUp *= 4;
+                            if (((Block)fieldObjects[i]).getType() == 2)
+                                levelGen.flyTextPls(2);
+                            mult = 3;
+                        }else if (mainBlock.isBoost()){
                             scoreUp *= 2;
+                            mult = 1;
+                        }
+                        else if (mainBlock.isRotated()){
+                            scoreUp *= 3;
+                            mult = 2;
+                        }
 
-                        arkadeBlock.updateScore(scoreUp);
+
+                        arkadeBlock.updateScore(scoreUp, ((Block)fieldObjects[i]).getType(), mult,
+                                                            fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+
+                        mainBlock.normalizeSpeed();
 
                         inspectUpdatedScore();
                         if (isNewRecord){
@@ -587,7 +634,7 @@ public class BlockGenerator {
             if (!isNewRecord){
                 isNewRecord = true;
                 if (oldRecord != 0)
-                    levelGen.startNewRecord(false);
+                    levelGen.flyTextPls(1);
             }
         }
 
@@ -595,7 +642,7 @@ public class BlockGenerator {
             if (arkadeBlock.getScore() >= targetScore && targetScore != 0){
                 if (!isScoreMoreTarget){
                     isScoreMoreTarget = true;
-                    levelGen.startNewRecord(true);
+                    levelGen.flyTextPls(0);
                     Prefers.putInt(Prefers.KeyOpenedArkadeModes, Prefers.getInt(Prefers.KeyOpenedArkadeModes) + 1);
                 }
             }

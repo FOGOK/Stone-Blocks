@@ -17,6 +17,7 @@ public class TextButton extends BaseButton {
     public TextButton(TextureGen textureGen, ButtonActions.All action, float x, float y, float h, int back, int front, String text) {
         super(textureGen, action, x, y, h, back, front);
         textBlock = new TextBlock(x + bounds.width / 2f, y + bounds.height / 2f, false, text);
+        textBlock.setCustomCff(bounds.getHeight() * 0.4f);
         textBlock.setTextColor(Color.valueOf("2c2c36"));
     }
 

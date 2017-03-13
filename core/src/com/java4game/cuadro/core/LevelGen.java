@@ -292,7 +292,9 @@ public class LevelGen {
             }
 
             blockGenerator.drawHoles(batch);
-            mainBlock.setAlpha(gameTransparency);
+            if (gameTransparency != 1f)
+                mainBlock.setAlpha(gameTransparency);
+
             mainBlock.draw(batch);
             blockGenerator.draw(batch);
 
@@ -435,9 +437,13 @@ public class LevelGen {
         gameOverUI.setText(false);
     }
 
-    public void startNewRecord(boolean isOpenedNewMode){
+    public void flyTextPls(int mode){
         isStartAnimNewRecord = true;
-        arkadeNewRecord.startT("NEW", isOpenedNewMode ? "MODE!" : "RECORD!");
+        if (mode < 2)
+            arkadeNewRecord.startT("NEW", mode == 0 ? "MODE!" : "RECORD!");
+        else if (mode == 2)
+            arkadeNewRecord.startT("WOOW", "MAX!!!");
+
     }
 
     public void arkadeLose(int score, boolean isNewRecord){

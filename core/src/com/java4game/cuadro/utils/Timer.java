@@ -18,6 +18,13 @@ public class Timer {
         isStarted = false;
     }
 
+    public void set(Timer timer){
+        isStarted = timer.isStarted;
+        seconds = timer.seconds;
+        targetSeconds = timer.targetSeconds;
+    }
+
+
     public boolean next(){
         isStarted = true;
         seconds += Gdx.graphics.getDeltaTime();
