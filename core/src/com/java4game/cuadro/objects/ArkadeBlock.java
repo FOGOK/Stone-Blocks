@@ -38,7 +38,6 @@ public class ArkadeBlock {
     private boolean updScoreFirstG[] = new boolean[30];
     private PosF updScorePosF[] = new PosF[30];
     private int countUpdateScoreNow;
-
     ///
 
     private float posYStar;
@@ -46,15 +45,18 @@ public class ArkadeBlock {
     private boolean showAnimation, updateScoreAnimation;
     private int endLevelFaza;
 
+    private boolean simplify;
+
     private Interpolation updateScoreAnimateInter = Interpolation.elasticOut, showAnimateInter = Interpolation.pow3Out, updScoreInter = Interpolation.linear;
     private float interpTimer, interpMax = 1.2f;
 
-    public ArkadeBlock(int currentStar) {
+    public ArkadeBlock(int currentStar, boolean simplify) {
         this.currentStar = currentStar;
+        this.simplify = simplify;
         initStar();
         initScoreText();
         initUpdScoreAnimation();
-        initBlinks(currStar);
+        initBlinks();
     }
 
     private void initUpdScoreAnimation(){
@@ -84,7 +86,7 @@ public class ArkadeBlock {
         scoreText.setPositionToCenter();
     }
 
-    private void initBlinks(Sprite currStar){
+    private void initBlinks(){
         blinks = new Blink[5];
 
         float xDifference = (currStar.getScaleX() - 1f) / 2f * currStar.getWidth();
@@ -150,7 +152,7 @@ public class ArkadeBlock {
             else{
                 if (endLevelFaza == 1){
                     interpTimer = interpMax;
-                    initBlinks(currStar);
+                    initBlinks();
                     endLevelFaza = 2;
                 }
             }
@@ -217,6 +219,17 @@ public class ArkadeBlock {
                 countUpdateScoreNow--;
                 i--;
             }
+        }
+    }
+
+    public void setScore(int _score){
+        if (_score != score){
+            score = _score;
+            scoreText.setText(score + "");
+            updateScoreTextPosition();
+            updateScoreAnimation = true;
+            interpTimer = 0;
+            showAnimation = false;
         }
     }
 

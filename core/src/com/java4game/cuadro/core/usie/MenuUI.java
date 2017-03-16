@@ -10,6 +10,7 @@ import com.java4game.cuadro.core.TextureGen;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.CustomFormButton;
 import com.java4game.cuadro.core.uiwidgets.List;
+import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.SelectWorldButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
@@ -74,6 +75,7 @@ public class MenuUI {
     private Sprite backMain, /*upBarMenu, downBarMenu,*/ gameNameTex, selectStageText, bottomBar;
 
     private TypeGameButton bronzeB, silverB, goldB;
+    private RandomModeButton testButton;
 
     public static int MENUSTATE;
     public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2;
@@ -119,6 +121,7 @@ public class MenuUI {
 
         initSelectWorld(textureGen);
         initArkadeButtons();
+        initRandomButtons();
 
         initStepsList();
         initTimedList();
@@ -189,6 +192,17 @@ public class MenuUI {
         goldB.setLocked(Prefers.getInt(Prefers.KeyOpenedArkadeModes) < 2);
         goldB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f);
         goldB.setPositionToCenter();
+    }
+
+    private void initRandomButtons(){
+        testButton = new RandomModeButton(Gm.WIDTH / 2f, Gm.HEIGHT / 2f, 25, 26, 0);
+        refreshRandomButtons();
+    }
+
+    private void refreshRandomButtons(){
+        testButton.setLocked(false);
+        testButton.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f);
+        testButton.setPositionToCenter();
     }
 
     private void setMainVars(){
@@ -518,9 +532,6 @@ public class MenuUI {
                     }
                 }
 
-
-
-
                 break;
             case SELECTWORLD:
                 backMain.draw(batch);
@@ -538,6 +549,7 @@ public class MenuUI {
                     setStepsListProporties();
                     setTimedListProporties();
                     refreshArkadeButtons();
+                    refreshRandomButtons();
                 }
 
                 for (int i = 0; i < flyingGlasses.length; i++) {
@@ -575,6 +587,9 @@ public class MenuUI {
                         bronzeB.draw(batch);
                         silverB.draw(batch);
                         goldB.draw(batch);
+                        break;
+                    case TYPE_RANDOM:
+                        testButton.draw(batch);
                         break;
                 }
 

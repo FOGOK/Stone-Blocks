@@ -78,6 +78,7 @@ public class MainBlock extends FieldObject{
         switch (SELECTED_BTN) {
             case TYPE_STEPS:
             case TYPE_ARKADE:
+            case TYPE_RANDOM:
                 setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
                 break;
             case TYPE_TIMED:
@@ -161,6 +162,8 @@ public class MainBlock extends FieldObject{
     private void setTeleport(int dir, boolean isRevers, int offset){
         this.isRevers = isRevers;
 
+        blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
+
         boolean isSetOffset = offset != -1;
         teleportAlpha = 0f;
 
@@ -194,8 +197,6 @@ public class MainBlock extends FieldObject{
                 }
                 break;
         }
-
-        blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
     }
 
     public void randomTeleport(){

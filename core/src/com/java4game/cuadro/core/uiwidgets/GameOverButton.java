@@ -49,7 +49,8 @@ public class GameOverButton extends BaseButton {
     protected void activateAction() {
         if (action == ButtonActions.All.NEXT_LEVEL_ACT){
             if (StageButton.LEVEL != MenuUI.COUNTSTAGESINWORLD[TypeGameButton.TOUCHED_B]){
-                StageButton.LEVEL++;
+                if (StageButton.LEVEL != StageButton.RANDOM_LEVEL)
+                    StageButton.LEVEL++;
                 super.activateAction();
                 LevelGen.REFRESH_REFRESH = true;
             }else

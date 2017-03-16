@@ -27,19 +27,20 @@ public class GameOverUI {
     private Sprite blackSprite, arkadeWinSprite;
     private float sizeStar, ySquare;
     private TextBlock loseWinText, arkadeRecord;
-    private boolean isWin, isArkade;
+    private boolean isWin;
+    private int mode;
 
     private GameOverButton nextLevelB, mainMenuB, restartB;
 
     private Interpolation showRecord = Interpolation.swingOut;
 
-    public GameOverUI(float sizeStar, float ySquare, boolean isArkade) {
+    public GameOverUI(float sizeStar, float ySquare, int mode) {
         this.sizeStar = sizeStar;
         this.ySquare = ySquare;
-        this.isArkade = isArkade;
+        this.mode = mode;
 
-        if (isArkade){
-            arkadeWinSprite = Assets.getNewSprite(62);
+        if (mode > 0){
+            arkadeWinSprite = Assets.getNewSprite(mode == 1 ? 62 : 63);
             float sizeArkWinSprite = 1.8f;
             arkadeWinSprite.setSize(sizeArkWinSprite, sizeArkWinSprite);
             arkadeWinSprite.setOriginCenter();
@@ -89,16 +90,26 @@ public class GameOverUI {
         loseWinText.setPositionToCenter();
     }
 
-    public void setScoreText(int scoreText){
-        this.isWin = false;
+    public void setScoreText(int scoreText, boolean isWin){
+        this.isWin = isWin;
         loseWinText.setText(scoreText + "");
         loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
         loseWinText.setPositionToCenter();
     }
 
+    private int specialText = 0;
+
+    public void setSpecialText(int specialText) {
+        this.specialText = specialText;
+    }
+
     public void setRecord(boolean isNewRecord){
         if (isNewRecord){
-            arkadeRecord.setText("NEW RECORD: " + loseWinText.getText() + "!");
+            if (mode == 1)
+                arkadeRecord.setText("NEW RECORD: " + loseWinText.getText() + "!");
+            else
+                arkadeRecord.setText("GAMES PLAYED: " + specialText);
+
         }else{
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
@@ -134,17 +145,22 @@ public class GameOverUI {
         if (isWin){
             nextLevelB.setAlpha(alpha);
             nextLevelB.draw(batch);
+            if (mode == 2)
+                topInfShow(batch, alpha);
         }else{
             restartB.setAlpha(alpha);
             restartB.draw(batch);
-            if (isArkade){
-                arkadeWinSprite.setScale(showRecord.apply(0, 1f, alpha / 1f));
-                arkadeWinSprite.setRotation(showRecord.apply(0, 360, alpha / 1f));
-                arkadeWinSprite.draw(batch, alpha);
-                arkadeRecord.setAlpha(alpha);
-                arkadeRecord.draw(batch);
-            }
+            if (mode == 1)
+                topInfShow(batch, alpha);
         }
+    }
+
+    private void topInfShow(SpriteBatch batch, float alpha){
+        arkadeWinSprite.setScale(showRecord.apply(0, 1f, alpha / 1f));
+        arkadeWinSprite.setRotation(showRecord.apply(0, 360, alpha / 1f));
+        arkadeWinSprite.draw(batch, alpha);
+        arkadeRecord.setAlpha(alpha);
+        arkadeRecord.draw(batch);
     }
 
     private void handleTime(){

@@ -19,7 +19,7 @@ public class TypeGameBottomBar extends BaseObject {
     private TypeGameButton tgButtons[];
 
 
-    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1, TYPE_ARKADE = 2;
+    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1, TYPE_ARKADE = 2, TYPE_RANDOM = 3, TYPE_STATS = 4;
 
     private MenuUI menuUI;
 

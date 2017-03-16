@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
+import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
@@ -21,8 +22,11 @@ import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 
+import java.util.Random;
+
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_ARKADE;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_RANDOM;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
@@ -45,7 +49,7 @@ public class LevelGen {
     private Rectangle fieldBounds;
     private Sprite background, field;
 
-    private boolean ISARKADE;
+    private boolean ISARKADE, ISRANDOM;
 
     public static boolean REFRESH_REFRESH;
     public static boolean ISGAMEOVER;
@@ -68,9 +72,11 @@ public class LevelGen {
     private MenuUI menuUI;
 
     private InitLevels.Level levelTEST;
+    private Random rnd = new Random();
 
     public LevelGen(MenuUI menuUI) {
         ISARKADE = StageButton.ARKADE_LEVEL == StageButton.LEVEL;
+        ISRANDOM = StageButton.RANDOM_LEVEL == StageButton.LEVEL;
 
         //инициализируем фон
         this.menuUI = menuUI;
@@ -90,7 +96,8 @@ public class LevelGen {
                     background = Assets.getNewSprite(currLevel.getBackgroundColor());
                     break;
                 case TYPE_ARKADE:
-                    background = Assets.getNewSprite(0);
+                case TYPE_RANDOM:
+                    background = Assets.getNewSprite(rnd.nextBoolean() ? 0 : (2 + rnd.nextInt(4)));
                     break;
             }
         }
@@ -109,7 +116,13 @@ public class LevelGen {
 
         ///инициализируем кубик и устанавливаем размер кубика
         mainBlock = new MainBlock(this, Assets.getNewSprite(12), fieldBounds);
-        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, currLevel, ISARKADE);
+        int mode = 0;
+        if (ISARKADE)
+            mode = 1;
+        else if (ISRANDOM)
+            mode = 2;
+
+        blockGenerator = new BlockGenerator(this, mainBlock, fieldBounds, currLevel, mode);
         mainBlock.setBlockGenerator(blockGenerator);
         //
 
@@ -134,7 +147,7 @@ public class LevelGen {
 //                break;
 //        }
         flyingStage = new FlyingStage(true);
-        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor, ISARKADE);
+        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor, mode);
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
         //
@@ -149,14 +162,21 @@ public class LevelGen {
                 starSize = timerBlock.getStarSize();
                 break;
             case TYPE_ARKADE:
-                arkadeBlock = new ArkadeBlock(TypeGameButton.TOUCHED_ARK);
+                arkadeBlock = new ArkadeBlock(TypeGameButton.TOUCHED_ARK, false);
+                arkadeBlock.showAnimate();
+                blockGenerator.setArkadeBlock(arkadeBlock);
+                starSize = arkadeBlock.getStarSize();
+                break;
+            case TYPE_RANDOM:
+                arkadeBlock = new ArkadeBlock(2, true);
+                arkadeBlock.setScore(blockGenerator.getFieldObjectsSize() / 2);
                 arkadeBlock.showAnimate();
                 blockGenerator.setArkadeBlock(arkadeBlock);
                 starSize = arkadeBlock.getStarSize();
                 break;
         }
 
-        gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), ISARKADE);
+        gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), mode);
 
         final float sizePauseBtn = 2.3f;
         restartButton = new RestartButton(ButtonActions.All.RESTART_PAUSE_ACTION, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
@@ -313,7 +333,6 @@ public class LevelGen {
                     }
                     break;
                 case TYPE_TIMED:
-
                     if (ISGAMEOVER){
                         timerBlock.draw(batch); //текст
                         gameOverUI.drawBack(batch);     //чёрная подложка
@@ -328,6 +347,7 @@ public class LevelGen {
 
                     break;
                 case TYPE_ARKADE:
+                case TYPE_RANDOM:
                     if (ISGAMEOVER){
                         gameOverUI.drawBack(batch);     //чёрная подложка
                         arkadeBlock.drawStar(batch);     //звезда
@@ -378,7 +398,7 @@ public class LevelGen {
     }
 
     public void win(int LEVEL){
-
+        int scoreText = 0;
         if (!MenuUI.TEST){
 
             int curStar = 1;
@@ -424,11 +444,39 @@ public class LevelGen {
                         }
                     }
                     break;
+                case TYPE_RANDOM:
+                    switch (RandomModeButton.RNDLEVEL){
+                        case 0:
+                            scoreText = Prefers.getInt(Prefers.KeyRandomMode1) + 1;
+                            Prefers.putInt(Prefers.KeyRandomMode1, scoreText);
+                            break;
+                        case 1:
+                            scoreText = Prefers.getInt(Prefers.KeyRandomMode2) + 1;
+                            Prefers.putInt(Prefers.KeyRandomMode2, scoreText);
+                            break;
+                        case 2:
+                            scoreText = Prefers.getInt(Prefers.KeyRandomMode3) + 1;
+                            Prefers.putInt(Prefers.KeyRandomMode3, scoreText);
+                            break;
+                        case 3:
+                            scoreText = Prefers.getInt(Prefers.KeyRandomMode4) + 1;
+                            Prefers.putInt(Prefers.KeyRandomMode4, scoreText);
+                            break;
+                        case 4:
+                            scoreText = Prefers.getInt(Prefers.KeyRandomMode5) + 1;
+                            Prefers.putInt(Prefers.KeyRandomMode5, scoreText);
+                            break;
+                    }
+                    break;
             }
 
         }
 
         ISGAMEOVER = true;
+        if (ISRANDOM){
+            gameOverUI.setSpecialText(scoreText);
+            gameOverUI.setRecord(true);
+        }
         gameOverUI.setText(true);
     }
 
@@ -448,7 +496,7 @@ public class LevelGen {
 
     public void arkadeLose(int score, boolean isNewRecord){
         ISGAMEOVER = true;
-        gameOverUI.setScoreText(score);
+        gameOverUI.setScoreText(score, false);
         gameOverUI.setRecord(isNewRecord);
     }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
@@ -47,14 +48,14 @@ public class FlyingStage {
         numberT.setCustomCff(size * 0.3f);
     }
 
-    public void setNew(int level, Color color, boolean ISARKADE){
+    public void setNew(int level, Color color, int mode){
         flyingAnimatorFrom.resetTime();
         flyingAnimatorTo.resetTime();
         flyingAnimatorToTo.resetTime();
 
-        if (isStage){
-            if (ISARKADE){
-                String text = "";
+        if (mode > 0){
+            String text = "";
+            if (mode == 1){
                 switch (TypeGameButton.TOUCHED_ARK){
                     case 0:
                         text = "BRONZE";
@@ -66,22 +67,41 @@ public class FlyingStage {
                         text = "GOLD";
                         break;
                 }
-                stageT.setText(text);
-                stageT.setTextColor(color);
-
-                numberT.setText("ARKADE");
-                numberT.setTextColor(color);
-
-                stageT.setCustomCff(size * 0.25f);
-                numberT.setCustomCff(size * 0.25f);
             }else{
-                stageT.setText("STAGE");
-                stageT.setTextColor(color);
-
-                numberT.setText(level + "");
-                numberT.setTextColor(color);
+                switch (RandomModeButton.RNDLEVEL){
+                    case 0:
+                        text = "3X";
+                        break;
+                    case 1:
+                        text = "5X";
+                        break;
+                    case 2:
+                        text = "7X";
+                        break;
+                    case 3:
+                        text = "10X";
+                        break;
+                    case 4:
+                        text = "15X";
+                        break;
+                }
             }
+            stageT.setText(text);
+            stageT.setTextColor(color);
+
+            numberT.setText(mode == 1 ? "ARKADE" : "RANDOM");
+            numberT.setTextColor(color);
+
+            stageT.setCustomCff(size * 0.25f);
+            numberT.setCustomCff(size * 0.25f);
+        }else{
+            stageT.setText("STAGE");
+            stageT.setTextColor(color);
+
+            numberT.setText(level + "");
+            numberT.setTextColor(color);
         }
+
 
         setPositionX(Gm.WIDTH / 2f);
     }

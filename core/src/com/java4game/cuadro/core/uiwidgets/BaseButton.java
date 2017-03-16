@@ -132,7 +132,7 @@ abstract class BaseButton extends BaseObject{
     }
 
     protected void drawButtonTexture(SpriteBatch batch){      //отрисовываем тесктуру кнопки, в зависимости от того, нажата ли она или нет
-        Sprite drawingTexture = isTouched ? touchedTex : normalTex;
+        final Sprite drawingTexture = isTouched ? touchedTex : normalTex;
         drawingTexture.draw(batch);
     }
 
