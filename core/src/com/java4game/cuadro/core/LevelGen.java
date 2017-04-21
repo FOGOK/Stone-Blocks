@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
-import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
@@ -46,6 +45,7 @@ public class LevelGen {
 
     public static final int SQSIZE = 7;
     public static float backHDivH;
+
     private Rectangle fieldBounds;
     private Sprite background, field;
 
@@ -179,7 +179,7 @@ public class LevelGen {
         gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), mode);
 
         final float sizePauseBtn = 2.3f;
-        restartButton = new RestartButton(ButtonActions.All.RESTART_PAUSE_ACTION, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
+        restartButton = new RestartButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
         restartButton.setPositionToCenter();
         restartButton.completeX();
 
@@ -445,7 +445,7 @@ public class LevelGen {
                     }
                     break;
                 case TYPE_RANDOM:
-                    switch (RandomModeButton.RNDLEVEL){
+                    switch (TypeGameButton.RNDLEVEL){
                         case 0:
                             scoreText = Prefers.getInt(Prefers.KeyRandomMode1) + 1;
                             Prefers.putInt(Prefers.KeyRandomMode1, scoreText);
@@ -457,14 +457,6 @@ public class LevelGen {
                         case 2:
                             scoreText = Prefers.getInt(Prefers.KeyRandomMode3) + 1;
                             Prefers.putInt(Prefers.KeyRandomMode3, scoreText);
-                            break;
-                        case 3:
-                            scoreText = Prefers.getInt(Prefers.KeyRandomMode4) + 1;
-                            Prefers.putInt(Prefers.KeyRandomMode4, scoreText);
-                            break;
-                        case 4:
-                            scoreText = Prefers.getInt(Prefers.KeyRandomMode5) + 1;
-                            Prefers.putInt(Prefers.KeyRandomMode5, scoreText);
                             break;
                     }
                     break;
@@ -492,6 +484,10 @@ public class LevelGen {
         else if (mode == 2)
             arkadeNewRecord.startT("WOOW", "MAX!!!");
 
+    }
+
+    public Rectangle getFieldBounds() {
+        return fieldBounds;
     }
 
     public void arkadeLose(int score, boolean isNewRecord){

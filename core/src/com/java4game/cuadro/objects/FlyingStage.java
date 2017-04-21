@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
@@ -68,7 +67,7 @@ public class FlyingStage {
                         break;
                 }
             }else{
-                switch (RandomModeButton.RNDLEVEL){
+                switch (TypeGameButton.RNDLEVEL){
                     case 0:
                         text = "3X";
                         break;
@@ -77,12 +76,6 @@ public class FlyingStage {
                         break;
                     case 2:
                         text = "7X";
-                        break;
-                    case 3:
-                        text = "10X";
-                        break;
-                    case 4:
-                        text = "15X";
                         break;
                 }
             }

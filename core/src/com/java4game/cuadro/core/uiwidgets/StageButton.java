@@ -114,7 +114,7 @@ public class StageButton extends TextButton {
         if (action == ButtonActions.All.RESTART_PAUSE_ACTION){
             if (!isLockedStage){
                 super.draw(batch);
-                if (currentStar != StarBlock.Star.None){
+                if (starTexture != null){
                     starTexture.setPosition(completeTexture.getX() + completeTexture.getWidth() * 0.933f - starTexture.getWidth() / 2f,
                             completeTexture.getY() + completeTexture.getHeight() * 0.866f - starTexture.getWidth() / 2f);
                     starTexture.draw(batch);

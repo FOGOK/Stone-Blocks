@@ -14,6 +14,6 @@ public interface BaseDrawingObject {
     void setBounds(final float x, final float y, final float w, final float h);
     void setPosition(final float x, final float y);
     void setPositionToCenter();
-    void setPositionToCenter(float realWidth, float realHeight);
+    void setPositionToCenter(float realWidth, float realHeight, boolean reversX);
     Rectangle getBounds();
 }

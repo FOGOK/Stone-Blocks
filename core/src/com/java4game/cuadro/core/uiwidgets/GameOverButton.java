@@ -20,7 +20,7 @@ public class GameOverButton extends BaseButton {
         super(action, x, y, h, back, back);
         textBlock = new TextBlock(x + bounds.getWidth() / 2f, y - h * 0.35f, false, text);
         textBlock.setPositionToCenter();
-        textBlock.setCustomCff(h * 0.45f);
+        textBlock.setCustomCff(h * 0.35f);
     }
 
     @Override
@@ -83,5 +83,9 @@ public class GameOverButton extends BaseButton {
         }
         Sprite spr = isTouched ? touchedTex : normalTex;
         spr.setScale(btnScale);
+    }
+
+    public TextBlock getTextBlock() {
+        return textBlock;
     }
 }

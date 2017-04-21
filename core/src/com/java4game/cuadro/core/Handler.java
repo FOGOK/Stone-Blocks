@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.usie.GPauseUI;
 import com.java4game.cuadro.core.usie.MenuUI;
-import com.java4game.cuadro.core.usie.PauseUI;
-import com.java4game.cuadro.utils.Atalas;
+import com.java4game.cuadro.core.usie.TypeGameBottomBar;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:15.
@@ -22,10 +22,9 @@ public class Handler {
 
     public static boolean isBackPressed;
 
-    Atalas atls;
-
     //game
-    LevelGen levelGen;
+    private LevelGen levelGen;
+    private GPauseUI pauseUI;
 
     public static boolean ISPAUSE;
     public static boolean ISRESTART;
@@ -33,12 +32,10 @@ public class Handler {
 
     //ui
 //    GameUI gameUi;
-    PauseUI pauseUI;
+
     MenuUI menuUI;
     ///
 
-
-    TextureGen textureGen;
     public static State state;
 
     public enum State{
@@ -51,17 +48,16 @@ public class Handler {
         ISPAUSE = ISRESTART = false;
 
         isBackPressed = false;
-        atls = new Atalas();
-        textureGen = new TextureGen(atls);
-//        gameUi = new GameUI(textureGen);
-        pauseUI = new PauseUI(textureGen);
-        menuUI = new MenuUI(textureGen);
+        menuUI = new MenuUI();
         if (!MenuUI.TEST)
             state = State.Menu;
         else{
+            TypeGameBottomBar.SELECTED_BTN = TypeGameBottomBar.TYPE_STEPS;
             state = State.Game;
-            StageButton.LEVEL = -1;
+            StageButton.LEVEL = 2;
             levelGen = new LevelGen(menuUI);
+            pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
+
         }
 
 //        state = State.Game;
@@ -100,11 +96,12 @@ public class Handler {
 
     public void restart(){
         levelGen = new LevelGen(menuUI);
+        if (pauseUI == null)
+            pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
         ISRESTART = false;
     }
 
     public void dispose() {
-        atls.dispose();
         menuUI.dispose();
 //        gameUi.dispose();
         if (levelGen != null)

@@ -24,7 +24,7 @@ public class RestartButton extends BaseButton{
         setFirstTexture(first);
         setSecondTexture(second);
 
-        icon = Assets.getNewSprite(56);
+        icon = Assets.getNewSprite(37);
         final float size = h * 0.42f;
         icon.setFlip(false, false);
         icon.setSize(size, size);

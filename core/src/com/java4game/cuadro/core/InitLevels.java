@@ -107,19 +107,20 @@ public class InitLevels {
 
     private static Level stepsLevels[], timeLevels[];
 
-    static {
-        stepsLevels = new Level[STEPS_LEVELS];
-        InitStepsLevels.init(stepsLevels);
-
-        timeLevels = new Level[TIME_LEVELS];
-        InitTimeLevels.init(timeLevels);
-    }
 ///whoH =
     public static Level getStepsLevels(int level){
+        if (stepsLevels == null){
+            stepsLevels = new Level[STEPS_LEVELS];
+            InitStepsLevels.init(stepsLevels);
+        }
         return stepsLevels[level];
     }
 
     public static Level getTimeLevels(int level) {
+        if (timeLevels == null){
+            timeLevels = new Level[TIME_LEVELS];
+            InitTimeLevels.init(timeLevels);
+        }
         return timeLevels[level];
     }
 

@@ -21,8 +21,10 @@ public abstract class BaseObject implements BaseDrawingObject{
     }
 
     @Override
-    public void setPositionToCenter(float realWidth, float realHeight) {
-        setPosition(bounds.x - realWidth / 2f, bounds.y - realHeight / 2f);
+    public void setPositionToCenter(float width, float height, boolean reversX) {
+        float revX = 0f;
+        if (reversX) revX = width - bounds.width;
+        setPosition(revX + bounds.x - width / 2f, bounds.y - height / 2f);
     }
 
     @Override

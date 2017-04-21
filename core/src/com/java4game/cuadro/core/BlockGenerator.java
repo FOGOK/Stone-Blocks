@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.uiwidgets.RandomModeButton;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.ArkadeBlock;
@@ -24,20 +23,8 @@ import com.java4game.cuadro.utils.Prefers;
 import java.util.Random;
 
 import static com.java4game.cuadro.core.uiwidgets.StageButton.LEVEL;
-import static com.java4game.cuadro.objects.FieldObject.BLOCK;
-import static com.java4game.cuadro.objects.FieldObject.BOMB;
-import static com.java4game.cuadro.objects.FieldObject.BOOSTER;
-import static com.java4game.cuadro.objects.FieldObject.HOLE;
-import static com.java4game.cuadro.objects.FieldObject.NULLTYPE;
-import static com.java4game.cuadro.objects.FieldObject.REVERS;
-import static com.java4game.cuadro.objects.FieldObject.ROTATE90;
-import static com.java4game.cuadro.objects.FieldObject.ROTATEM90;
-import static com.java4game.cuadro.objects.FieldObject.SLOWER;
-import static com.java4game.cuadro.objects.FieldObject.TELEPORT;
-import static com.java4game.cuadro.objects.MainBlock.BOTTOM;
-import static com.java4game.cuadro.objects.MainBlock.LEFT;
-import static com.java4game.cuadro.objects.MainBlock.RIGHT;
-import static com.java4game.cuadro.objects.MainBlock.TOP;
+import static com.java4game.cuadro.objects.FieldObject.*;
+import static com.java4game.cuadro.objects.MainBlock.*;
 
 /**
  * Created by FOGOK on 03.01.2017 15:59.
@@ -200,7 +187,7 @@ public class BlockGenerator {
         }else{
             if (ISRANDOM){
                 int objectsCount = 0;
-                switch (RandomModeButton.RNDLEVEL){
+                switch (TypeGameButton.RNDLEVEL){
                     case 0:
                         objectsCount = 6;
                         break;
@@ -209,12 +196,6 @@ public class BlockGenerator {
                         break;
                     case 2:
                         objectsCount = 14;
-                        break;
-                    case 3:
-                        objectsCount = 20;
-                        break;
-                    case 4:
-                        objectsCount = 30;
                         break;
                 }
 

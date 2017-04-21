@@ -1,5 +1,6 @@
 package com.java4game.cuadro.core.uiwidgets;
 
+import com.badlogic.gdx.Gdx;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
@@ -19,11 +20,24 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE, START_LEARN
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE, START_LEARN,
+        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, CHECKBOXCLICK_AUTORIZETOSTART
     }
 
     public static void activateAction(All action){
         switch (action){
+            case CHECKBOXCLICK_AUTORIZETOSTART:
+
+                break;
+            case OPEN_ACHIEVEMENTS:
+
+                break;
+            case OPEN_LIDERBOARD:
+
+                break;
+            case OPEN_SITE:
+                Gdx.net.openURI("http://www.java4game.net");
+                break;
             case START_RANDOM_MODE:
                 LevelGen.REFRESH_REFRESH = true;
                 Handler.ISRESTART = true;
@@ -125,6 +139,10 @@ public class ButtonActions {
                 break;
             case INFO_ACT:
                 MusicCore.playSound(7);
+                MenuUI.MENUSTATE = MenuUI.INFORMATION;
+                break;
+            case BACK_TO_MAIN_SCREEN:
+                MenuUI.MENUSTATE = MenuUI.GAMEMAIN;
                 break;
 
             case SETTINGS_PAUSE_ACTION:

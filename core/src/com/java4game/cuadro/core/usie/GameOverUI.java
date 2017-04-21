@@ -63,18 +63,36 @@ public class GameOverUI {
         final float sizeB = sizeStar / 2f;
 
         mainMenuB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.TOMAINMENU_PAUSE_ACTION,
-                (Gm.WIDTH - sizeStar) / 2f,
-                ySquare / 2f,   sizeB, 57, "MENU");
-        mainMenuB.setPositionToCenter();
+                0f, 0f, sizeB, 57, "MENU");
 
         nextLevelB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.NEXT_LEVEL_ACT,
-                (Gm.WIDTH - sizeStar) / 2f + sizeStar,
-                ySquare / 2f,   sizeB, 58, "NEXT");
-        nextLevelB.setPositionToCenter();
+                0f, 0f, sizeB, 58, "NEXT");
 
         restartB = new GameOverButton(ButtonActions.All.RESTART_PAUSE_ACTION,
-                (Gm.WIDTH - sizeStar) / 2f + sizeStar,
-                ySquare / 2f,   sizeB, 56, "RESTART");
+                0f, 0f, sizeB, 87, "RESTART");
+    }
+
+    private void setLose(){
+        mainMenuB.setPosition((Gm.WIDTH - sizeStar) / 2f,
+                ySquare / 2f);
+        restartB.setPosition((Gm.WIDTH - sizeStar) / 2f + sizeStar,
+                ySquare / 2f);
+        mainMenuB.setPositionToCenter();
+        restartB.setPositionToCenter();
+    }
+
+    private void setWin(){
+        final float otst = sizeStar * 0.8f;
+        final float sizeB = restartB.getHeight();
+
+        restartB.setPosition((Gm.WIDTH - sizeB) / 2f - otst + sizeB / 2f,
+                ySquare / 2f);
+        mainMenuB.setPosition((Gm.WIDTH - sizeB) / 2f + sizeB / 2f,
+                ySquare / 2f);
+        nextLevelB.setPosition((Gm.WIDTH - sizeB) / 2f + otst + sizeB / 2f,
+                ySquare / 2f);
+        mainMenuB.setPositionToCenter();
+        nextLevelB.setPositionToCenter();
         restartB.setPositionToCenter();
     }
 
@@ -85,6 +103,7 @@ public class GameOverUI {
 
     public void setText(boolean isWin){
         this.isWin = isWin;
+        if (isWin) setWin(); else setLose();
         loseWinText.setText(isWin ? "WIN" : "LOSE");
         loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
         loseWinText.setPositionToCenter();
@@ -92,6 +111,7 @@ public class GameOverUI {
 
     public void setScoreText(int scoreText, boolean isWin){
         this.isWin = isWin;
+        if (isWin) setWin(); else setLose();
         loseWinText.setText(scoreText + "");
         loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
         loseWinText.setPositionToCenter();
@@ -148,11 +168,11 @@ public class GameOverUI {
             if (mode == 2)
                 topInfShow(batch, alpha);
         }else{
-            restartB.setAlpha(alpha);
-            restartB.draw(batch);
             if (mode == 1)
                 topInfShow(batch, alpha);
         }
+        restartB.setAlpha(alpha);
+        restartB.draw(batch);
     }
 
     private void topInfShow(SpriteBatch batch, float alpha){

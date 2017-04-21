@@ -19,7 +19,7 @@ public class TypeGameBottomBar extends BaseObject {
     private TypeGameButton tgButtons[];
 
 
-    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1, TYPE_ARKADE = 2, TYPE_RANDOM = 3, TYPE_STATS = 4;
+    public static final int TYPE_STEPS = 0, TYPE_TIMED = 1, TYPE_ARKADE = 2, TYPE_RANDOM = 3, TYPE_RECORDS = 4;
 
     private MenuUI menuUI;
 
@@ -32,7 +32,7 @@ public class TypeGameBottomBar extends BaseObject {
         final float cellW = Gm.WIDTH / btnsCount;
         for (int i = 0; i < tgButtons.length; i++) {
             tgButtons[i] = new TypeGameButton(ButtonActions.All.CHANGE_GAME_MODE,
-                    cellW * i + cellW / 2f, h / 2f, h / 2f, 41 + i, i, true);
+                    cellW * i + cellW / 2f, h / 2f, h / 2f, 41 + i, i, true, false);
             tgButtons[i].setPositionToCenter();
         }
     }
