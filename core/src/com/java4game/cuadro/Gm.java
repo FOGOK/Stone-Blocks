@@ -120,7 +120,7 @@ public class Gm extends ApplicationAdapter {
             handler.draw(batch);
         }else{
             float sizeW = Gm.WIDTH * 0.8f;
-            float sizeH = sizeW * 1.42f;
+            float sizeH = sizeW * 1.095f;
             batch.draw(startTexture, (Gm.WIDTH - sizeW) / 2f, (Gm.HEIGHT - sizeH) / 2f, sizeW, sizeH);
             if (!isFirstIter)
                 isFirstIter = true;

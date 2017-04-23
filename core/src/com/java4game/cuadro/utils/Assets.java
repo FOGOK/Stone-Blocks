@@ -11,22 +11,27 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public class Assets {
 
-    private static TextureAtlas textureAtlas;
+    private static TextureAtlas textureAtlasObjects, textureAtlasBacks;
 
     public static void init(){
-        textureAtlas = new TextureAtlas("textures/720/720.atlas");
+        textureAtlasObjects = new TextureAtlas("textures/720/720.atlas");
+        textureAtlasBacks = new TextureAtlas("textures/720/backs.atlas");
     }
 
     public static Sprite getNewSprite(int who){
-        return new Sprite(textureAtlas.findRegion(String.valueOf(who)));
+        if (who < 6 || who == 29)
+            return new Sprite(textureAtlasBacks.findRegion(String.valueOf(who)));
+        else
+            return new Sprite(textureAtlasObjects.findRegion(String.valueOf(who)));
     }
 
     public static TextureAtlas getTextureAtlas() {
-        return textureAtlas;
+        return textureAtlasObjects;
     }
 
     public static void dispose(){
-        textureAtlas.dispose();
+        textureAtlasObjects.dispose();
+        textureAtlasBacks.dispose();
     }
 
 }
