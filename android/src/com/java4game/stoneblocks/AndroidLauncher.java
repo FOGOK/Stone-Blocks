@@ -34,7 +34,7 @@ public class AndroidLauncher extends AndroidApplication implements IServices, Ga
     public void onBackPressed(){
         if (Handler.state != Handler.State.Menu)
             Handler.isBackPressed = true;
-        else if (MenuUI.MENUSTATE == MenuUI.SELECTSTAGE)
+        else if (MenuUI.MENUSTATE == MenuUI.SELECTSTAGE || MenuUI.MENUSTATE == MenuUI.INFORMATION)
             MenuUI.MENUSTATE = MenuUI.GAMEMAIN;
         else
             super.onBackPressed();

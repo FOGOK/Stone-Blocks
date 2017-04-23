@@ -1,14 +1,17 @@
 package com.java4game.cuadro.core.uiwidgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.FloatAnimator;
 import com.java4game.cuadro.utils.Timer;
 
 import java.util.Random;
@@ -22,6 +25,7 @@ public class RobotHead {
     private float sizeText;
     private Rectangle textAreaBounds;
     private GlyphLayout glyphLayout = new GlyphLayout();
+    private FloatAnimator headAnimation;
 
     private Timer timer;
 
@@ -46,6 +50,9 @@ public class RobotHead {
 
         timer = new Timer(1.3f);
 
+        headAnimation = new FloatAnimator();
+        headAnimation.setInterpolation(Interpolation.pow5);
+
         setPositionY(y);
     }
 
@@ -67,6 +74,8 @@ public class RobotHead {
 
         leftEave.setPosition(head.getX() + head.getWidth() * 0.049f, head.getY() + head.getHeight() * 0.251f);
         rightEave.setPosition(head.getX() + head.getWidth() * 0.514f, head.getY() + head.getHeight() * 0.215f);
+
+        headAnimation.setFrom(-head.getWidth()).setTo(head.getX()).setAnimationTime(1f);
     }
 
     public void setText(String text, float sizeText){
@@ -76,25 +85,34 @@ public class RobotHead {
         glyphLayout.setText(UI.getContentFont(), text, Color.valueOf("323232"), textAreaBounds.getWidth(), Align.center, true);
     }
 
+    public void resetAnim(){
+        headAnimation.resetTime();
+    }
+
     public void draw(SpriteBatch batch){
+        head.setX(headAnimation.current);
         head.draw(batch);
-        dialogCover.draw(batch);
-        UI.setCff(false, sizeText);
-        UI.getContentFont().draw(batch, glyphLayout, textAreaBounds.getX(), textAreaBounds.getY() + (textAreaBounds.getHeight() + glyphLayout.height) / 2f);
+        headAnimation.update(Gdx.graphics.getDeltaTime());
 
-        if (timer.next()) {
-            if (isEyesClosed){
-                timer.reset(rnd.nextInt(20) / 10f);
-                isEyesClosed = false;
-            }else{
-                timer.reset(0.2f);
-                isEyesClosed = true;
+        if (!headAnimation.isNeedToUpdate()){
+            dialogCover.draw(batch);
+            UI.setCff(false, sizeText);
+            UI.getContentFont().draw(batch, glyphLayout, textAreaBounds.getX(), textAreaBounds.getY() + (textAreaBounds.getHeight() + glyphLayout.height) / 2f);
+
+            if (timer.next()) {
+                if (isEyesClosed){
+                    timer.reset(rnd.nextInt(20) / 10f);
+                    isEyesClosed = false;
+                }else{
+                    timer.reset(0.2f);
+                    isEyesClosed = true;
+                }
             }
-        }
 
-        if (isEyesClosed){
-            leftEave.draw(batch);
-            rightEave.draw(batch);
+            if (isEyesClosed){
+                leftEave.draw(batch);
+                rightEave.draw(batch);
+            }
         }
     }
 

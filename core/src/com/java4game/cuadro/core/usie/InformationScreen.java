@@ -50,6 +50,10 @@ public class InformationScreen {
 
     }
 
+    public void reset(){
+        robotHead.resetAnim();
+    }
+
     private void initTextBlocks(){
         UI.setCff(false, sizeText * 2f);
         gameName.setText(UI.getContentFont(), text1, Color.valueOf("323232"), 0, Align.center, false);

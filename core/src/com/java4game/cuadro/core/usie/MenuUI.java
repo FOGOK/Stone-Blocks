@@ -450,6 +450,8 @@ public class MenuUI {
         backMain.setSize(Gm.WIDTH, Gm.WIDTH * (1f / wDivH));
         backMain.setPosition(0f, (Gm.HEIGHT - backMain.getHeight()) / 2f);
     }
+
+    private int lastMenuState, lastSelectedBtn;
     public void draw(SpriteBatch batch){
         int dstFunc;
         int srcFunc;
@@ -588,6 +590,13 @@ public class MenuUI {
 
                 break;
         }
+
+        if (lastMenuState != MENUSTATE || lastSelectedBtn != SELECTED_BTN){
+            robotHead.resetAnim();
+            informationScreen.reset();
+        }
+        lastMenuState = MENUSTATE;
+        lastSelectedBtn = SELECTED_BTN;
 
 
 //        upBarMenu.draw(batch);
