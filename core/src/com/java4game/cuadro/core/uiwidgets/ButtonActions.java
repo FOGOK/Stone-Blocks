@@ -136,6 +136,7 @@ public class ButtonActions {
                 break;
             case QUESTION_ACT:
                 MusicCore.playSound(7);
+                MenuUI.MENUSTATE = MenuUI.TRAINING;
                 break;
             case INFO_ACT:
                 MusicCore.playSound(7);

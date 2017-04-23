@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
+import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GameOverUI;
@@ -49,6 +50,8 @@ public class LevelGen {
     private Rectangle fieldBounds;
     private Sprite background, field;
 
+    private RobotHead robotHead;
+
     private boolean ISARKADE, ISRANDOM;
 
     public static boolean REFRESH_REFRESH;
@@ -58,7 +61,6 @@ public class LevelGen {
 
     private MainBlock mainBlock;
     private BlockGenerator blockGenerator;
-
 
     //ui
     private FlyingStage flyingStage, arkadeNewRecord;
@@ -166,6 +168,8 @@ public class LevelGen {
                 arkadeBlock.showAnimate();
                 blockGenerator.setArkadeBlock(arkadeBlock);
                 starSize = arkadeBlock.getStarSize();
+                robotHead = new RobotHead(0f);
+                blockGenerator.setRobotHead(robotHead);
                 break;
             case TYPE_RANDOM:
                 arkadeBlock = new ArkadeBlock(2, true);
@@ -362,6 +366,8 @@ public class LevelGen {
                             Handler.ISPAUSE = arkadeNewRecord.isShow();
                         }
                     }
+                    if (SELECTED_BTN == TYPE_ARKADE)
+                        robotHead.draw(batch);
                     break;
             }
 

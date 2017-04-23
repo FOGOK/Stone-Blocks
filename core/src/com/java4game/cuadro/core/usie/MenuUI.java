@@ -1,13 +1,10 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.Align;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.CustomFormButton;
@@ -24,8 +21,6 @@ import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
 import com.java4game.cuadro.utils.Prefers;
-
-import java.util.Random;
 
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
 
@@ -68,7 +63,7 @@ public class MenuUI {
     public static final int[] COUNTSTAGESINWORLD = new int[] {102, 22, 30, 30, 30};
     ///
 
-    private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
+//    private SelectWorldButton[] selectWorldButtons = new SelectWorldButton[5];
 //    private TextButton startButton;
     private CustomFormButton startButton, infoButton, qButton;
     private Sprite backMain, /*upBarMenu, downBarMenu,*/ gameNameTex, selectStageText, bottomBar;
@@ -76,11 +71,12 @@ public class MenuUI {
     private TypeGameButton bronzeB, silverB, goldB, normalB, hardB, extremeB;
 
     public static int MENUSTATE;
-    public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2, INFORMATION = 3;
+    public static final int GAMEMAIN = 0, SELECTWORLD = 1, SELECTSTAGE = 2, INFORMATION = 3, TRAINING = 4;
 
     private float sizeTopT;
 
     private InformationScreen informationScreen;
+    private TrainingScreen trainingScreen;
 
     private FlyingGlass[] flyingGlasses;
 
@@ -109,7 +105,7 @@ public class MenuUI {
             objectAnimations[i].setTimer((5f + 0.5f * i) / 10f);
         }
 
-        initInformationScreen();
+        initInformationAndTrainingScreens();
         setMainVars();
 
         setSelectStageTextAndBottomBar();
@@ -137,8 +133,9 @@ public class MenuUI {
         recordsScreen = new RecordsScreen(typeGameBottomBar.getBounds().height, selectStageText.getY());
     }
 
-    private void initInformationScreen(){
+    private void initInformationAndTrainingScreens(){
         informationScreen = new InformationScreen();
+        trainingScreen = new TrainingScreen();
     }
 
     private void initTypeGameBottomBar(){
@@ -498,15 +495,15 @@ public class MenuUI {
                 }
 
                 break;
-            case SELECTWORLD:
-                backMain.draw(batch);
-                starIco.draw(batch);
-                starsText.draw(batch);
-
-                for (int i = 0; i < selectWorldButtons.length; i++)
-                    selectWorldButtons[i].draw(batch);
-
-                break;
+//            case SELECTWORLD:
+//                backMain.draw(batch);
+//                starIco.draw(batch);
+//                starsText.draw(batch);
+//
+//                for (int i = 0; i < selectWorldButtons.length; i++)
+//                    selectWorldButtons[i].draw(batch);
+//
+//                break;
             case SELECTSTAGE:
                 if (SETSTAGEPROP){
                     SETSTAGEPROP = false;
@@ -588,6 +585,30 @@ public class MenuUI {
 
                 informationScreen.draw(batch);
 
+                break;
+            case TRAINING:
+
+                for (int i = 0; i < flyingGlasses.length; i++) {
+                    flyingGlasses[i].draw(batch);
+                }
+
+                batch.end();
+
+                srcFunc = batch.getBlendSrcFunc();
+                dstFunc = batch.getBlendDstFunc();
+
+                batch.enableBlending();
+                batch.begin();
+
+                batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
+
+                backMain.draw(batch);
+
+                batch.end();
+                batch.begin();
+                batch.setBlendFunction(srcFunc, dstFunc);
+
+                trainingScreen.draw(batch);
                 break;
         }
 

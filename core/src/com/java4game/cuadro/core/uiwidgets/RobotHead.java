@@ -50,9 +50,6 @@ public class RobotHead {
 
         timer = new Timer(1.3f);
 
-        headAnimation = new FloatAnimator();
-        headAnimation.setInterpolation(Interpolation.pow5);
-
         setPositionY(y);
     }
 
@@ -60,11 +57,13 @@ public class RobotHead {
         return head.getY() + head.getHeight();
     }
 
+    private float dialogCoverX;
     public void setPositionY(float y){
-        float dialogCoverX = head.getWidth() * 0.864f;
-        float sizeWidth = dialogCoverX + dialogCover.getWidth();
+        dialogCoverX = head.getWidth() * 0.864f;
 
-        head.setPosition((Gm.WIDTH - sizeWidth) / 2f, y);
+        head.setY(y);
+        refreshHeadAnim();
+
         dialogCover.setPosition(head.getX() + dialogCoverX, y);
 
         textAreaBounds.setPosition(dialogCover.getX() + dialogCover.getWidth() * 0.11f, dialogCover.getY() + dialogCover.getHeight() * 0.159f);
@@ -74,27 +73,66 @@ public class RobotHead {
 
         leftEave.setPosition(head.getX() + head.getWidth() * 0.049f, head.getY() + head.getHeight() * 0.251f);
         rightEave.setPosition(head.getX() + head.getWidth() * 0.514f, head.getY() + head.getHeight() * 0.215f);
-
-        headAnimation.setFrom(-head.getWidth()).setTo(head.getX()).setAnimationTime(1f);
     }
 
-    public void setText(String text, float sizeText){
+    private void refreshHeadAnim(){
+        setPositionHead(head.getY());
+        headAnimation = new FloatAnimator();
+        headAnimation.setInterpolation(Interpolation.pow5);
+        headAnimation.setFrom(-head.getWidth()).setCurrentFrom().setTo(head.getX()).setAnimationTime(1f).setNeedToUpdate(true).setRevers(false);
+    }
+
+    private void setPositionHead(float y){
+        float sizeWidth = dialogCoverX + dialogCover.getWidth();
+        head.setPosition((Gm.WIDTH - sizeWidth) / 2f, y);
+    }
+
+    public RobotHead setText(String text, float sizeText){
         this.text = text;
         this.sizeText = sizeText;
         UI.setCff(false, sizeText);
         glyphLayout.setText(UI.getContentFont(), text, Color.valueOf("323232"), textAreaBounds.getWidth(), Align.center, true);
+        return this;
     }
 
     public void resetAnim(){
+        isShow = true;
+        isTimered = false;
         headAnimation.resetTime();
     }
 
+    private boolean isTimered;
+    private Timer showingTimer;
+    public void showInTimered(float showTime){
+        isTimered = true;
+        isShow = true;
+        showingTimer = new Timer(showTime);
+        refreshHeadAnim();
+    }
+
+    private boolean isShow;
+
     public void draw(SpriteBatch batch){
+        if (!isShow)
+            return;
+
         head.setX(headAnimation.current);
         head.draw(batch);
-        headAnimation.update(Gdx.graphics.getDeltaTime());
 
         if (!headAnimation.isNeedToUpdate()){
+
+            if (isTimered){
+                if (headAnimation.isRevers()){
+                    isShow = false;
+                    return;
+                }
+
+                if (showingTimer.next())
+                    headAnimation.revers();
+            }
+
+
+
             dialogCover.draw(batch);
             UI.setCff(false, sizeText);
             UI.getContentFont().draw(batch, glyphLayout, textAreaBounds.getX(), textAreaBounds.getY() + (textAreaBounds.getHeight() + glyphLayout.height) / 2f);
@@ -114,6 +152,8 @@ public class RobotHead {
                 rightEave.draw(batch);
             }
         }
+
+        headAnimation.update(Math.min(Gdx.graphics.getDeltaTime(), 0.016f));
     }
 
     private boolean isEyesClosed;

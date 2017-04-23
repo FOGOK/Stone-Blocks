@@ -45,7 +45,12 @@ public class FloatAnimator {
         resetTime();
     }
 
-    public FloatAnimator setFrom( final float from ) {
+    public FloatAnimator setCurrentFrom() {
+        this.current = from;
+        return this;
+    }
+
+    public FloatAnimator setFrom(final float from ) {
         current = from;
         this.from = from;
         return this;
@@ -78,7 +83,7 @@ public class FloatAnimator {
         return resetTime(true);
     }
 
-    private FloatAnimator resetTime(boolean resetRevers){
+    public FloatAnimator resetTime(boolean resetRevers){
         time = 0.0f;
         timer = 0f;
         current = from;
@@ -126,16 +131,24 @@ public class FloatAnimator {
 
 
         if ( !isNeedToUpdate() ) {
-            float ffrom = from;
-            from = to;
-            to = ffrom;
-            current = from;
-            resetTime(false);
-            isRevers = !isRevers;
+            revers();
             return true;
         }
 
         return false;
+    }
+
+    public void setRevers(boolean revers) {
+        isRevers = revers;
+    }
+
+    public void revers(){
+        float ffrom = from;
+        from = to;
+        to = ffrom;
+        current = from;
+        resetTime(false);
+        isRevers = !isRevers;
     }
 
     public float getProgress(){
@@ -146,8 +159,9 @@ public class FloatAnimator {
         return isRevers;
     }
 
-    public void setNeedToUpdate(boolean needToUpdate) {
+    public FloatAnimator setNeedToUpdate(boolean needToUpdate) {
         this.needToUpdate = needToUpdate;
+        return this;
     }
 
     public boolean isNeedToUpdate() {

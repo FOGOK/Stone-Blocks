@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.ArkadeBlock;
@@ -40,6 +41,8 @@ public class BlockGenerator {
     private Rectangle mainBlockBounds, stackedTrain, dotq;
     private int stackedCount;
     private MainBlock mainBlock;
+
+    private RobotHead robotHead;
 
     private float cornTrainX, cornTrainY;
 
@@ -239,6 +242,10 @@ public class BlockGenerator {
                 calculateCountMinSteps();
             }
         }
+    }
+
+    public void setRobotHead(RobotHead robotHead) {
+        this.robotHead = robotHead;
     }
 
     public void refreshArkObjects(){
@@ -586,15 +593,20 @@ public class BlockGenerator {
                         }
                         int mult = 0;
                         if (mainBlock.isRotated() && mainBlock.isBoost()){
+
+                            robotHead.setText("OHHH, GOD. 4X!!!", 0.7f).showInTimered(1f);
+
                             scoreUp *= 4;
                             if (((Block)fieldObjects[i]).getType() == 2)
                                 levelGen.flyTextPls(2);
                             mult = 3;
                         }else if (mainBlock.isBoost()){
+                            robotHead.setText("OHHH, GOD. 2X!!!", 0.7f).showInTimered(1f);
                             scoreUp *= 2;
                             mult = 1;
                         }
                         else if (mainBlock.isRotated()){
+                            robotHead.setText("OHHH, GOD. 3X!!!", 0.7f).showInTimered(1f);
                             scoreUp *= 3;
                             mult = 2;
                         }
