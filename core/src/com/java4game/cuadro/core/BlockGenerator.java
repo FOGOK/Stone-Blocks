@@ -493,7 +493,7 @@ public class BlockGenerator {
                         case SLOWER:
                             mainBlock.setSlow();
 
-                            robotHead.setText("LOL, SLOW!", 1.3f).showInTimered(1f);
+                            robotHead.setText("LOL, SLOW!", 0.8f).showInTimered(1f);
 
                             arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
@@ -563,9 +563,9 @@ public class BlockGenerator {
                                 levelGen.addSecondsToTimerArcade(30f);
                                 arkadeBlock.updateScore(100, 9, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
-                                robotHead.setText("SUPER BONUS!!!", 1.3f).showInTimered(1f);
+                                robotHead.setText("SUPER BONUS!!!", 0.8f).showInTimered(1f);
 
-                                ((TimerAddBlock)fieldObjects[i]).setShowing(false);
+                                ((MoverBonus)fieldObjects[i]).setShowing(false);
                             }
                             break;
                     }
