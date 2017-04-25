@@ -61,7 +61,7 @@ public class Handler {
         }
 
 //        state = State.Game;
-//        StageButton.LEVEL = 83;
+//        StageButton.LEVEL = StageButton.ARKADE_LEVEL;
 //        levelGen = new LevelGen(menuUI);
     }
 

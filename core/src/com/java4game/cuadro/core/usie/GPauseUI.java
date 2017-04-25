@@ -23,8 +23,9 @@ public class GPauseUI {
         final float otst = sizeStar * 0.8f;
         final Color textColor = Color.valueOf("323232");
 
-        blackScreen = new Sprite(GameUtils.generateBlackPic());
+        blackScreen = new Sprite(GameUtils.generateWhitePic());
         blackScreen.setSize(Gm.WIDTH, Gm.HEIGHT);
+        blackScreen.setColor(Color.BLACK);
         blackScreen.setAlpha(0.3f);
 
         resumeB = new GameOverButton(ButtonActions.All.CONTINUE_PAUSE_ACTION,
@@ -48,7 +49,7 @@ public class GPauseUI {
         restartB.setPositionToCenter();
 
         textBlock = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT / 2f, false, "PAUSE");
-        textBlock.setCustomCff(1.4f);
+        textBlock.setCustomCff(0.8f);
         textBlock.setPositionToCenter();
         textBlock.setTextColor(textColor);
 
@@ -61,6 +62,7 @@ public class GPauseUI {
     public void draw(SpriteBatch batch){
         blackScreen.draw(batch);
         coverPause.draw(batch);
+        coverPause.draw(batch);//не баг, так надо 2 раза, чтобы
         textBlock.draw(batch);
         resumeB.draw(batch);
         menuB.draw(batch);

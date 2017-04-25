@@ -17,6 +17,7 @@ import com.java4game.cuadro.objects.MainBlock;
 import com.java4game.cuadro.objects.Revers;
 import com.java4game.cuadro.objects.Rotate90;
 import com.java4game.cuadro.objects.Teleport;
+import com.java4game.cuadro.objects.TimerAddBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Pos;
 import com.java4game.cuadro.utils.Prefers;
@@ -48,6 +49,7 @@ public class BlockGenerator {
 
     private int targetScore;
     private int oldRecord = 0;
+    private int counterBlocksDrivedOut = 0;
 
     private boolean isEndLevel;
 
@@ -93,9 +95,8 @@ public class BlockGenerator {
 
         isEndLevel = false;
 
-
         if (ISARKADE){
-            int arkObjectsSize = 5;
+            int arkObjectsSize = 6;
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
                     arkadeCubesAndHolesSize = 2;//2
@@ -126,7 +127,29 @@ public class BlockGenerator {
             //randomize arkadeAndRandomPositions
             arkadeAndRandomPositions = new Pos[fieldObjects.length];
             for (int i = 0; i < fieldObjects.length; i++) {
-                setValRandomPos();
+//                switch (i){
+//                    case 4:
+//                        arkadeVal.set(2, 1);
+//                        break;
+//                    case 5:
+//                        arkadeVal.set(2, 2);
+//                        break;
+//                    case 6:
+//                        arkadeVal.set(2, 3);
+//                        break;
+//                    case 7:
+//                        arkadeVal.set(2, 4);
+//                        break;
+//                    case 8:
+//                        arkadeVal.set(2, 5);
+//                        break;
+//                    case 9:
+//                        arkadeVal.set(2, 6);
+//                        break;
+//                    default:
+                        setValRandomPos();
+//                        break;
+//                }
                 arkadeAndRandomPositions[i] = new Pos(arkadeVal);
             }
             ///
@@ -145,6 +168,7 @@ public class BlockGenerator {
             types[index++] = rnd.nextBoolean() ? ROTATE90 : ROTATEM90;
             types[index++] = BOMB;
             types[index++] = TELEPORT;
+            types[index++] = TIMER_ADD;
 
             ///
 
@@ -159,7 +183,8 @@ public class BlockGenerator {
                                 fieldBounds, mainBlock, fieldObjects);
                         break;
                     case HOLE:
-                        color = rnd.nextInt(5);
+//                        color = rnd.nextInt(5);
+                        color = 2;
                         fieldObjects[i] = new Hole(Assets.getNewSprite(13 + color), fieldBounds,
                                 arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y, color);
                         break;
@@ -183,6 +208,9 @@ public class BlockGenerator {
                         break;
                     case TELEPORT:
                         fieldObjects[i] = new Teleport(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
+                        break;
+                    case TIMER_ADD:
+                        fieldObjects[i] = new TimerAddBlock(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
                         break;
                 }
             }
@@ -273,6 +301,9 @@ public class BlockGenerator {
 
                 refFiskCount = 0;
             }
+            if (counterBlocksDrivedOut > 0)
+                mainBlock.normalizeSpeed();
+            counterBlocksDrivedOut = 0;
         }
     }
 
@@ -438,15 +469,19 @@ public class BlockGenerator {
                     switch (fieldObjects[i].getTypeBlock()){
                         case BOOSTER:
                             mainBlock.setBoost();
-                            refFiskIndexes[refFiskCount] = i;
-                            refFiskCount++;
+
+                            updateArkadePositions();
+                            refreshOnePosition(i);
                             break;
                         case SLOWER:
                             mainBlock.setSlow();
-                            refFiskIndexes[refFiskCount] = i;
-                            refFiskCount++;
+
+                            robotHead.setText("LOL", 1.3f).showInTimered(1f);
 
                             arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+
+                            updateArkadePositions();
+                            refreshOnePosition(i);
                             break;
                         case REVERS:
                             mainBlock.specialRevers();
@@ -491,10 +526,18 @@ public class BlockGenerator {
 
                             break;
                         case BOMB:
-                            levelGen.arkadeLose(arkadeBlock.getScore(), isNewRecord);
+                            levelGen.arkadeLose();
                             break;
                         case TELEPORT:
                             mainBlock.randomTeleport();
+                            updateArkadePositions();
+                            refreshOnePosition(i);
+                            break;
+                        case TIMER_ADD:
+                            levelGen.addSecondsToTimerArcade(5f);
+
+                            refFiskIndexes[refFiskCount] = i;
+                            refFiskCount++;
                             break;
                     }
                 }
@@ -558,6 +601,7 @@ public class BlockGenerator {
     }
 
     public void clearStacked(float x, float y){
+        int timeredStackedCount = stackedCount;
         stackedCount = 0;
         isCleanedCollision = false;
         stackedTrain.set(mainBlockBounds);
@@ -591,31 +635,47 @@ public class BlockGenerator {
                                 scoreUp = 15;
                                 break;
                         }
-                        int mult = 0;
+
+                        counterBlocksDrivedOut++;
+                        boolean isManyBlocks = counterBlocksDrivedOut > 1 || timeredStackedCount > 1;
+                        int mult = 0, realMult = 0;
                         if (mainBlock.isRotated() && mainBlock.isBoost()){
 
-                            robotHead.setText("OHHH, GOD. 4X!!!", 0.7f).showInTimered(1f);
+                            robotHead.setText("OHHH, GOD. 4X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.5f).showInTimered(1f);
 
                             scoreUp *= 4;
+                            realMult = 4;
                             if (((Block)fieldObjects[i]).getType() == 2)
                                 levelGen.flyTextPls(2);
                             mult = 3;
                         }else if (mainBlock.isBoost()){
-                            robotHead.setText("OHHH, GOD. 2X!!!", 0.7f).showInTimered(1f);
                             scoreUp *= 2;
+                            realMult = 2;
                             mult = 1;
+                            robotHead.setText("2X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
                         }
                         else if (mainBlock.isRotated()){
-                            robotHead.setText("OHHH, GOD. 3X!!!", 0.7f).showInTimered(1f);
                             scoreUp *= 3;
+                            realMult = 3;
                             mult = 2;
+                            robotHead.setText("3X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
                         }
 
+                        if (isManyBlocks){
+                            scoreUp *= 2;
+                            int whX = realMult != 0 ? realMult * counterBlocksDrivedOut * 2 : counterBlocksDrivedOut * 2;
+                            robotHead.showInTimered(1f).setText(whX + "X!!! TOTAL SCORE:", scoreUp, true, 0.7f);
+                        }
 
                         arkadeBlock.updateScore(scoreUp, ((Block)fieldObjects[i]).getType(), mult,
                                                             fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
-                        mainBlock.normalizeSpeed();
+                        if (arkadeBlock.getScore() >= 100)
+                            robotHead.setText("WOW! Already 100 points", 0.5f).showInTimered(2f);
+                        else if (arkadeBlock.getScore() >= 1000)
+                            robotHead.setText("WOW! Already 1000 points", 0.5f).showInTimered(2f);
+                        else if (arkadeBlock.getScore() >= 10000)
+                            robotHead.setText("Oh, My GOD!!! Already 10000 points.", 0.3f).showInTimered(2f);
 
                         inspectUpdatedScore();
                         if (isNewRecord){
@@ -735,6 +795,10 @@ public class BlockGenerator {
         if (!result){
             isCleanedCollision = true;
         }
+    }
+
+    public boolean isNewRecord() {
+        return isNewRecord;
     }
 
     private boolean isCornered(float offset){   //если при следующей итерации мы выходим за край, тогда возвращаем тру, иначе фолс

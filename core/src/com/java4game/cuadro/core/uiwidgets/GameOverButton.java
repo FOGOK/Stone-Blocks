@@ -15,12 +15,18 @@ import com.java4game.cuadro.core.usie.MenuUI;
 public class GameOverButton extends BaseButton {
 
     private TextBlock textBlock;
-    private float offsetY;
+    private float scale;
     public GameOverButton(ButtonActions.All action, float x, float y, float h, int back, String text) {//info
         super(action, x, y, h, back, back);
         textBlock = new TextBlock(x + bounds.getWidth() / 2f, y - h * 0.35f, false, text);
         textBlock.setPositionToCenter();
         textBlock.setCustomCff(h * 0.35f);
+        scale = 1f;
+    }
+
+    @Override
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     @Override
@@ -82,7 +88,8 @@ public class GameOverButton extends BaseButton {
                 btnScale = 1f;
         }
         Sprite spr = isTouched ? touchedTex : normalTex;
-        spr.setScale(btnScale);
+        float scl = isTouched ? btnScale : scale;
+        spr.setScale(scl);
     }
 
     public TextBlock getTextBlock() {

@@ -6,50 +6,50 @@ filter: Nearest,Nearest
 repeat: none
 0
   rotate: false
-  xy: 2, 163
-  size: 468, 832
-  orig: 468, 832
+  xy: 2, 176
+  size: 504, 896
+  orig: 504, 896
   offset: 0, 0
   index: -1
 1
   rotate: false
-  xy: 2, 997
-  size: 671, 671
-  orig: 671, 671
+  xy: 2, 1074
+  size: 722, 722
+  orig: 722, 722
   offset: 0, 0
   index: -1
 2
   rotate: false
-  xy: 675, 836
-  size: 468, 832
-  orig: 468, 832
+  xy: 726, 900
+  size: 504, 896
+  orig: 504, 896
   offset: 0, 0
   index: -1
 29
   rotate: false
-  xy: 1412, 391
-  size: 469, 443
-  orig: 469, 443
+  xy: 1520, 421
+  size: 505, 477
+  orig: 505, 477
   offset: 0, 0
   index: -1
 3
   rotate: false
-  xy: 1145, 836
-  size: 468, 832
-  orig: 468, 832
+  xy: 1232, 900
+  size: 504, 896
+  orig: 504, 896
   offset: 0, 0
   index: -1
 4
   rotate: false
-  xy: 472, 2
-  size: 468, 832
-  orig: 468, 832
+  xy: 508, 2
+  size: 504, 896
+  orig: 504, 896
   offset: 0, 0
   index: -1
 5
   rotate: false
-  xy: 942, 2
-  size: 468, 832
-  orig: 468, 832
+  xy: 1014, 2
+  size: 504, 896
+  orig: 504, 896
   offset: 0, 0
   index: -1

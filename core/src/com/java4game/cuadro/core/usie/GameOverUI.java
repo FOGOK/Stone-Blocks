@@ -1,11 +1,11 @@
 package com.java4game.cuadro.core.usie;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
-import com.java4game.cuadro.core.BlockGenerator;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
@@ -53,7 +53,8 @@ public class GameOverUI {
 
         time = allTime;
         time2 = allTime2;
-        blackSprite = new Sprite(GameUtils.generateBlackPic());
+        blackSprite = new Sprite(GameUtils.generateWhitePic());
+        blackSprite.setColor(Color.BLACK);
         blackSprite.setSize(Gm.WIDTH, Gm.HEIGHT);
         initLoseWinText();
         initButtons();
@@ -202,6 +203,6 @@ public class GameOverUI {
     }
 
     public void dispose(){
-        blackSprite.getTexture().dispose();
+
     }
 }

@@ -1,21 +1,25 @@
 package com.java4game.cuadro.core.usie;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Align;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.FloatAnimator;
 
 public class InformationScreen {
 
     private GameOverButton backB, openSite;
     private RobotHead robotHead;
     private Sprite cover;
+    private FloatAnimator floatAnimator;
 
     private float sizeText = 0.47f;
     private static final String text1 = "BLOCK MOVER";
@@ -24,6 +28,8 @@ public class InformationScreen {
                                         "PROGRAMMING: OLEG KARLOVSKIY\n" +
                                         "MORE GAMES HERE:";
     private GlyphLayout gameName = new GlyphLayout(), contentText = new GlyphLayout();
+
+
     public InformationScreen() {
         float sizeB = 1.5f;
         backB = new GameOverButton(ButtonActions.All.BACK_TO_MAIN_SCREEN,
@@ -48,6 +54,7 @@ public class InformationScreen {
         robotHead = new RobotHead(cover.getY() + cover.getHeight());
         robotHead.setText("Hello!!! My name is mover", 0.7f);
 
+        floatAnimator = new FloatAnimator(1f, 1.2f, 0.3f, Interpolation.pow3);
     }
 
     public void reset(){
@@ -66,6 +73,9 @@ public class InformationScreen {
         robotHead.draw(batch);
         cover.draw(batch);
         drawText(batch);
+
+        floatAnimator.updateLoop(Gdx.graphics.getDeltaTime());
+        openSite.setScale(floatAnimator.current);
         openSite.draw(batch);
     }
 

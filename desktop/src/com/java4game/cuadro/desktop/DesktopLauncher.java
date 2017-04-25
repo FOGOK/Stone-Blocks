@@ -35,9 +35,8 @@ public class DesktopLauncher {
         config.resizable = false;
 
         if (Oleg){
-            //            config.width = 450;
+//            config.width = 450;
 //            config.height = 600;
-//            config.y = 768 / 2 - 20 - config.height / 2;
             config.width = 360;
             config.height = 640;
             config.y = 768 / 2 - 20 - config.height / 2;

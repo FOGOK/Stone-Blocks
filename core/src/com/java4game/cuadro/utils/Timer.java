@@ -24,6 +24,13 @@ public class Timer {
         targetSeconds = timer.targetSeconds;
     }
 
+    public void setCurrentSeconds(float seconds) {
+        this.seconds = seconds;
+    }
+
+    public void appendTargetSeconds(float targetSeconds) {
+        this.targetSeconds += targetSeconds;
+    }
 
     public boolean next(){
         isStarted = true;

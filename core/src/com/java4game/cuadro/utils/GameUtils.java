@@ -16,12 +16,16 @@ import com.java4game.cuadro.core.usie.UI;
 public class GameUtils {
 
 
-    public static Texture generateBlackPic(){
-        Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 1f);
-        pixmap.fillRectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
+    private static Texture texture;
+
+    public static Texture generateWhitePic(){
+        if (texture == null){
+            Pixmap pixmap = new Pixmap(50, 50, Pixmap.Format.RGBA8888);
+            pixmap.setColor(1f, 1f, 1f, 1f);
+            pixmap.fillRectangle(0, 0, 50, 50);
+            texture = new Texture(pixmap);
+            pixmap.dispose();
+        }
         return texture;
     }
 
@@ -56,6 +60,13 @@ public class GameUtils {
         //////                      \/start value to scale 0.33f, then optimal effect
         FINAL_FONT_SCALE = fontCff * 0.33f * heightCff;
         ///
+    }
+
+    public static void dispose(){
+        if (texture != null){
+            texture.dispose();
+            texture = null;
+        }
     }
 
 

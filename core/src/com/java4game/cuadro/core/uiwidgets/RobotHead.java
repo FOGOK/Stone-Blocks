@@ -28,6 +28,7 @@ public class RobotHead {
     private FloatAnimator headAnimation;
 
     private Timer timer;
+    private int appendedNumber;
 
     public RobotHead(float y) {
         sizeH = Gm.WIDTH * 0.32f;
@@ -78,8 +79,10 @@ public class RobotHead {
     private void refreshHeadAnim(){
         setPositionHead(head.getY());
         headAnimation = new FloatAnimator();
-        headAnimation.setInterpolation(Interpolation.pow5);
-        headAnimation.setFrom(-head.getWidth()).setCurrentFrom().setTo(head.getX()).setAnimationTime(1f).setNeedToUpdate(true).setRevers(false);
+        headAnimation.setInterpolation(Interpolation.pow5)
+                .setFrom(-head.getWidth())
+                .setTo(head.getX())
+                .setAnimationTime(0.3f);
     }
 
     private void setPositionHead(float y){
@@ -88,10 +91,19 @@ public class RobotHead {
     }
 
     public RobotHead setText(String text, float sizeText){
+        return setText(text, -1, false, sizeText);
+    }
+
+    public RobotHead setText(String text, int number, boolean isAppend, float sizeText){
         this.text = text;
         this.sizeText = sizeText;
+        if (isAppend)
+            appendedNumber += number;
+        String textFinal = text;
+        if (number != -1)
+            textFinal += " " + appendedNumber;
         UI.setCff(false, sizeText);
-        glyphLayout.setText(UI.getContentFont(), text, Color.valueOf("323232"), textAreaBounds.getWidth(), Align.center, true);
+        glyphLayout.setText(UI.getContentFont(), textFinal, Color.valueOf("323232"), textAreaBounds.getWidth(), Align.center, true);
         return this;
     }
 
@@ -103,11 +115,17 @@ public class RobotHead {
 
     private boolean isTimered;
     private Timer showingTimer;
-    public void showInTimered(float showTime){
-        isTimered = true;
-        isShow = true;
-        showingTimer = new Timer(showTime);
-        refreshHeadAnim();
+    public RobotHead showInTimered(float showTime){
+        if (!isShow || headAnimation.isRevers()){
+            appendedNumber = 0;
+            isTimered = true;
+            isShow = true;
+            showingTimer = new Timer(0);
+            refreshHeadAnim();
+        }
+        showingTimer.setCurrentSeconds(0f);
+        showingTimer.appendTargetSeconds(showTime);
+        return this;
     }
 
     private boolean isShow;
@@ -130,6 +148,7 @@ public class RobotHead {
                 if (showingTimer.next())
                     headAnimation.revers();
             }
+
 
 
 

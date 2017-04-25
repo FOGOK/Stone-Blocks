@@ -200,6 +200,7 @@ public class Gm extends ApplicationAdapter {
 	@Override
 	public void dispose () {
         UI.dispose();
+        GameUtils.dispose();
         batch.dispose();
         debugBatch.dispose();
         handler.dispose();

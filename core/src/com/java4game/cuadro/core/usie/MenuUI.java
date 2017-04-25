@@ -220,19 +220,19 @@ public class MenuUI {
 
     private void refreshRandomButtons(){
         normalB.setText("NORMAL");
-        normalB.setText2(Prefers.getInt(Prefers.KeyRandomMode1) + "");
+        normalB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode1));
         normalB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode1Opened, false));
         normalB.setPosition(Gm.WIDTH / 2f, startPos + otstRandButtons * 1.2f);
         normalB.setPositionToCenter();
 
         hardB.setText("HARD");
-        hardB.setText2(Prefers.getInt(Prefers.KeyRandomMode2) + "");
+        hardB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode2));
         hardB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode2Opened, false));
         hardB.setPosition(Gm.WIDTH / 2f, startPos);
         hardB.setPositionToCenter();
 
         extremeB.setText("EXTREME");
-        extremeB.setText2(Prefers.getInt(Prefers.KeyRandomMode3) + "");
+        extremeB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode3));
         extremeB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode3Opened, false));
         extremeB.setPosition(Gm.WIDTH / 2f, startPos - otstRandButtons * 1.2f);
         extremeB.setPositionToCenter();

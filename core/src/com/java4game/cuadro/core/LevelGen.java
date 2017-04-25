@@ -17,6 +17,7 @@ import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.ArkadeBlock;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
+import com.java4game.cuadro.objects.TimerInArcade;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.utils.Assets;
@@ -51,6 +52,7 @@ public class LevelGen {
     private Sprite background, field;
 
     private RobotHead robotHead;
+    private TimerInArcade timerInArcade;
 
     private boolean ISARKADE, ISRANDOM;
 
@@ -170,6 +172,8 @@ public class LevelGen {
                 starSize = arkadeBlock.getStarSize();
                 robotHead = new RobotHead(0f);
                 blockGenerator.setRobotHead(robotHead);
+                float otst = 0.3f;
+                timerInArcade = new TimerInArcade(this, field.getX(), field.getY() + fieldSize + otst, fieldSize, robotHead);
                 break;
             case TYPE_RANDOM:
                 arkadeBlock = new ArkadeBlock(2, true);
@@ -316,8 +320,7 @@ public class LevelGen {
             }
 
             blockGenerator.drawHoles(batch);
-            if (gameTransparency != 1f)
-                mainBlock.setAlpha(gameTransparency);
+            mainBlock.setAlpha(gameTransparency);
 
             mainBlock.draw(batch);
             blockGenerator.draw(batch);
@@ -372,11 +375,20 @@ public class LevelGen {
             }
 
             restartButton.drawIcon(batch);
+            if (timerInArcade != null){
+                timerInArcade.setAlpha(gameTransparency);
+                timerInArcade.draw(batch, true);
+            }
         }
         flyingStage.drawText(batch);
         if (arkadeNewRecord != null)
             arkadeNewRecord.drawText(batch);
 
+
+    }
+
+    public void addSecondsToTimerArcade(float timeToAdd){
+        timerInArcade.addTime(timeToAdd);
     }
 
     public void refreshStars(){
@@ -496,10 +508,10 @@ public class LevelGen {
         return fieldBounds;
     }
 
-    public void arkadeLose(int score, boolean isNewRecord){
+    public void arkadeLose(){
         ISGAMEOVER = true;
-        gameOverUI.setScoreText(score, false);
-        gameOverUI.setRecord(isNewRecord);
+        gameOverUI.setScoreText(arkadeBlock.getScore(), false);
+        gameOverUI.setRecord(blockGenerator.isNewRecord());
     }
 
     public void dispose(){
