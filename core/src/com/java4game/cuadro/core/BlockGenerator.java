@@ -96,7 +96,7 @@ public class BlockGenerator {
         isEndLevel = false;
 
         if (ISARKADE){
-            int arkObjectsSize = 6;
+            int arkObjectsSize = 5;
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
                     arkadeCubesAndHolesSize = 2;//2
@@ -168,7 +168,7 @@ public class BlockGenerator {
             types[index++] = rnd.nextBoolean() ? ROTATE90 : ROTATEM90;
             types[index++] = BOMB;
             types[index++] = TELEPORT;
-            types[index++] = TIMER_ADD;
+//            types[index++] = TIMER_ADD;
 
             ///
 
@@ -183,8 +183,8 @@ public class BlockGenerator {
                                 fieldBounds, mainBlock, fieldObjects);
                         break;
                     case HOLE:
-//                        color = rnd.nextInt(5);
-                        color = 2;
+                        color = rnd.nextInt(5);
+//                        color = 2;
                         fieldObjects[i] = new Hole(Assets.getNewSprite(13 + color), fieldBounds,
                                 arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y, color);
                         break;
@@ -210,7 +210,7 @@ public class BlockGenerator {
                         fieldObjects[i] = new Teleport(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
                         break;
                     case TIMER_ADD:
-                        fieldObjects[i] = new TimerAddBlock(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
+//                        fieldObjects[i] = new TimerAddBlock(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
                         break;
                 }
             }
@@ -621,18 +621,23 @@ public class BlockGenerator {
                         switch (((Block)fieldObjects[i]).getType()){
                             case 0: //blue
                                 scoreUp = 25;
+                                levelGen.addSecondsToTimerArcade(8f);
                                 break;
                             case 1: //green
                                 scoreUp = 20;
+                                levelGen.addSecondsToTimerArcade(6f);
                                 break;
                             case 2: //red
                                 scoreUp = 30;
+                                levelGen.addSecondsToTimerArcade(10f);
                                 break;
                             case 3: //white
                                 scoreUp = 10;
+                                levelGen.addSecondsToTimerArcade(2f);
                                 break;
                             case 4: //yellow
                                 scoreUp = 15;
+                                levelGen.addSecondsToTimerArcade(4f);
                                 break;
                         }
 
