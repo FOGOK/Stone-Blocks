@@ -22,7 +22,7 @@ import static com.java4game.cuadro.core.LevelGen.ISGAMEOVER;
 public class TimerInArcade extends BaseObject{
 
     private Sprite cover, content;
-    private TextBlock timerSeconds;
+    private TextBlock timerSeconds, timeText, minOneText;
 
     private float allSeconds = 60f;
     private float currentSeconds;
@@ -46,9 +46,21 @@ public class TimerInArcade extends BaseObject{
         content.setOrigin(0f, 0f);
         content.setColor(Color.WHITE);
 
+        float textSize = cover.getHeight() * 1.3f;
         timerSeconds = new TextBlock(0f, 0f,
-                false, allSeconds + "");
-        timerSeconds.setCustomCff(cover.getHeight() * 1.3f);
+                false, (allSeconds - 1) + "");
+        timerSeconds.setCustomCff(textSize);
+
+        float otst = 0.15f;
+        timeText = new TextBlock(0f, 0f, false, "TIME");
+        timeText.setCustomCff(textSize);
+        timeText.setPosition(getBounds().getX(), getBounds().getY() + getBounds().getHeight() + otst);
+
+        minOneText = new TextBlock(0f, 0f, false, "1 MIN");
+        minOneText.setCustomCff(textSize);
+        minOneText.setPosition(getBounds().getX() + getBounds().getWidth() - minOneText.getBounds().getWidth(), getBounds().getY() + getBounds().getHeight() + otst);
+
+
         resetTime();
     }
 
@@ -78,12 +90,16 @@ public class TimerInArcade extends BaseObject{
         content.setAlpha(alpha);
         cover.setAlpha(alpha);
         timerSeconds.setAlpha(alpha);
+        timeText.setAlpha(alpha);
+        minOneText.setAlpha(alpha);
     }
 
     public void draw(SpriteBatch batch, boolean isHandle){
         content.draw(batch);
         cover.draw(batch);
         timerSeconds.draw(batch);
+        timeText.draw(batch);
+        minOneText.draw(batch);
         if (isHandle)
             handle();
     }

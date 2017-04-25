@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 public class FieldObject {
 
-    public static final int BLOCK = 0, HOLE = 1, BOOSTER = 2, SLOWER = 3, REVERS = 4, ROTATE90 = 5, ROTATEM90 = 6, BOMB = 7, NULLTYPE = 8, TELEPORT = 9, TIMER_ADD = 10;
+    public static final int BLOCK = 0, HOLE = 1, BOOSTER = 2, SLOWER = 3, REVERS = 4, ROTATE90 = 5, ROTATEM90 = 6, BOMB = 7, NULLTYPE = 8, TELEPORT = 9, TIMER_ADD = 10, MOVER_BONUS = 11;
 
     Sprite block;
     Rectangle blockBounds;

@@ -14,6 +14,7 @@ import com.java4game.cuadro.objects.BoosterSlower;
 import com.java4game.cuadro.objects.FieldObject;
 import com.java4game.cuadro.objects.Hole;
 import com.java4game.cuadro.objects.MainBlock;
+import com.java4game.cuadro.objects.MoverBonus;
 import com.java4game.cuadro.objects.Revers;
 import com.java4game.cuadro.objects.Rotate90;
 import com.java4game.cuadro.objects.Teleport;
@@ -96,7 +97,7 @@ public class BlockGenerator {
         isEndLevel = false;
 
         if (ISARKADE){
-            int arkObjectsSize = 5;
+            int arkObjectsSize = 7;
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
                     arkadeCubesAndHolesSize = 2;//2
@@ -168,7 +169,8 @@ public class BlockGenerator {
             types[index++] = rnd.nextBoolean() ? ROTATE90 : ROTATEM90;
             types[index++] = BOMB;
             types[index++] = TELEPORT;
-//            types[index++] = TIMER_ADD;
+            types[index++] = TIMER_ADD;
+            types[index++] = MOVER_BONUS;
 
             ///
 
@@ -210,7 +212,12 @@ public class BlockGenerator {
                         fieldObjects[i] = new Teleport(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
                         break;
                     case TIMER_ADD:
-//                        fieldObjects[i] = new TimerAddBlock(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
+                        fieldObjects[i] = new TimerAddBlock(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
+                        ((TimerAddBlock)fieldObjects[i]).setShowing(false);
+                        break;
+                    case MOVER_BONUS:
+                        fieldObjects[i] = new MoverBonus(fieldBounds, arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y);
+                        ((MoverBonus)fieldObjects[i]).setShowing(false);
                         break;
                 }
             }
@@ -301,8 +308,16 @@ public class BlockGenerator {
 
                 refFiskCount = 0;
             }
-            if (counterBlocksDrivedOut > 0)
+            if (counterBlocksDrivedOut > 0){
                 mainBlock.normalizeSpeed();
+                if (counterBlocksDrivedOut > 1 && rnd.nextBoolean()){
+                    for (int j = 0; j < fieldObjects.length; j++) {
+                        if (fieldObjects[j].getTypeBlock() == MOVER_BONUS)
+                            ((MoverBonus)fieldObjects[j]).setShowing(true);
+                    }
+                }
+
+            }
             counterBlocksDrivedOut = 0;
         }
     }
@@ -470,13 +485,15 @@ public class BlockGenerator {
                         case BOOSTER:
                             mainBlock.setBoost();
 
+                            robotHead.setText("BOOOST!", 1.3f).showInTimered(1f);
+
                             updateArkadePositions();
                             refreshOnePosition(i);
                             break;
                         case SLOWER:
                             mainBlock.setSlow();
 
-                            robotHead.setText("LOL", 1.3f).showInTimered(1f);
+                            robotHead.setText("LOL, SLOW!", 1.3f).showInTimered(1f);
 
                             arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
@@ -534,10 +551,22 @@ public class BlockGenerator {
                             refreshOnePosition(i);
                             break;
                         case TIMER_ADD:
-                            levelGen.addSecondsToTimerArcade(5f);
+                            if (((TimerAddBlock)fieldObjects[i]).isShowing()){
+                                levelGen.addSecondsToTimerArcade(20f);
+                                arkadeBlock.updateScore(1, 7, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
-                            refFiskIndexes[refFiskCount] = i;
-                            refFiskCount++;
+                                ((TimerAddBlock)fieldObjects[i]).setShowing(false);
+                            }
+                            break;
+                        case MOVER_BONUS:
+                            if (((MoverBonus)fieldObjects[i]).isShowing()){
+                                levelGen.addSecondsToTimerArcade(30f);
+                                arkadeBlock.updateScore(100, 9, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+
+                                robotHead.setText("SUPER BONUS!!!", 1.3f).showInTimered(1f);
+
+                                ((TimerAddBlock)fieldObjects[i]).setShowing(false);
+                            }
                             break;
                     }
                 }
@@ -672,15 +701,21 @@ public class BlockGenerator {
                             robotHead.showInTimered(1f).setText(whX + "X!!! TOTAL SCORE:", scoreUp, true, 0.7f);
                         }
 
+                        int lastScore = arkadeBlock.getScore();
                         arkadeBlock.updateScore(scoreUp, ((Block)fieldObjects[i]).getType(), mult,
                                                             fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
-                        if (arkadeBlock.getScore() >= 100)
-                            robotHead.setText("WOW! Already 100 points", 0.5f).showInTimered(2f);
-                        else if (arkadeBlock.getScore() >= 1000)
-                            robotHead.setText("WOW! Already 1000 points", 0.5f).showInTimered(2f);
-                        else if (arkadeBlock.getScore() >= 10000)
+                        if (arkadeBlock.getScore() >= 10000)
                             robotHead.setText("Oh, My GOD!!! Already 10000 points.", 0.3f).showInTimered(2f);
+                        else if (arkadeBlock.getScore() / 100 > lastScore / 100 && arkadeBlock.getScore() - lastScore < 100){
+
+                            robotHead.setText("Nice! Already " + arkadeBlock.getScore() + " points.", 0.6f).showInTimered(2f);
+
+                            for (int j = 0; j < fieldObjects.length; j++) {
+                                if (fieldObjects[j].getTypeBlock() == TIMER_ADD)
+                                    ((TimerAddBlock)fieldObjects[j]).setShowing(true);
+                            }
+                        }
 
                         inspectUpdatedScore();
                         if (isNewRecord){

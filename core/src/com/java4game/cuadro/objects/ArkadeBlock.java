@@ -21,7 +21,7 @@ import static com.java4game.cuadro.core.LevelGen.ISGAMEOVER;
 public class ArkadeBlock {
 
     private Sprite currStar;
-    private TextBlock scoreText;
+    private TextBlock scoreText, nameText;
     private Blink blinks[];
     private int score = 0;
     private int currentStar;
@@ -29,7 +29,7 @@ public class ArkadeBlock {
 
     //numbersUpdateScore
     private final static int updScoreCount = 9;
-    private Sprite updScoreText[] = new Sprite[updScoreCount];
+    private Sprite updScoreText[] = new Sprite[updScoreCount + 1];
     private Sprite updScoreMult[] = new Sprite[3];
 
     private Timer updScoreTimers[] = new Timer[30];
@@ -66,6 +66,10 @@ public class ArkadeBlock {
             updScoreText[i].setSize(size, size);
             updScoreText[i].setOriginCenter();
         }
+        updScoreText[updScoreText.length - 1] = Assets.getNewSprite(102); //todo: hardcode
+        updScoreText[updScoreText.length - 1].setSize(size, size);
+        updScoreText[updScoreText.length - 1].setOriginCenter();
+
         for (int i = 0; i < updScoreMult.length; i++) {
             updScoreMult[i] = Assets.getNewSprite(i + 84);
             updScoreMult[i].setSize(size, size);
@@ -74,6 +78,8 @@ public class ArkadeBlock {
     }
 
     private void initScoreText(){
+        nameText = new TextBlock(0f, 0f, true, "POINTS");
+        nameText.setCustomCff(currStar.getHeight() / 8f);
         scoreText = new TextBlock(0f, 0f, true, "0");
         scoreText.setCustomCff(currStar.getHeight() / 4f);
         updateScoreTextPosition();
@@ -84,6 +90,11 @@ public class ArkadeBlock {
         scoreText.setPosition(currStar.getX() + currStar.getWidth() / 2f,
                 posYStar + currStar.getHeight() / 2f);
         scoreText.setPositionToCenter();
+
+        nameText.setPosition(currStar.getX() + currStar.getWidth() / 2f,
+                posYStar + currStar.getHeight() / 2f);
+        nameText.setPositionToCenter();
+        nameText.setPosition(nameText.getBounds().getX(), scoreText.getBounds().getY() - nameText.getBounds().getHeight() - 0.2f);
     }
 
     private void initBlinks(){
@@ -176,13 +187,19 @@ public class ArkadeBlock {
         if (updateScoreAnimation || showAnimation){
             if (showAnimation){
                 scoreText.setAlpha(showAnimateInter.apply(0f, 1f, interpTimer / interpMax));
+                nameText.setAlpha(showAnimateInter.apply(0f, 1f, interpTimer / interpMax));
             }
             else{
                 scoreText.setAlpha(1f);
+                nameText.setAlpha(1f);
             }
         }else{
             scoreText.setAlpha(1f);
+            nameText.setAlpha(1f);
         }
+
+        nameText.setOffsetY(currStar.getY() - posYStar);
+        nameText.draw(batch);
 
         scoreText.setOffsetY(currStar.getY() - posYStar);
         scoreText.draw(batch);
@@ -225,7 +242,7 @@ public class ArkadeBlock {
     public void setScore(int _score){
         if (_score != score){
             score = _score;
-            scoreText.setText(score + "");
+            scoreText.setText("" + score);
             updateScoreTextPosition();
             updateScoreAnimation = true;
             interpTimer = 0;
@@ -235,7 +252,7 @@ public class ArkadeBlock {
 
     public void updateScore(int scoreP, int type, int mult, float x, float y){
         score += scoreP;
-        scoreText.setText(score + "");
+        scoreText.setText("" + score);
         updateScoreTextPosition();
         updateScoreAnimation = true;
         interpTimer = 0;

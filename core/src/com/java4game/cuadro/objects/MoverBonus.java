@@ -5,14 +5,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.utils.Assets;
 
 /**
- * Created by FOGOK on 25.04.2017 12:18.
+ * Created by FOGOK on 25.04.2017 16:41.
  */
 
-public class TimerAddBlock extends FieldObject {
+public class MoverBonus extends FieldObject {
 
     private boolean isShowing;
-    public TimerAddBlock(Rectangle fieldBounds, int x, int y) {
-        super(Assets.getNewSprite(100), fieldBounds, TIMER_ADD);
+    public MoverBonus(Rectangle fieldBounds, int x, int y) {
+        super(Assets.getNewSprite(101), fieldBounds, MOVER_BONUS);
         setSQPos(x, y);
     }
 
@@ -29,4 +29,6 @@ public class TimerAddBlock extends FieldObject {
         if (isShowing)
             super.draw(batch);
     }
+
+
 }

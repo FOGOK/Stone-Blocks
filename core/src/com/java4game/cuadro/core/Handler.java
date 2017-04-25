@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GPauseUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
@@ -57,12 +58,13 @@ public class Handler {
             StageButton.LEVEL = 2;
             levelGen = new LevelGen(menuUI);
             pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
-
         }
 
 //        state = State.Game;
 //        StageButton.LEVEL = StageButton.ARKADE_LEVEL;
+//        TypeGameButton.TOUCHED_ARK = 2;
 //        levelGen = new LevelGen(menuUI);
+//        pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
     }
 
     public void draw(SpriteBatch batch){
