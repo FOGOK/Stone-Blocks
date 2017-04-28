@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.core.DialogSystem;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
@@ -52,47 +53,58 @@ public class FlyingStage {
         flyingAnimatorTo.resetTime();
         flyingAnimatorToTo.resetTime();
 
-        if (mode > 0){
-            String text = "";
-            if (mode == 1){
-                switch (TypeGameButton.TOUCHED_ARK){
-                    case 0:
-                        text = "BRONZE";
-                        break;
-                    case 1:
-                        text = "SILVER";
-                        break;
-                    case 2:
-                        text = "GOLD";
-                        break;
-                }
-            }else{
-                switch (TypeGameButton.RNDLEVEL){
-                    case 0:
-                        text = "3X";
-                        break;
-                    case 1:
-                        text = "5X";
-                        break;
-                    case 2:
-                        text = "7X";
-                        break;
-                }
-            }
+        String text = "";
+
+        if (DialogSystem.ISLEARNING){
+            text = DialogSystem.LEARNING_PART == 0 ? "BASE" : "ARKADE";
             stageT.setText(text);
             stageT.setTextColor(color);
 
-            numberT.setText(mode == 1 ? "ARKADE" : "RANDOM");
+            numberT.setText("MODE");
             numberT.setTextColor(color);
-
-            stageT.setCustomCff(size * 0.25f);
-            numberT.setCustomCff(size * 0.25f);
         }else{
-            stageT.setText("STAGE");
-            stageT.setTextColor(color);
+            if (mode > 0){
 
-            numberT.setText(level + "");
-            numberT.setTextColor(color);
+                if (mode == 1){
+                    switch (TypeGameButton.TOUCHED_ARK){
+                        case 0:
+                            text = "BRONZE";
+                            break;
+                        case 1:
+                            text = "SILVER";
+                            break;
+                        case 2:
+                            text = "GOLD";
+                            break;
+                    }
+                }else{
+                    switch (TypeGameButton.RNDLEVEL){
+                        case 0:
+                            text = "3X";
+                            break;
+                        case 1:
+                            text = "5X";
+                            break;
+                        case 2:
+                            text = "7X";
+                            break;
+                    }
+                }
+                stageT.setText(text);
+                stageT.setTextColor(color);
+
+                numberT.setText(mode == 1 ? "ARKADE" : "RANDOM");
+                numberT.setTextColor(color);
+
+                stageT.setCustomCff(size * 0.25f);
+                numberT.setCustomCff(size * 0.25f);
+            }else{
+                stageT.setText("STAGE");
+                stageT.setTextColor(color);
+
+                numberT.setText(level + "");
+                numberT.setTextColor(color);
+            }
         }
 
 

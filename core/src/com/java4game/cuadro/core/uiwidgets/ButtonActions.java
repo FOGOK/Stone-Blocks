@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core.uiwidgets;
 
 import com.badlogic.gdx.Gdx;
+import com.java4game.cuadro.core.DialogSystem;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
@@ -21,7 +22,7 @@ public class ButtonActions {
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
         WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE, START_LEARN,
-        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, CHECKBOXCLICK_AUTORIZETOSTART
+        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHECKBOXCLICK_AUTORIZETOSTART
     }
 
     public static void activateAction(All action){
@@ -106,9 +107,13 @@ public class ButtonActions {
 
             case NEXT_MENU_OPTION:
 //                MenuUI.MENUSTATE++;
-                MenuUI.SELECTEDWORLD = 0;
-                MenuUI.SETSTAGEPROP = true;
-                MenuUI.MENUSTATE = 2;
+                if (Prefers.getBool(Prefers.KeyFirstOpenLearn, false)){     //если ещё не проходили обучение
+                    MenuUI.SELECTEDWORLD = 0;
+                    MenuUI.SETSTAGEPROP = true;
+                    MenuUI.MENUSTATE = 2;
+                }else{
+                    MenuUI.MENUSTATE = MenuUI.TRAINING;
+                }
                 MusicCore.playSound(4);
                 break;
             case START_GAME_ACTION:
@@ -122,6 +127,7 @@ public class ButtonActions {
                 break;
 
             case RESTART_PAUSE_ACTION:
+                DialogSystem.ISLEARNING = false;
                 Handler.ISRESTART = true;
                 Handler.ISPAUSE = false;
                 LevelGen.ISGAMEOVER = false;
@@ -144,6 +150,26 @@ public class ButtonActions {
                 break;
             case BACK_TO_MAIN_SCREEN:
                 MenuUI.MENUSTATE = MenuUI.GAMEMAIN;
+                break;
+
+            case OPEN_LEARNING_INTERACTIVE:
+                DialogSystem.ISLEARNING = true;
+                switch (DialogSystem.LEARNING_PART){
+                    case 0:
+                        StageButton.LEVEL = StageButton.RANDOM_LEVEL;
+                        TypeGameButton.RNDLEVEL = 0;
+                        break;
+                    case 1:
+                        StageButton.LEVEL = StageButton.ARKADE_LEVEL;
+                        TypeGameButton.TOUCHED_ARK = 1;
+                        break;
+                }
+
+                Handler.ISRESTART = true;
+                Handler.ISPAUSE = false;
+                LevelGen.ISGAMEOVER = false;
+                Handler.state = Handler.State.Game;
+                LevelGen.REFRESH_REFRESH = true;
                 break;
 
             case SETTINGS_PAUSE_ACTION:

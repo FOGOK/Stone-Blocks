@@ -58,7 +58,7 @@ public class InformationScreen {
     }
 
     public void reset(){
-        robotHead.resetAnim();
+        robotHead.show();
     }
 
     private void initTextBlocks(){

@@ -32,6 +32,20 @@ repeat: none
   orig: 68, 68
   offset: 0, 0
   index: -1
+103
+  rotate: false
+  xy: 1337, 889
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+104
+  rotate: false
+  xy: 1337, 819
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
 11
   rotate: false
   xy: 1822, 1449

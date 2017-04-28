@@ -7,17 +7,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.BlockGenerator;
+import com.java4game.cuadro.core.DialogSystem;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.MenuUI;
-import com.java4game.cuadro.utils.Timer;
 
 import java.util.Random;
 
-import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.SELECTED_BTN;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_ARKADE;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_RANDOM;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_STEPS;
+import static com.java4game.cuadro.core.usie.TypeGameBottomBar.TYPE_TIMED;
 
 /**
  * Created by FOGOK on 02.01.2017 17:31.
@@ -27,6 +31,7 @@ import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
  */
 public class MainBlock extends FieldObject{
 
+    private DialogSystem dialogSystem;
 
     public final static int LEFT = 0, RIGHT = 1, TOP = 2, BOTTOM = 3;
     private final static int BOTTOM_LEFT = 0, TOP_LEFT = 1, TOP_RIGHT = 2, BOTTOM_RIGHT = 3;
@@ -67,25 +72,38 @@ public class MainBlock extends FieldObject{
 
         setReversAlpha(true);
 
-        float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
-        lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
-        speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
-        if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
-            speed = SPEED_START * 2f;
+        if (!DialogSystem.ISLEARNING){
+            float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
+            lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
+            speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
+            if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
+                speed = SPEED_START * 2f;
+        }else{
+            speed = 0.06864f;
+        }
+
+
         isNextDirectionTrued = true;
         isReversTrued = startChangeDir = lockChangeInTouch = isRotationStart = isRevers = false;
         isDirectionChanged = true;
-        switch (SELECTED_BTN) {
-            case TYPE_STEPS:
-            case TYPE_ARKADE:
-            case TYPE_RANDOM:
-                setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
-                break;
-            case TYPE_TIMED:
-                setPositionToCorner(false, 0);
-                break;
-        }
+        if (DialogSystem.ISLEARNING)
+            setPositionToCorner(false, 0);
+        else
+            switch (SELECTED_BTN) {
+                case TYPE_STEPS:
+                case TYPE_ARKADE:
+                case TYPE_RANDOM:
+                    setPositionToCorner(rnd.nextBoolean(), rnd.nextInt(4));
+                    break;
+                case TYPE_TIMED:
+                    setPositionToCorner(false, 0);
+                    break;
+            }
         normalizeSpeed();
+    }
+
+    public void setDialogSystem(DialogSystem dialogSystem) {
+        this.dialogSystem = dialogSystem;
     }
 
     public void normalizeSpeed() {
@@ -200,7 +218,9 @@ public class MainBlock extends FieldObject{
     }
 
     public void randomTeleport(){
-        setTeleport(rnd.nextInt(4), rnd.nextBoolean(), rnd.nextInt(10));
+        setTeleport(rnd.nextInt(4), isRevers, rnd.nextInt(10));
+        if (dialogSystem != null)
+            dialogSystem.teleportAction();
     }
 
     public void nextTeleport(){
@@ -258,13 +278,11 @@ public class MainBlock extends FieldObject{
         NCsQX = getSQX(direction, 0);
         NCsQY = getSQY(direction, 0);
 
-        if (Gdx.input.justTouched() && (Gm.HEIGHT / Gdx.graphics.getHeight()) * Gdx.input.getY() > 3f){
-            if (!lockChangeInTouch)
-                startChangeDir = true;
-            if (blockGenerator.isStackAvailable())
-                revers(false);
 
-        }
+        if (!DialogSystem.ISLEARNING || DialogSystem.ISALLOWTOUCH)
+            if (Gdx.input.justTouched() && (Gm.HEIGHT / Gdx.graphics.getHeight()) * Gdx.input.getY() > 3f)
+                touchAction();
+
 
         if (startChangeDir && !isDirectionChanged && !positionIsCorner()){
             startChangeDir = false;
@@ -288,6 +306,9 @@ public class MainBlock extends FieldObject{
                 blockGenerator.refreshArkObjects();
             }
             isRotated = isReversTrued = lockChangeInTouch = false;
+
+            if (dialogSystem != null)
+                dialogSystem.incrMainBlockRotationCount();  //для обучения, чтобы диалог систем знал, когда мы на углу
         }
         else if (isDirectionChanged)
             isDirectionChanged = !(sQX != lastSQX || sQY != lastSQY);
@@ -311,6 +332,14 @@ public class MainBlock extends FieldObject{
         lastSQY = sQY;
         NClastSQX = NCsQX;
         NClastSQY = NCsQY;
+    }
+
+    public void touchAction(){
+        if (!lockChangeInTouch)
+            startChangeDir = true;
+        if (blockGenerator.isStackAvailable()){
+            revers(false);
+        }
     }
 
     public void blockHasComedHole(boolean isArkade){

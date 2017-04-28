@@ -33,7 +33,7 @@ public class TrainingScreen {
 
         backB.setPositionToCenter();
 
-        openTraining = new GameOverButton(ButtonActions.All.BACK_TO_MAIN_SCREEN,
+        openTraining = new GameOverButton(ButtonActions.All.OPEN_LEARNING_INTERACTIVE,
                 Gm.WIDTH - otst,
                 topBar.getHeight() / 2f, sizeB, 12, "TRAINING");
 

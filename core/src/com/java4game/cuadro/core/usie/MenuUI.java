@@ -10,7 +10,6 @@ import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.CustomFormButton;
 import com.java4game.cuadro.core.uiwidgets.List;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
-import com.java4game.cuadro.core.uiwidgets.SelectWorldButton;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
@@ -613,7 +612,7 @@ public class MenuUI {
         }
 
         if (lastMenuState != MENUSTATE || lastSelectedBtn != SELECTED_BTN){
-            robotHead.resetAnim();
+            robotHead.show();
             informationScreen.reset();
         }
         lastMenuState = MENUSTATE;

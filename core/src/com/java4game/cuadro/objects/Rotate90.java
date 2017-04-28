@@ -60,8 +60,11 @@ public class Rotate90 extends FieldObject {
                 setNewReg(bot + reversA);
                 break;
         }
+    }
 
-
+    public void setBottomDirInLearn(){
+        direction = BOTTOM;
+        setNewReg(bot);
     }
 
     public int getDirection() {

@@ -59,6 +59,10 @@ public class GPauseUI {
         coverPause.setPosition((Gm.WIDTH - coverPause.getWidth()) / 2f, (Gm.HEIGHT - coverPause.getHeight()) / 2f);
     }
 
+    public void setRestartAction(ButtonActions.All buttonAction){
+        restartB.setAction(buttonAction);
+    }
+
     public void draw(SpriteBatch batch){
         blackScreen.draw(batch);
         coverPause.draw(batch);

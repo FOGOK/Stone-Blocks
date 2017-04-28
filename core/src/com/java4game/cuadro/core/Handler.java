@@ -3,6 +3,7 @@ package com.java4game.cuadro.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GPauseUI;
@@ -34,7 +35,7 @@ public class Handler {
     //ui
 //    GameUI gameUi;
 
-    MenuUI menuUI;
+    private MenuUI menuUI;
     ///
 
     public static State state;
@@ -47,6 +48,8 @@ public class Handler {
 
     public Handler(){
         ISPAUSE = ISRESTART = false;
+
+        DialogSystem.LEARNING_PART = 1;
 
         isBackPressed = false;
         menuUI = new MenuUI();
@@ -98,8 +101,11 @@ public class Handler {
 
     public void restart(){
         levelGen = new LevelGen(menuUI);
+
         if (pauseUI == null)
             pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
+        pauseUI.setRestartAction(DialogSystem.ISLEARNING ? ButtonActions.All.OPEN_LEARNING_INTERACTIVE : ButtonActions.All.RESTART_PAUSE_ACTION);
+
         ISRESTART = false;
     }
 

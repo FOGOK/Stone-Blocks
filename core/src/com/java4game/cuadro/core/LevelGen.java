@@ -11,15 +11,16 @@ import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GameOverUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.ArkadeBlock;
 import com.java4game.cuadro.objects.FlyingStage;
 import com.java4game.cuadro.objects.MainBlock;
-import com.java4game.cuadro.objects.TimerInArcade;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.objects.TimerBlock;
+import com.java4game.cuadro.objects.TimerInArcade;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.Prefers;
 
@@ -42,23 +43,17 @@ public class LevelGen {
     /**
      * Класс, который отвечает за всё, что связанно с игрой
      * тут инициализируется игровое поле, кубик, препятствия и т.д.
-     *
-     * */
+     */
 
     public static final int SQSIZE = 7;
     public static float backHDivH;
-
-    private Rectangle fieldBounds;
-    private Sprite background, field;
-
-    private RobotHead robotHead;
-    private TimerInArcade timerInArcade;
-
-    private boolean ISARKADE, ISRANDOM;
-
     public static boolean REFRESH_REFRESH;
     public static boolean ISGAMEOVER;
-
+    private Rectangle fieldBounds;
+    private Sprite background, field;
+    private RobotHead robotHead;
+    private TimerInArcade timerInArcade;
+    private boolean ISARKADE, ISRANDOM;
     private boolean isStartAnimNewRecord;
 
     private MainBlock mainBlock;
@@ -71,12 +66,15 @@ public class LevelGen {
     private ArkadeBlock arkadeBlock;
     private RestartButton restartButton;
     private GameOverUI gameOverUI;
+    private TextBlock learningText;
     ///
 
     private MenuUI menuUI;
 
     private InitLevels.Level levelTEST;
     private Random rnd = new Random();
+    private Interpolation pauseBInterp;
+    private boolean arkadeSpecialAlphaFlag;
 
     public LevelGen(MenuUI menuUI) {
         ISARKADE = StageButton.ARKADE_LEVEL == StageButton.LEVEL;
@@ -85,12 +83,12 @@ public class LevelGen {
         //инициализируем фон
         this.menuUI = menuUI;
         InitLevels.Level currLevel = null;
-        if (MenuUI.TEST){
+        if (MenuUI.TEST) {
             createTESTLevel();
             currLevel = levelTEST;
             background = Assets.getNewSprite(currLevel.getBackgroundColor());
-        }else{
-            switch (SELECTED_BTN){
+        } else {
+            switch (SELECTED_BTN) {
                 case TYPE_STEPS:
                     currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
                     background = Assets.getNewSprite(currLevel.getBackgroundColor());
@@ -156,35 +154,45 @@ public class LevelGen {
             flyingStage.refreshRefresh();
         //
         float starSize = 0f;
-        switch (SELECTED_BTN){
-            case TYPE_STEPS:
-                starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
-                starSize = starBlock.getStarSize();
-                break;
-            case TYPE_TIMED:
-                timerBlock = new TimerBlock(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 6f : currLevel.getAllSeconds());
-                starSize = timerBlock.getStarSize();
-                break;
-            case TYPE_ARKADE:
-                arkadeBlock = new ArkadeBlock(TypeGameButton.TOUCHED_ARK, false);
-                arkadeBlock.showAnimate();
-                blockGenerator.setArkadeBlock(arkadeBlock);
-                starSize = arkadeBlock.getStarSize();
-                robotHead = new RobotHead(0f);
-                blockGenerator.setRobotHead(robotHead);
-                float otst = 0.3f;
-                timerInArcade = new TimerInArcade(this, field.getX(), field.getY() + fieldSize + otst, fieldSize, robotHead);
-                break;
-            case TYPE_RANDOM:
-                arkadeBlock = new ArkadeBlock(2, true);
-                arkadeBlock.setScore(blockGenerator.getFieldObjectsSize() / 2);
-                arkadeBlock.showAnimate();
-                blockGenerator.setArkadeBlock(arkadeBlock);
-                starSize = arkadeBlock.getStarSize();
-                break;
+        if (!DialogSystem.ISLEARNING) {
+            switch (SELECTED_BTN) {
+                case TYPE_STEPS:
+                    starBlock = new StarBlock(this, currLevel.getMinSteps() == 0 ? blockGenerator.getCountMinSteps() : currLevel.getMinSteps());
+                    starSize = starBlock.getStarSize();
+                    break;
+                case TYPE_TIMED:
+                    timerBlock = new TimerBlock(this, currLevel.getAllSeconds() == 0f ? blockGenerator.getCountMinSteps() * 6f : currLevel.getAllSeconds());
+                    starSize = timerBlock.getStarSize();
+                    break;
+                case TYPE_ARKADE:
+                    arkadeBlock = new ArkadeBlock(TypeGameButton.TOUCHED_ARK, false);
+                    arkadeBlock.showAnimate();
+                    blockGenerator.setArkadeBlock(arkadeBlock);
+                    starSize = arkadeBlock.getStarSize();
+                    robotHead = new RobotHead(0f);
+                    blockGenerator.setRobotHead(robotHead);
+                    float otst = 0.3f;
+                    timerInArcade = new TimerInArcade(this, field.getX(), field.getY() + fieldSize + otst, fieldSize, robotHead);
+                    break;
+                case TYPE_RANDOM:
+                    arkadeBlock = new ArkadeBlock(2, true);
+                    arkadeBlock.setScore(blockGenerator.getFieldObjectsSize() / 2);
+                    arkadeBlock.showAnimate();
+                    blockGenerator.setArkadeBlock(arkadeBlock);
+                    starSize = arkadeBlock.getStarSize();
+                    break;
+            }
+            gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), mode);
+        } else {
+            learningText = new TextBlock(0f, 0f, false, "TRAINING");
+            learningText.setCustomCff(0.7f);
+            learningText.setPosition(Gm.WIDTH / 2f, field.getY() + fieldSize + 0.8f);
+            learningText.setPositionToCenter();
+
+            robotHead = new RobotHead(0f);
+            blockGenerator.setRobotHead(robotHead);
         }
 
-        gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), mode);
 
         final float sizePauseBtn = 2.3f;
         restartButton = new RestartButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
@@ -193,14 +201,18 @@ public class LevelGen {
 
         pauseBInterp = Interpolation.exp5Out;
 
-        if (ISARKADE){
+        if (ISARKADE) {
             arkadeNewRecord = new FlyingStage(false);
             arkadeNewRecord.refreshRefresh();
         }
 
+        if (DialogSystem.ISLEARNING)
+            learningStart();
+
         MusicCore.playSound(8);
     }
-    private void createTESTLevel(){
+
+    private void createTESTLevel() {
         String[] mainParts = Handler.TEST_STRING.split(",");
         String[] allObjects = mainParts[2].split("_");
 
@@ -219,8 +231,8 @@ public class LevelGen {
         }
 
 
-        if (Integer.parseInt(mainParts[4]) != -1){
-            switch (SELECTED_BTN){
+        if (Integer.parseInt(mainParts[4]) != -1) {
+            switch (SELECTED_BTN) {
                 case TYPE_STEPS:
                     levelTEST.setMinSteps(Integer.parseInt(mainParts[4]));
                     break;
@@ -231,35 +243,34 @@ public class LevelGen {
         }
     }
 
+    private void learningStart() {
+        blockGenerator.learningStart();
+    }
 
-    private Interpolation pauseBInterp;
-
-    private boolean arkadeSpecialAlphaFlag;
-    public void draw(SpriteBatch batch){
-
+    public void draw(SpriteBatch batch) {
 
 
         flyingStage.handle();
         flyingStage.drawGlass(batch);
 
-        if (arkadeNewRecord != null){
+        if (arkadeNewRecord != null) {
             arkadeNewRecord.handle();
             arkadeNewRecord.drawGlass(batch);
         }
 
         float gameTransparency = ISARKADE ? arkadeNewRecord.getAlphaInNewRecordArkade() : flyingStage.getProgressEnd();
 
-        if (!flyingStage.isFlying()){
+        if (!flyingStage.isFlying()) {
 
             field.setAlpha(gameTransparency);
             field.draw(batch);
 
-            switch (SELECTED_BTN){
+            switch (SELECTED_BTN) {
                 case TYPE_STEPS:
 
                     if (flyingStage.getProgressEnd() != 1f)
                         starBlock.handle(flyingStage.getProgressEnd(), false);
-                    else{
+                    else {
                         if (!ISGAMEOVER)
                             starBlock.handle();
                         else
@@ -271,7 +282,7 @@ public class LevelGen {
                 case TYPE_TIMED:
                     if (flyingStage.getProgressEnd() != 1f)
                         timerBlock.handle(flyingStage.getProgressEnd(), false);
-                    else{
+                    else {
                         if (!ISGAMEOVER)
                             timerBlock.handle();
                         else
@@ -311,10 +322,10 @@ public class LevelGen {
         batch.setBlendFunction(srcFunc, dstFunc);
 
 
-        if (!flyingStage.isFlying()){
+        if (!flyingStage.isFlying()) {
             if (flyingStage.getProgressEnd() != 1f)
                 blockGenerator.setAlpha(flyingStage.getProgressEnd());
-            else if (!arkadeSpecialAlphaFlag){
+            else if (!arkadeSpecialAlphaFlag) {
                 arkadeSpecialAlphaFlag = true;
                 blockGenerator.setAlpha(1f);
             }
@@ -325,78 +336,87 @@ public class LevelGen {
             mainBlock.draw(batch);
             blockGenerator.draw(batch);
 
-            switch (SELECTED_BTN){
-                case TYPE_STEPS:
-                    if (ISGAMEOVER){
-                        starBlock.draw(batch); //текст
-                        gameOverUI.drawBack(batch);     //чёрная подложка
-                        starBlock.drawStar(batch);     //звезда
-                        gameOverUI.draw(batch); //текст окончания игры и кнопки
-                        starBlock.drawBlinks(batch);     //блики
-                    }else {
-                        starBlock.drawStar(batch);     //звезда
-                        starBlock.draw(batch); //текст
-                        starBlock.drawBlinks(batch);     //блики
-                    }
-                    break;
-                case TYPE_TIMED:
-                    if (ISGAMEOVER){
-                        timerBlock.draw(batch); //текст
-                        gameOverUI.drawBack(batch);     //чёрная подложка
-                        timerBlock.drawStar(batch);     //звезда
-                        gameOverUI.draw(batch); //текст окончания игры и кнопки
-                        timerBlock.drawStarBlinks(batch);     //блики
-                    }else {
-                        timerBlock.drawStar(batch);     //звезда
-                        timerBlock.draw(batch); //текст
-                        timerBlock.drawStarBlinks(batch);     //блики
-                    }
-
-                    break;
-                case TYPE_ARKADE:
-                case TYPE_RANDOM:
-                    if (ISGAMEOVER){
-                        gameOverUI.drawBack(batch);     //чёрная подложка
-                        arkadeBlock.drawStar(batch);     //звезда
-                        gameOverUI.draw(batch); //текст окончания игры и кнопки
-                        arkadeBlock.drawStarBlinks(batch);     //блики
-                    }else{
-                        arkadeBlock.draw(batch);
-
-                        if (isStartAnimNewRecord){
-                            blockGenerator.setAlpha(gameTransparency);
-                            isStartAnimNewRecord = arkadeNewRecord.isShow();
-                            Handler.ISPAUSE = arkadeNewRecord.isShow();
+            if (!DialogSystem.ISLEARNING)
+                switch (SELECTED_BTN) {
+                    case TYPE_STEPS:
+                        if (ISGAMEOVER) {
+                            starBlock.draw(batch); //текст
+                            gameOverUI.drawBack(batch);     //чёрная подложка
+                            starBlock.drawStar(batch);     //звезда
+                            gameOverUI.draw(batch); //текст окончания игры и кнопки
+                            starBlock.drawBlinks(batch);     //блики
+                        } else {
+                            starBlock.drawStar(batch);     //звезда
+                            starBlock.draw(batch); //текст
+                            starBlock.drawBlinks(batch);     //блики
                         }
-                    }
-                    if (SELECTED_BTN == TYPE_ARKADE)
-                        robotHead.draw(batch);
-                    break;
-            }
+                        break;
+                    case TYPE_TIMED:
+                        if (ISGAMEOVER) {
+                            timerBlock.draw(batch); //текст
+                            gameOverUI.drawBack(batch);     //чёрная подложка
+                            timerBlock.drawStar(batch);     //звезда
+                            gameOverUI.draw(batch); //текст окончания игры и кнопки
+                            timerBlock.drawStarBlinks(batch);     //блики
+                        } else {
+                            timerBlock.drawStar(batch);     //звезда
+                            timerBlock.draw(batch); //текст
+                            timerBlock.drawStarBlinks(batch);     //блики
+                        }
+
+                        break;
+                    case TYPE_ARKADE:
+                    case TYPE_RANDOM:
+                        if (ISGAMEOVER) {
+                            gameOverUI.drawBack(batch);     //чёрная подложка
+                            arkadeBlock.drawStar(batch);     //звезда
+                            gameOverUI.draw(batch); //текст окончания игры и кнопки
+                            arkadeBlock.drawStarBlinks(batch);     //блики
+                        } else {
+                            arkadeBlock.draw(batch);
+
+                            if (isStartAnimNewRecord) {
+                                blockGenerator.setAlpha(gameTransparency);
+                                isStartAnimNewRecord = arkadeNewRecord.isShow();
+                                Handler.ISPAUSE = arkadeNewRecord.isShow();
+                            }
+                        }
+                        break;
+                }
 
             restartButton.drawIcon(batch);
-            if (timerInArcade != null){
+            if (timerInArcade != null) {
                 timerInArcade.setAlpha(gameTransparency);
                 timerInArcade.draw(batch, true);
             }
+
+            if (learningText != null){
+                learningText.setAlpha(gameTransparency);
+                learningText.draw(batch);
+            }
+
+            if (robotHead != null)
+                robotHead.draw(batch);
         }
         flyingStage.drawText(batch);
         if (arkadeNewRecord != null)
             arkadeNewRecord.drawText(batch);
 
 
+
     }
 
-    public void addSecondsToTimerArcade(float timeToAdd){
-        timerInArcade.addTime(timeToAdd);
+    public void addSecondsToTimerArcade(float timeToAdd) {
+        if (!DialogSystem.ISLEARNING)
+            timerInArcade.addTime(timeToAdd);
     }
 
-    public void refreshStars(){
+    public void refreshStars() {
         menuUI.refreshStarsData();
     }
 
-    public void minusStep(){
-        switch (SELECTED_BTN){
+    public void minusStep() {
+        switch (SELECTED_BTN) {
             case TYPE_STEPS:
                 starBlock.minusStep();
                 break;
@@ -405,8 +425,8 @@ public class LevelGen {
         }
     }
 
-    public void inspectIsChangeStar(){
-        switch (SELECTED_BTN){
+    public void inspectIsChangeStar() {
+        switch (SELECTED_BTN) {
             case TYPE_STEPS:
                 starBlock.inspectIsChangeStar();
                 break;
@@ -415,14 +435,14 @@ public class LevelGen {
         }
     }
 
-    public void win(int LEVEL){
+    public void win(int LEVEL) {
         int scoreText = 0;
-        if (!MenuUI.TEST){
+        if (!MenuUI.TEST) {
 
             int curStar = 1;
             char[] chars;
             //setStar
-            switch (SELECTED_BTN){
+            switch (SELECTED_BTN) {
                 case TYPE_STEPS:
                     chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
                     curStar = starBlock.getCurrentStar().ordinal();
@@ -445,25 +465,25 @@ public class LevelGen {
 //            chars[LEVEL] =
             ///
 
-            switch (SELECTED_BTN){
+            switch (SELECTED_BTN) {
                 case TYPE_STEPS:
-                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0){     //открываем следующий уровень
-                        if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]){
+                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0) {     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]) {
                             MenuUI.OPENEDSTAGESINWORLD[0]++;
                             Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
                         }
                     }
                     break;
                 case TYPE_TIMED:
-                    if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL){     //открываем следующий уровень
-                        if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]){
+                    if (MenuUI.OPENEDSTAGESINWORLD[1] == LEVEL) {     //открываем следующий уровень
+                        if (MenuUI.OPENEDSTAGESINWORLD[1] <= MenuUI.COUNTSTAGESINWORLD[1]) {
                             MenuUI.OPENEDSTAGESINWORLD[1]++;
                             Prefers.putInt(Prefers.KeyOpenedStagesTimed, MenuUI.OPENEDSTAGESINWORLD[1]);
                         }
                     }
                     break;
                 case TYPE_RANDOM:
-                    switch (TypeGameButton.RNDLEVEL){
+                    switch (TypeGameButton.RNDLEVEL) {
                         case 0:
                             scoreText = Prefers.getInt(Prefers.KeyRandomMode1) + 1;
                             Prefers.putInt(Prefers.KeyRandomMode1, scoreText);
@@ -483,19 +503,19 @@ public class LevelGen {
         }
 
         ISGAMEOVER = true;
-        if (ISRANDOM){
+        if (ISRANDOM) {
             gameOverUI.setSpecialText(scoreText);
             gameOverUI.setRecord(true);
         }
         gameOverUI.setText(true);
     }
 
-    public void lose(){
+    public void lose() {
         ISGAMEOVER = true;
         gameOverUI.setText(false);
     }
 
-    public void flyTextPls(int mode){
+    public void flyTextPls(int mode) {
         isStartAnimNewRecord = true;
         if (mode < 2)
             arkadeNewRecord.startT("NEW", mode == 0 ? "MODE!" : "RECORD!");
@@ -508,13 +528,14 @@ public class LevelGen {
         return fieldBounds;
     }
 
-    public void arkadeLose(){
+    public void arkadeLose() {
         ISGAMEOVER = true;
         gameOverUI.setScoreText(arkadeBlock.getScore(), false);
         gameOverUI.setRecord(blockGenerator.isNewRecord());
     }
 
-    public void dispose(){
-        gameOverUI.dispose();
+    public void dispose() {
+        if (gameOverUI != null)
+            gameOverUI.dispose();
     }
 }

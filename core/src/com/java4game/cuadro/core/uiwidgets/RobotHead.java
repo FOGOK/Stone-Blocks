@@ -107,7 +107,7 @@ public class RobotHead {
         return this;
     }
 
-    public void resetAnim(){
+    public void show(){
         isShow = true;
         isTimered = false;
         headAnimation.resetTime();
@@ -116,7 +116,7 @@ public class RobotHead {
     private boolean isTimered;
     private Timer showingTimer;
     public RobotHead showInTimered(float showTime){
-        if (!isShow || headAnimation.isRevers()){
+        if (!isShow || headAnimation.isRevers() || showingTimer == null){
             appendedNumber = 0;
             isTimered = true;
             isShow = true;
