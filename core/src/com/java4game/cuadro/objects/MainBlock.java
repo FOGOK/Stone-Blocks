@@ -72,15 +72,15 @@ public class MainBlock extends FieldObject{
 
         setReversAlpha(true);
 
-        if (!DialogSystem.ISLEARNING){
-            float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
-            lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
-            speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
-            if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
+//        if (!DialogSystem.ISLEARNING){
+//            float lowLevelCffSpeed = (StageButton.LEVEL / 25f + 1f) * 1.2f;
+//            lowLevelCffSpeed = lowLevelCffSpeed > 2f ? 2f : lowLevelCffSpeed;
+//            speed = StageButton.LEVEL <= 25 ? lowLevelCffSpeed * SPEED_START : SPEED_START * 2f;
+//            if (MenuUI.TEST || SELECTED_BTN == TYPE_TIMED)
                 speed = SPEED_START * 2f;
-        }else{
-            speed = 0.06864f;
-        }
+//        }else{
+//            speed = 0.06864f;
+//        }
 
 
         isNextDirectionTrued = true;

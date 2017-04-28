@@ -88,20 +88,23 @@ public class LevelGen {
             currLevel = levelTEST;
             background = Assets.getNewSprite(currLevel.getBackgroundColor());
         } else {
-            switch (SELECTED_BTN) {
-                case TYPE_STEPS:
-                    currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
-                    background = Assets.getNewSprite(currLevel.getBackgroundColor());
-                    break;
-                case TYPE_TIMED:
-                    currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
-                    background = Assets.getNewSprite(currLevel.getBackgroundColor());
-                    break;
-                case TYPE_ARKADE:
-                case TYPE_RANDOM:
-                    background = Assets.getNewSprite(rnd.nextBoolean() ? 0 : (2 + rnd.nextInt(4)));
-                    break;
-            }
+            if (DialogSystem.ISLEARNING){
+                background = Assets.getNewSprite(3);
+            }else
+                switch (SELECTED_BTN) {
+                    case TYPE_STEPS:
+                        currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
+                        background = Assets.getNewSprite(currLevel.getBackgroundColor());
+                        break;
+                    case TYPE_TIMED:
+                        currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
+                        background = Assets.getNewSprite(currLevel.getBackgroundColor());
+                        break;
+                    case TYPE_ARKADE:
+                    case TYPE_RANDOM:
+                        background = Assets.getNewSprite(rnd.nextBoolean() ? 0 : (2 + rnd.nextInt(4)));
+                        break;
+                }
         }
         ISGAMEOVER = false;
         final float hDivW = 1.7777f;
