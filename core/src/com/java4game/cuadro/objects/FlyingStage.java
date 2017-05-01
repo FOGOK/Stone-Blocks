@@ -56,7 +56,7 @@ public class FlyingStage {
         String text = "";
 
         if (DialogSystem.ISLEARNING){
-            text = DialogSystem.LEARNING_PART == 0 ? "BASE" : "ARKADE";
+            text = DialogSystem.LEARNING_PART == 0 ? "BASE" : "ARCADE";
             stageT.setText(text);
             stageT.setTextColor(color);
 

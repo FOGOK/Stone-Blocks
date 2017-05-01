@@ -490,7 +490,7 @@ public class BlockGenerator {
             if (ISARKADE){
                 arkadeCompletePositions = 0;
             }else{
-                levelGen.win(LEVEL - 1);
+                levelGen.win(LEVEL);
             }
         }
     }
@@ -607,15 +607,17 @@ public class BlockGenerator {
                             break;
                         case TIMER_ADD:
                             if (((TimerAddBlock)fieldObjects[i]).isShowing()){
-                                levelGen.addSecondsToTimerArcade(20f);
+                                levelGen.addSecondsToTimerArcade(10f);
                                 arkadeBlock.updateScore(1, 7, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+
+                                robotHead.setText("+10 SEC", 0.8f).showInTimered(1f);
 
                                 ((TimerAddBlock)fieldObjects[i]).setShowing(false);
                             }
                             break;
                         case MOVER_BONUS:
                             if (((MoverBonus)fieldObjects[i]).isShowing()){
-                                levelGen.addSecondsToTimerArcade(30f);
+                                levelGen.addSecondsToTimerArcade(10f);
                                 arkadeBlock.updateScore(100, 9, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
                                 robotHead.setText("SUPER BONUS!!!", 0.8f).showInTimered(1f);

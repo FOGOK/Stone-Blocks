@@ -218,21 +218,24 @@ public class MenuUI {
     }
 
     private void refreshRandomButtons(){
+        int stagesOpenedCount = Prefers.getInt(Prefers.KeyOpenedStagesSteps);
+        int timedOpenedCount = Prefers.getInt(Prefers.KeyOpenedStagesTimed);
+
         normalB.setText("NORMAL");
         normalB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode1));
-        normalB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode1Opened, false));
+        normalB.setLocked(stagesOpenedCount < 25 && timedOpenedCount < 25);
         normalB.setPosition(Gm.WIDTH / 2f, startPos + otstRandButtons * 1.2f);
         normalB.setPositionToCenter();
 
         hardB.setText("HARD");
         hardB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode2));
-        hardB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode2Opened, false));
+        hardB.setLocked(stagesOpenedCount < 50 && timedOpenedCount < 50);
         hardB.setPosition(Gm.WIDTH / 2f, startPos);
         hardB.setPositionToCenter();
 
         extremeB.setText("EXTREME");
         extremeB.setText2("COUNT:" + Prefers.getInt(Prefers.KeyRandomMode3));
-        extremeB.setLocked(!Prefers.getBool(Prefers.KeyRandomMode3Opened, false));
+        extremeB.setLocked(stagesOpenedCount < 75 && timedOpenedCount < 75);
         extremeB.setPosition(Gm.WIDTH / 2f, startPos - otstRandButtons * 1.2f);
         extremeB.setPositionToCenter();
     }
@@ -304,10 +307,7 @@ public class MenuUI {
         stepsStagesButtons = new StageButton[columns * rows];
 
         for (int i = 0; i < columns * rows; i++) {
-            if (i != 0)
-                stepsStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
-            else
-                stepsStagesButtons[i] = new StageButton(ButtonActions.All.START_LEARN, 2.43f, i + 1, this);
+            stepsStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
         }
         setStepsListProporties();
     }
@@ -351,7 +351,7 @@ public class MenuUI {
         timedStagesButtons = new StageButton[columns * rows];
 
         for (int i = 0; i < columns * rows; i++) {
-            timedStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 2, this);
+            timedStagesButtons[i] = new StageButton(ButtonActions.All.RESTART_PAUSE_ACTION, 2.43f, i + 1, this);
         }
         setTimedListProporties();
     }

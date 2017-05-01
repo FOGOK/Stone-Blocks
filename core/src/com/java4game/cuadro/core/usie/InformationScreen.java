@@ -54,7 +54,7 @@ public class InformationScreen {
         robotHead = new RobotHead(cover.getY() + cover.getHeight());
         robotHead.setText("Hello!!! My name is mover", 0.7f);
 
-        floatAnimator = new FloatAnimator(1f, 1.2f, 0.3f, Interpolation.pow3);
+        floatAnimator = new FloatAnimator(0.8f, 1f, 0.5f, Interpolation.pow3);
     }
 
     public void reset(){

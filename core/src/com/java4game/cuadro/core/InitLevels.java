@@ -8,7 +8,7 @@ package com.java4game.cuadro.core;
  */
 public class InitLevels {
 
-    public static final int STEPS_LEVELS = 102, TIME_LEVELS = 22;
+    public static final int STEPS_LEVELS = 103, TIME_LEVELS = 22;
 
     public static final int COLOR_BLUE = 0, COLOR_GREEN = 1, COLOR_RED = 2, COLOR_WHITE = 3, COLOR_YELLOW = 4;
     public static final int BACK_COLOR_BLUE = 0, BACK_COLOR_GREEN = 2, BACK_COLOR_GRAY = 3, BACK_COLOR_RED = 4, BACK_COLOR_YELLOW = 5;

@@ -1822,5 +1822,44 @@ class InitStepsLevels {
                 new Object(8, 8, COLOR_RED, BLOCK),  //17
         }, BACK_COLOR_RED);
         stepsLevels[101].setMinSteps(33);
+
+        stepsLevels[102] = new Level(new Object[]{
+                new Object(2, 1, COLOR_WHITE, HOLE),
+                new Object(4, 1, COLOR_BLUE, HOLE),
+                new Object(6, 1, COLOR_WHITE, HOLE),
+                new Object(2, 2, COLOR_WHITE, HOLE),
+                new Object(2, 3, COLOR_YELLOW, HOLE),
+                new Object(6, 3, COLOR_RED, HOLE),
+                new Object(8, 3, COLOR_BLUE, HOLE),
+                new Object(8, 4, COLOR_RED, HOLE),
+                new Object(2, 5, COLOR_RED, HOLE),
+                new Object(4, 5, COLOR_BLUE, HOLE),
+                new Object(6, 5, COLOR_YELLOW, HOLE),
+                new Object(8, 5, COLOR_RED, HOLE),
+                new Object(2, 7, COLOR_YELLOW, HOLE),
+                new Object(4, 7, COLOR_WHITE, HOLE),
+                new Object(2, 8, COLOR_YELLOW, HOLE),
+                new Object(4, 8, COLOR_RED, HOLE),
+                new Object(5, 8, COLOR_RED, HOLE),
+
+                new Object(1, 1, COLOR_WHITE, BLOCK),    //1
+                new Object(1, 2, COLOR_WHITE, BLOCK),    //2
+                new Object(3, 2, COLOR_BLUE, BLOCK), //3
+                new Object(5, 2, COLOR_WHITE, BLOCK),    //4
+                new Object(1, 4, COLOR_YELLOW, BLOCK),   //5
+                new Object(5, 4, COLOR_RED, BLOCK),  //6
+                new Object(7, 4, COLOR_BLUE, BLOCK), //7
+                new Object(1, 6, COLOR_RED, BLOCK),  //8
+                new Object(3, 6, COLOR_BLUE, BLOCK), //9
+                new Object(5, 6, COLOR_YELLOW, BLOCK),   //10
+                new Object(1, 7, COLOR_YELLOW, BLOCK),   //11
+                new Object(7, 7, COLOR_RED, BLOCK),  //12
+                new Object(8, 7, COLOR_RED, BLOCK),  //13
+                new Object(1, 8, COLOR_YELLOW, BLOCK),   //14
+                new Object(3, 8, COLOR_WHITE, BLOCK),    //15
+                new Object(7, 8, COLOR_RED, BLOCK),  //16
+                new Object(8, 8, COLOR_RED, BLOCK),  //17
+        }, BACK_COLOR_RED);
+        stepsLevels[102].setMinSteps(33);
     }
 }

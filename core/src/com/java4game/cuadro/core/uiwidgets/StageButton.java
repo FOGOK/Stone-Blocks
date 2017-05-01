@@ -32,7 +32,7 @@ public class StageButton extends TextButton {
     private MenuUI menuUI;
 
     public StageButton(ButtonActions.All action, float h, int stage, MenuUI menuUI) {
-        super(action, 0f, 0f, h, 25, 28, (stage - 1) + "");
+        super(action, 0f, 0f, h, 25, 28, (stage) + "");
         this.menuUI = menuUI;
         this.stage = stage;
         size = h;

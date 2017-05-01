@@ -66,7 +66,8 @@ public class LevelGen {
     private ArkadeBlock arkadeBlock;
     private RestartButton restartButton;
     private GameOverUI gameOverUI;
-    private TextBlock learningText;
+    private Sprite starLearn;
+    private TextBlock textLearn;
     ///
 
     private MenuUI menuUI;
@@ -93,11 +94,11 @@ public class LevelGen {
             }else
                 switch (SELECTED_BTN) {
                     case TYPE_STEPS:
-                        currLevel = InitLevels.getStepsLevels(StageButton.LEVEL - 1);
+                        currLevel = InitLevels.getStepsLevels(StageButton.LEVEL);
                         background = Assets.getNewSprite(currLevel.getBackgroundColor());
                         break;
                     case TYPE_TIMED:
-                        currLevel = InitLevels.getTimeLevels(StageButton.LEVEL - 1);
+                        currLevel = InitLevels.getTimeLevels(StageButton.LEVEL);
                         background = Assets.getNewSprite(currLevel.getBackgroundColor());
                         break;
                     case TYPE_ARKADE:
@@ -152,7 +153,7 @@ public class LevelGen {
 //                break;
 //        }
         flyingStage = new FlyingStage(true);
-        flyingStage.setNew(StageButton.LEVEL - 1, flyStageColor, mode);
+        flyingStage.setNew(StageButton.LEVEL, flyStageColor, mode);
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
         //
@@ -187,10 +188,14 @@ public class LevelGen {
             }
             gameOverUI = new GameOverUI(starSize, fieldBounds.getY(), mode);
         } else {
-            learningText = new TextBlock(0f, 0f, false, "TRAINING");
-            learningText.setCustomCff(0.7f);
-            learningText.setPosition(Gm.WIDTH / 2f, field.getY() + fieldSize + 0.8f);
-            learningText.setPositionToCenter();
+            starLearn = Assets.getNewSprite(35);
+            starLearn.setSize(3.1f, 3.1f);
+            starLearn.setCenter(Gm.WIDTH / 2f, fieldBounds.getY() + fieldSize + 2.3f);
+
+            textLearn = new TextBlock(0f, 0f, false, "TRAINING");
+            textLearn.setCustomCff(0.5f);
+            textLearn.setPosition(starLearn.getX() + starLearn.getWidth() / 2f, starLearn.getY() + starLearn.getHeight() / 2f);
+            textLearn.setPositionToCenter();
 
             robotHead = new RobotHead(0f);
             blockGenerator.setRobotHead(robotHead);
@@ -393,9 +398,12 @@ public class LevelGen {
                 timerInArcade.draw(batch, true);
             }
 
-            if (learningText != null){
-                learningText.setAlpha(gameTransparency);
-                learningText.draw(batch);
+            if (starLearn != null){
+                starLearn.setAlpha(gameTransparency);
+                starLearn.draw(batch);
+
+                textLearn.setAlpha(gameTransparency);
+                textLearn.draw(batch);
             }
 
             if (robotHead != null)
@@ -449,8 +457,8 @@ public class LevelGen {
                 case TYPE_STEPS:
                     chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
                     curStar = starBlock.getCurrentStar().ordinal();
-                    if (curStar > Character.getNumericValue(chars[LEVEL]))
-                        chars[LEVEL] = Integer.toString(curStar).charAt(0);
+                    if (curStar > Character.getNumericValue(chars[LEVEL - 1]))
+                        chars[LEVEL - 1] = Integer.toString(curStar).charAt(0);
                     Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
                     refreshStars();
                     break;
@@ -470,7 +478,7 @@ public class LevelGen {
 
             switch (SELECTED_BTN) {
                 case TYPE_STEPS:
-                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL + 1 && curStar != 0) {     //открываем следующий уровень
+                    if (MenuUI.OPENEDSTAGESINWORLD[0] == LEVEL && curStar != 0) {     //открываем следующий уровень
                         if (MenuUI.OPENEDSTAGESINWORLD[0] <= MenuUI.COUNTSTAGESINWORLD[0]) {
                             MenuUI.OPENEDSTAGESINWORLD[0]++;
                             Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);

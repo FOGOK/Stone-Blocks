@@ -177,7 +177,7 @@ public class MainBlock extends FieldObject{
         isNormalizeSpeed = false;
     }
 
-    private void setTeleport(int dir, boolean isRevers, int offset){
+    public void setTeleport(int dir, boolean isRevers, int offset){
         this.isRevers = isRevers;
 
         blockGenerator.clearStacked(getPosSQX() + block.getWidth() / 2f, getPosSQY() + block.getHeight() / 2f);
@@ -332,6 +332,10 @@ public class MainBlock extends FieldObject{
         lastSQY = sQY;
         NClastSQX = NCsQX;
         NClastSQY = NCsQY;
+    }
+
+    public boolean isNotNormalState() {
+        return lockChangeInTouch || blockGenerator.isStackAvailable();
     }
 
     public void touchAction(){

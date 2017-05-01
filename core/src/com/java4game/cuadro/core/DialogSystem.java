@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
-import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.Block;
 import com.java4game.cuadro.objects.BoosterSlower;
 import com.java4game.cuadro.objects.FieldLearnLine;
@@ -15,6 +14,7 @@ import com.java4game.cuadro.objects.Revers;
 import com.java4game.cuadro.objects.Rotate90;
 import com.java4game.cuadro.objects.Teleport;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Prefers;
 
 import static com.java4game.cuadro.objects.FieldObject.NULLTYPE;
 
@@ -65,6 +65,41 @@ public class DialogSystem {
     }
 
     public void handle(){
+
+        if (getNextScreenCondition())
+            nextScreen();
+        else if (getRefreshScreenCondition()){
+            switch (screen){
+                case 11:
+                    screen = 9;
+                    break;
+            }
+            mainBlock.setTeleport(MainBlock.BOTTOM, mainBlock.isRevers(), 0);
+            activateCurrentScreen();
+        }
+
+    }
+
+    private boolean getRefreshScreenCondition(){
+        boolean condition = false;
+        switch (screen){
+            case 14:
+            case 16:
+            case 17:
+            case 19:
+                break;
+            default:
+                int x = mainBlock.getSQX(true);
+                int y = mainBlock.getSQY(true);
+                condition = !firstFieldLearnLine.greenBlockCollide(mainBlock) && isJustTouch() && ISALLOWTOUCH &&
+                        (x == 0 || x == LevelGen.SQSIZE + 2 || y == 0 || y == LevelGen.SQSIZE + 2);
+
+                break;
+        }
+        return condition;
+    }
+
+    private boolean getNextScreenCondition(){
         boolean condition = false;
         switch (screen){
             case 0:
@@ -115,9 +150,7 @@ public class DialogSystem {
                 condition = fieldObjects[3].getTypeBlock() == NULLTYPE && fieldObjects[4].getTypeBlock() == NULLTYPE;
                 break;
         }
-
-        if (condition)
-            nextScreen();
+        return condition;
     }
 
     private boolean isJustTouch(){
@@ -127,6 +160,10 @@ public class DialogSystem {
 
     public void nextScreen(){
         screen++;
+        activateCurrentScreen();
+    }
+
+    private void activateCurrentScreen(){
         mainBlockRotationCount = 0;
         switch (screen){
             case 0:
@@ -319,7 +356,9 @@ public class DialogSystem {
                 robotHead.setText("GOOD!", 1.2f).show();
                 break;
             case 25:
+                DialogSystem.LEARNING_PART = 0;
                 ButtonActions.activateAction(ButtonActions.All.TOMAINMENU_PAUSE_ACTION);
+                Prefers.putBool(Prefers.KeyFirstOpenLearn, true);
                 break;
         }
     }

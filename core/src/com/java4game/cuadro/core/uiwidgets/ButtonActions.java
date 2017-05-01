@@ -21,7 +21,7 @@ public class ButtonActions {
 
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
-        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, COMPLETE_LEARN, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE, START_LEARN,
+        WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE,
         BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHECKBOXCLICK_AUTORIZETOSTART
     }
 
@@ -60,22 +60,19 @@ public class ButtonActions {
                 TypeGameBottomBar.SELECTED_BTN = TypeGameButton.TOUCHED_B;
                 MusicCore.playSound(4);
                 break;
-            case START_LEARN:
-                activateAction(All.COMPLETE_LEARN);
-                break;
-            case COMPLETE_LEARN:
-                final char[] chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
-                chars[0] = '3';
-                Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
-
-//            chars[LEVEL] =
-                ///
-
-                if (MenuUI.OPENEDSTAGESINWORLD[0] == 1){     //открываем следующий уровень
-                    MenuUI.OPENEDSTAGESINWORLD[0]++;
-                    Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
-                }
-                break;
+//            case COMPLETE_LEARN:
+//                final char[] chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
+//                chars[0] = '3';
+//                Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
+//
+////            chars[LEVEL] =
+//                ///
+//
+//                if (MenuUI.OPENEDSTAGESINWORLD[0] == 1){     //открываем следующий уровень
+//                    MenuUI.OPENEDSTAGESINWORLD[0]++;
+//                    Prefers.putInt(Prefers.KeyOpenedStagesSteps, MenuUI.OPENEDSTAGESINWORLD[0]);
+//                }
+//                break;
             case PAUSE_ACT:
                 Handler.isBackPressed = true;
                 break;
@@ -177,12 +174,17 @@ public class ButtonActions {
                 break;
 
             case TOMAINMENU_PAUSE_ACTION:
+
                 Handler.state = Handler.State.Menu;
                 Handler.ISPAUSE = false;
                 MenuUI.RESETANIMATION = true;
                 MenuUI.SETSTAGEPROP = true;
 
-                MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
+                if (DialogSystem.ISLEARNING)
+                    MenuUI.MENUSTATE = MenuUI.GAMEMAIN;
+                else
+                    MenuUI.MENUSTATE = MenuUI.SELECTSTAGE;
+
 
                 MusicCore.play(MusicCore.MENU);
                 break;
