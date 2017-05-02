@@ -78,7 +78,10 @@ public class ArkadeBlock {
     }
 
     private void initScoreText(){
-        nameText = new TextBlock(0f, 0f, true, "POINTS");
+        if (simplify)
+            nameText = new TextBlock(0f, 0f, true, "BLOCKS");
+        else
+            nameText = new TextBlock(0f, 0f, true, "POINTS");
         nameText.setCustomCff(currStar.getHeight() / 8f);
         scoreText = new TextBlock(0f, 0f, true, "0");
         scoreText.setCustomCff(currStar.getHeight() / 4f);

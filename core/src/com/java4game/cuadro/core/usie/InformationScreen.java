@@ -13,20 +13,16 @@ import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
+import com.java4game.cuadro.utils.Localization;
 
 public class InformationScreen {
 
     private GameOverButton backB, openSite;
     private RobotHead robotHead;
     private Sprite cover;
-    private FloatAnimator floatAnimator;
+    private FloatAnimator openSiteAnimation;
 
     private float sizeText = 0.47f;
-    private static final String text1 = "BLOCK MOVER";
-    private static final String text2 = "VERSION 1.0.2\n\n" +
-                                        "IDEA, ART: ANDREY SVETASHOV\n" +
-                                        "PROGRAMMING: OLEG KARLOVSKIY\n" +
-                                        "MORE GAMES HERE:";
     private GlyphLayout gameName = new GlyphLayout(), contentText = new GlyphLayout();
 
 
@@ -34,7 +30,7 @@ public class InformationScreen {
         float sizeB = 1.5f;
         backB = new GameOverButton(ButtonActions.All.BACK_TO_MAIN_SCREEN,
                 Gm.WIDTH / 2f,
-                3f, sizeB, 88, "BACK");
+                3f, sizeB, 88, Localization.getText(Localization.LettersKey.BACK));
 
         backB.setPositionToCenter();
 
@@ -52,9 +48,9 @@ public class InformationScreen {
         openSite.setPositionToCenter();
 
         robotHead = new RobotHead(cover.getY() + cover.getHeight());
-        robotHead.setText("Hello!!! My name is mover", 0.7f);
+        robotHead.setText(Localization.getText(Localization.LettersKey.HELLOINF), 0.66f);
 
-        floatAnimator = new FloatAnimator(0.8f, 1f, 0.5f, Interpolation.pow3);
+        openSiteAnimation = new FloatAnimator(0.8f, 1f, 0.8f, Interpolation.pow3);
     }
 
     public void reset(){
@@ -63,9 +59,9 @@ public class InformationScreen {
 
     private void initTextBlocks(){
         UI.setCff(false, sizeText * 2f);
-        gameName.setText(UI.getContentFont(), text1, Color.valueOf("323232"), 0, Align.center, false);
+        gameName.setText(UI.getContentFont(), Localization.getText(Localization.LettersKey.INF1), Color.valueOf("323232"), 0, Align.center, false);
         UI.setCff(false, sizeText);
-        contentText.setText(UI.getContentFont(), text2, Color.valueOf("323232"), 0, Align.center, false);
+        contentText.setText(UI.getContentFont(), Localization.getText(Localization.LettersKey.INF2), Color.valueOf("323232"), 0, Align.center, false);
     }
 
     public void draw(SpriteBatch batch){
@@ -74,8 +70,8 @@ public class InformationScreen {
         cover.draw(batch);
         drawText(batch);
 
-        floatAnimator.updateLoop(Gdx.graphics.getDeltaTime());
-        openSite.setScale(floatAnimator.current);
+        openSiteAnimation.updateLoop(Gdx.graphics.getDeltaTime());
+        openSite.setScale(openSiteAnimation.current);
         openSite.draw(batch);
     }
 

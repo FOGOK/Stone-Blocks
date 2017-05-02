@@ -30,6 +30,8 @@ public class Gm extends ApplicationAdapter {
     public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
     private DebugValueChanger debugValueChanger;
     private DebugDrawer debugDrawer;
+
+    protected static int COUNT_BLOCKS;
     /***/
 
     private Texture startTexture;
@@ -54,6 +56,7 @@ public class Gm extends ApplicationAdapter {
     private void initGame(){
         Prefers.initPrefs();
         setStagesOpened();
+        COUNT_BLOCKS = Prefers.getInt(Prefers.CountBlacks);
         ///
 
         //initDebug
@@ -80,6 +83,8 @@ public class Gm extends ApplicationAdapter {
             Prefers.putInt(Prefers.KeyOpenedStagesSteps, 103);  //103
             Prefers.putInt(Prefers.KeyOpenedStagesTimed, 22);   //22
 
+
+            Prefers.putInt(Prefers.CountBlacks, 100);
             char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[0]; i++) {
                 chars[i] = '3';
@@ -93,6 +98,12 @@ public class Gm extends ApplicationAdapter {
             Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
         }
     }
+
+    public static void minusBlocksCount(){
+        Prefers.putInt(Prefers.CountBlacks, Prefers.getInt(Prefers.CountBlacks) - 1);
+        COUNT_BLOCKS = Prefers.getInt(Prefers.CountBlacks);
+    }
+
 
     public static float aspectR, WIDTH, HEIGHT, mdT;     ///размеры экрана статичны (высота всегда равна 20, ширина 20 * отнощение ширины на высоту, mdT - delta / 0.016 = ~1
 

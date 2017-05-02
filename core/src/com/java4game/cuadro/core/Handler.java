@@ -49,7 +49,7 @@ public class Handler {
     public Handler(){
         ISPAUSE = ISRESTART = false;
 
-        DialogSystem.LEARNING_PART = 0;
+        DialogSystem.LEARNING_PART = 1;
 
         isBackPressed = false;
         menuUI = new MenuUI();

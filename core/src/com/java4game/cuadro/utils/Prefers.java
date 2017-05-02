@@ -26,6 +26,7 @@ public class Prefers {
     public static final String KeyRandomMode2 = "KeyRandomMode2";
     public static final String KeyRandomMode3 = "KeyRandomMode3";
     public static final String KeyFirstOpenLearn = "KeyFirstOpenLearn";
+    public static final String CountBlacks = "CountBlacks";
     /////// DO NOT CHANGE FINAL STRINGS
 
     public static void initPrefs(){

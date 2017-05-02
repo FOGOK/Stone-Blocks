@@ -14,6 +14,7 @@ import com.java4game.cuadro.objects.Revers;
 import com.java4game.cuadro.objects.Rotate90;
 import com.java4game.cuadro.objects.Teleport;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
 
 import static com.java4game.cuadro.objects.FieldObject.NULLTYPE;
@@ -169,18 +170,19 @@ public class DialogSystem {
             case 0:
                 for (int i = 0; i < fieldObjects.length; i++)
                     fieldObjects[i].setTypeBlock(FieldObject.HIDED);
-                robotHead.setText("HI! WELCOME TO TRAINING", 0.8f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR1), 0.8f *
+                    Localization.getCff(Localization.CffsKey.TR1)).show();
                 break;
             case 1:
-                robotHead.setText("WAIT UNTIL THE CUBE COME GREEN SQUARE", 0.6f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR2), 0.6f).show();
                 firstFieldLearnLine.setParams(false, true, 4, true);
                 break;
             case 2:
-                robotHead.setText("TAAAP TO SCREEEEN!", 0.9f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR3), 0.9f).show();
                 Handler.ISPAUSE = true;
                 break;
             case 3:
-                robotHead.setText("GOOD!", 1.2f).show();    //после условия с нажатием
+                robotHead.setText(Localization.getText(Localization.LettersKey.GOOD), 1.2f).show();    //после условия с нажатием
                 Handler.ISPAUSE = false;
                 mainBlock.touchAction();
                 break;
@@ -188,7 +190,7 @@ public class DialogSystem {
                 nextScreen();
                 break;
             case 4:
-                robotHead.setText("NOW DO IT YOURSELF", 0.6f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR5), 0.6f).show();
                 firstFieldLearnLine.setParams(true, false, 4, true);
                 ISALLOWTOUCH = true;
                 break;
@@ -200,10 +202,10 @@ public class DialogSystem {
             case 18:
             case 20:
             case 22:
-                robotHead.setText("GOOD!", 1.2f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.GOOD), 1.2f).show();
                 break;
             case 6:
-                robotHead.setText("TAP TO SCREEN IN GREEN POSITION FOR MOVE BLOCK", 0.6f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR6), 0.6f).show();
                 firstFieldLearnLine.setParams(false, true, 5, true);
                 firstFieldLearnLine.setOtst(1);
 
@@ -218,7 +220,7 @@ public class DialogSystem {
                 blockGenerator.arkadeRefresh();
                 break;
             case 9:
-                robotHead.setText("STEP ONE: STOP THE BLOCK BEFORE WHITE HOLE", 0.5f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR7), 0.5f).show();
                 firstFieldLearnLine.setParams(false, true, 4, true);
                 firstFieldLearnLine.setOtst(1);
 //                fieldObjects[i].setAlpha(0f);
@@ -232,7 +234,7 @@ public class DialogSystem {
                 blockGenerator.arkadeRefresh();
                 break;
             case 11:
-                robotHead.setText("STEP TWO: STOP THE BLOCK IN WHITE HOLE", 0.5f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR8), 0.5f).show();
                 firstFieldLearnLine.setParams(true, false, 2, true);
                 firstFieldLearnLine.setOtst(3);
                 break;
@@ -259,7 +261,7 @@ public class DialogSystem {
 
                 ISALLOWTOUCH = true;
 
-                robotHead.setText("THIS IS REVERSE. TRY IT!", 0.7f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR9), 0.7f).show();
                 break;
             case 16:
                 firstFieldLearnLine.setParams(true, false, 4, true);
@@ -273,7 +275,7 @@ public class DialogSystem {
 
                 blockGenerator.arkadeRefresh();
 
-                robotHead.setText("THIS IS TELEPORT AT RANDOM POSITION", 0.5f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR10), 0.5f).show();
                 break;
             case 17:
             case 19:
@@ -289,9 +291,11 @@ public class DialogSystem {
                 blockGenerator.arkadeRefresh();
 
                 if (screen == 17)
-                    robotHead.setText("THIS IS TURBO. X2 POINTS GET IT", 0.5f).show();
+                    robotHead.setText(Localization.getText(Localization.LettersKey.TR11), 0.7f *
+                            Localization.getCff(Localization.CffsKey.TR11)).show();
                 else
-                    robotHead.setText("THIS IS SLOWER. 5 POINTS GET IT", 0.5f).show();
+                    robotHead.setText(Localization.getText(Localization.LettersKey.TR12), 0.7f *
+                            Localization.getCff(Localization.CffsKey.TR12)).show();
 
                 break;
             case 21:
@@ -318,7 +322,8 @@ public class DialogSystem {
 
                 blockGenerator.arkadeRefresh();
 
-                robotHead.setText("THIS IS ROTATOR. X2 POINTS GET IT", 0.5f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR13), 0.7f *
+                        Localization.getCff(Localization.CffsKey.TR13)).show();
 
                 break;
             case 23:
@@ -344,7 +349,8 @@ public class DialogSystem {
 
                 blockGenerator.arkadeRefresh();
 
-                robotHead.setText("2 IN 1 HOLE. X2 POINTS DO IT", 0.5f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR14), 0.7f *
+                        Localization.getCff(Localization.CffsKey.TR11)).show();
                 break;
             case 24:
                 for (int i = 0; i < fieldObjects.length; i++)
@@ -353,7 +359,7 @@ public class DialogSystem {
                 firstFieldLearnLine.setParams(false, true, 5, false);
 
                 ISALLOWTOUCH = false;
-                robotHead.setText("GOOD!", 1.2f).show();
+                robotHead.setText(Localization.getText(Localization.LettersKey.TR15), 0.8f).show();
                 break;
             case 25:
                 DialogSystem.LEARNING_PART = 0;
@@ -361,6 +367,7 @@ public class DialogSystem {
                 Prefers.putBool(Prefers.KeyFirstOpenLearn, true);
                 break;
         }
+        Gdx.app.log("RQQQR", screen + "");
     }
 
     public void teleportAction(){

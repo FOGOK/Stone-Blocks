@@ -3,8 +3,6 @@ package com.java4game.cuadro.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.java4game.cuadro.core.LevelGen;
-import com.java4game.cuadro.core.usie.GameUI;
 import com.java4game.cuadro.core.usie.UI;
 
 /**
@@ -30,26 +28,26 @@ public class GameUtils {
     }
 
 
-    /**
-     * ///val % => позиция Y относительно фона начиная с верхней границы
-     * */
-    public static int getPosYFromUpBoard(float val){
-        return (int) (GameUI.HEIGHT - (GameUI.HEIGHT * LevelGen.backHDivH * val));
-    }
-
-    /**
-     * ///val % => количество пикселей относительно высоты фона
-     * */
-    public static int getPosXFromUpBoard(float val){
-        return (int) (GameUI.WIDTH * val);
-    }
-
-    /**
-     * ///val % => количество пикселей относительно высоты фона
-     * */
-    public static int getHFromBoard(float val){
-        return (int) (GameUI.HEIGHT * LevelGen.backHDivH * val);
-    }
+//    /**
+//     * ///val % => позиция Y относительно фона начиная с верхней границы
+//     * */
+//    public static int getPosYFromUpBoard(float val){
+//        return (int) (GameUI.HEIGHT - (GameUI.HEIGHT * LevelGen.backHDivH * val));
+//    }
+//
+//    /**
+//     * ///val % => количество пикселей относительно высоты фона
+//     * */
+//    public static int getPosXFromUpBoard(float val){
+//        return (int) (GameUI.WIDTH * val);
+//    }
+//
+//    /**
+//     * ///val % => количество пикселей относительно высоты фона
+//     * */
+//    public static int getHFromBoard(float val){
+//        return (int) (GameUI.HEIGHT * LevelGen.backHDivH * val);
+//    }
 
     public static float FINAL_FONT_SCALE;
 

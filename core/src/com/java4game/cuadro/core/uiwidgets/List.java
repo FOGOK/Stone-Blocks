@@ -18,6 +18,8 @@ public class List extends BaseObject {
     private BaseObject[][] objects;    ///все объекты внутри листа
     private PosF[][] positions;    ///все объекты внутри листа
 
+    private boolean isButtons;
+
     private int columns, rows;
 
     private float currentPos;
@@ -37,7 +39,13 @@ public class List extends BaseObject {
         objects = new BaseObject[columns][rows];
         positions = new PosF[columns][rows];
         setBoundsToChControls();
+        isButtons = true;
     }
+
+    public void setButtons(boolean buttons) {
+        isButtons = buttons;
+    }
+
     private void setBoundsToChControls(){
         posX = (int) (bounds.x * (Gdx.graphics.getWidth() / Gm.WIDTH));
         posY = (int) (bounds.y * (Gdx.graphics.getHeight() / Gm.HEIGHT));
@@ -54,7 +62,7 @@ public class List extends BaseObject {
     }
 
     public void calculatePadding(int targetObjectColumn, int targetObjectRow){
-        padding = (bounds.width - objects[targetObjectColumn][targetObjectRow].getBounds().width * columns) / (float) (columns - 1);
+        padding = (bounds.width - objects[targetObjectColumn][targetObjectRow].getBounds().width * columns) / (float) (Math.max(columns - 1, 1));
         setPositionAllObjects();
     }
 
@@ -71,9 +79,11 @@ public class List extends BaseObject {
                 float x = positions[column][row].x, y = positions[column][row].y + currentPos;
                 if (y + objects[column][row].getBounds().getHeight() > bounds.y && y < bounds.y + bounds.height){
                     objects[column][row].setPosition(x, y);
-                    objects[column][row].draw(batch); //TODO: сделать тут проверку на разные объекты, может быть вызвано исключение
-                    if (!((StageButton)objects[column][row]).isLockedStage())
-                        ((StageButton)objects[column][row]).setEnabled(!moveSp && isTouchedList);
+                    objects[column][row].draw(batch);
+                    if (isButtons){
+                        if (!((StageButton)objects[column][row]).isLockedStage())
+                            ((StageButton)objects[column][row]).setEnabled(!moveSp && isTouchedList);
+                    }
                 }
             }
         }

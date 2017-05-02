@@ -95,6 +95,20 @@ repeat: none
   orig: 68, 68
   offset: 0, 0
   index: -1
+172
+  rotate: false
+  xy: 1435, 1074
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+173
+  rotate: false
+  xy: 1337, 688
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 18
   rotate: false
   xy: 1043, 1104
@@ -650,7 +664,7 @@ repeat: none
   index: -1
 95
   rotate: false
-  xy: 1435, 1075
+  xy: 1337, 754
   size: 66, 63
   orig: 66, 63
   offset: 0, 0

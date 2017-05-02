@@ -21,6 +21,7 @@ import com.java4game.cuadro.objects.Rotate90;
 import com.java4game.cuadro.objects.Teleport;
 import com.java4game.cuadro.objects.TimerAddBlock;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Pos;
 import com.java4game.cuadro.utils.Prefers;
 
@@ -243,13 +244,13 @@ public class BlockGenerator {
                 int objectsCount = 0;
                 switch (TypeGameButton.RNDLEVEL){
                     case 0:
-                        objectsCount = 6;
-                        break;
-                    case 1:
                         objectsCount = 10;
                         break;
+                    case 1:
+                        objectsCount = 20;
+                        break;
                     case 2:
-                        objectsCount = 14;
+                        objectsCount = 30;
                         break;
                 }
 
@@ -529,7 +530,7 @@ public class BlockGenerator {
                             mainBlock.setBoost();
 
                             if (!DialogSystem.ISLEARNING){
-                                robotHead.setText("BOOOST!", 1.3f).showInTimered(1f);
+                                robotHead.setText(Localization.getText(Localization.LettersKey.TURBO), 1.3f * Localization.getCff(Localization.CffsKey.TURBO)).showInTimered(1f);
 
                                 updateArkadePositions();
                                 refreshOnePosition(i);
@@ -539,7 +540,7 @@ public class BlockGenerator {
                             mainBlock.setSlow();
 
                             if (!DialogSystem.ISLEARNING){
-                                robotHead.setText("LOL, SLOW!", 0.8f).showInTimered(1f);
+                                robotHead.setText(Localization.getText(Localization.LettersKey.SLOWER), 0.8f * Localization.getCff(Localization.CffsKey.SLOWER)).showInTimered(1f);
 
                                 arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
@@ -601,6 +602,9 @@ public class BlockGenerator {
                             mainBlock.randomTeleport();
 
                             if (!DialogSystem.ISLEARNING){
+                                arkadeBlock.updateScore(2, 6, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+                                inspectUpdatedScore();
+
                                 updateArkadePositions();
                                 refreshOnePosition(i);
                             }
@@ -609,8 +613,9 @@ public class BlockGenerator {
                             if (((TimerAddBlock)fieldObjects[i]).isShowing()){
                                 levelGen.addSecondsToTimerArcade(10f);
                                 arkadeBlock.updateScore(1, 7, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+                                inspectUpdatedScore();
 
-                                robotHead.setText("+10 SEC", 0.8f).showInTimered(1f);
+                                robotHead.setText("+10 " + Localization.getText(Localization.LettersKey.SEC), 0.8f).showInTimered(1f);
 
                                 ((TimerAddBlock)fieldObjects[i]).setShowing(false);
                             }
@@ -619,8 +624,9 @@ public class BlockGenerator {
                             if (((MoverBonus)fieldObjects[i]).isShowing()){
                                 levelGen.addSecondsToTimerArcade(10f);
                                 arkadeBlock.updateScore(100, 9, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
+                                inspectUpdatedScore();
 
-                                robotHead.setText("SUPER BONUS!!!", 0.8f).showInTimered(1f);
+                                robotHead.setText(Localization.getText(Localization.LettersKey.SUPERBONUS), 0.8f).showInTimered(1f);
 
                                 ((MoverBonus)fieldObjects[i]).setShowing(false);
                             }
@@ -711,7 +717,7 @@ public class BlockGenerator {
                             switch (((Block) fieldObjects[i]).getType()) {
                                 case 0: //blue
                                     scoreUp = 25;
-                                    levelGen.addSecondsToTimerArcade(8f);
+                                    levelGen.addSecondsToTimerArcade(4f);
                                     break;
                                 case 1: //green
                                     scoreUp = 20;
@@ -719,15 +725,15 @@ public class BlockGenerator {
                                     break;
                                 case 2: //red
                                     scoreUp = 30;
-                                    levelGen.addSecondsToTimerArcade(10f);
+                                    levelGen.addSecondsToTimerArcade(2f);
                                     break;
                                 case 3: //white
                                     scoreUp = 10;
-                                    levelGen.addSecondsToTimerArcade(2f);
+                                    levelGen.addSecondsToTimerArcade(10f);
                                     break;
                                 case 4: //yellow
                                     scoreUp = 15;
-                                    levelGen.addSecondsToTimerArcade(4f);
+                                    levelGen.addSecondsToTimerArcade(8f);
                                     break;
                             }
 
@@ -736,7 +742,7 @@ public class BlockGenerator {
                             int mult = 0, realMult = 0;
                             if (mainBlock.isRotated() && mainBlock.isBoost()) {
 
-                                robotHead.setText("OHHH, GOD. 4X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.5f).showInTimered(1f);
+                                robotHead.setText(Localization.getText(Localization.LettersKey.OHMYGODTEXT) + " " + 4 + Localization.getText(Localization.LettersKey.MULTIXTEXT), scoreUp, !isManyBlocks, 0.5f).showInTimered(1f);
 
                                 scoreUp *= 4;
                                 realMult = 4;
@@ -747,18 +753,18 @@ public class BlockGenerator {
                                 scoreUp *= 2;
                                 realMult = 2;
                                 mult = 1;
-                                robotHead.setText("2X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
+                                robotHead.setText(2 + Localization.getText(Localization.LettersKey.MULTIXTEXT), scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
                             } else if (mainBlock.isRotated()) {
                                 scoreUp *= 3;
                                 realMult = 3;
                                 mult = 2;
-                                robotHead.setText("3X!!! TOTAL SCORE:", scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
+                                robotHead.setText(3 + Localization.getText(Localization.LettersKey.MULTIXTEXT), scoreUp, !isManyBlocks, 0.7f).showInTimered(1f);
                             }
 
                             if (isManyBlocks) {
                                 scoreUp *= 2;
                                 int whX = realMult != 0 ? realMult * counterBlocksDrivedOut * 2 : counterBlocksDrivedOut * 2;
-                                robotHead.showInTimered(1f).setText(whX + "X!!! TOTAL SCORE:", scoreUp, true, 0.7f);
+                                robotHead.showInTimered(1f).setText(whX + Localization.getText(Localization.LettersKey.MULTIXTEXT), scoreUp, true, 0.7f);
                             }
 
                             int lastScore = arkadeBlock.getScore();
@@ -769,9 +775,11 @@ public class BlockGenerator {
 
                                 if (arkadeBlock.getScore() - lastScore < 100) {
                                     if (arkadeBlock.getScore() >= 10000)
-                                        robotHead.setText("Oh, My GOD!!! Already 10000 points.", 0.3f).showInTimered(2f);
+                                        robotHead.setText(Localization.getText(Localization.LettersKey.OHMYGODTEXT) + Localization.getText(Localization.LettersKey.NICEALREADYTEXT) +
+                                                arkadeBlock.getScore() + Localization.getText(Localization.LettersKey.PTS), 0.3f).showInTimered(2f);
                                     else
-                                        robotHead.setText("Nice! Already " + arkadeBlock.getScore() + " points.", 0.6f).showInTimered(2f);
+                                        robotHead.setText(Localization.getText(Localization.LettersKey.NICEALREADYTEXT) +
+                                                arkadeBlock.getScore() + Localization.getText(Localization.LettersKey.PTS), 0.6f).showInTimered(2f);
                                 }
 
                                 for (int j = 0; j < fieldObjects.length; j++) {

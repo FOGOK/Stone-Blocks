@@ -80,13 +80,13 @@ public class FlyingStage {
                 }else{
                     switch (TypeGameButton.RNDLEVEL){
                         case 0:
-                            text = "3X";
-                            break;
-                        case 1:
                             text = "5X";
                             break;
+                        case 1:
+                            text = "10X";
+                            break;
                         case 2:
-                            text = "7X";
+                            text = "15X";
                             break;
                     }
                 }

@@ -12,6 +12,7 @@ import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Timer;
 
 import java.util.Random;
