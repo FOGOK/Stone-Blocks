@@ -367,7 +367,6 @@ public class DialogSystem {
                 Prefers.putBool(Prefers.KeyFirstOpenLearn, true);
                 break;
         }
-        Gdx.app.log("RQQQR", screen + "");
     }
 
     public void teleportAction(){

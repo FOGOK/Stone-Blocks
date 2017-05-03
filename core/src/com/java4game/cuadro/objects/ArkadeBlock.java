@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.PosF;
 import com.java4game.cuadro.utils.Timer;
 
@@ -79,9 +80,9 @@ public class ArkadeBlock {
 
     private void initScoreText(){
         if (simplify)
-            nameText = new TextBlock(0f, 0f, true, "BLOCKS");
+            nameText = new TextBlock(0f, 0f, true, Localization.getText(Localization.LettersKey.BLOCKS));
         else
-            nameText = new TextBlock(0f, 0f, true, "POINTS");
+            nameText = new TextBlock(0f, 0f, true, Localization.getText(Localization.LettersKey.POINTS));
         nameText.setCustomCff(currStar.getHeight() / 8f);
         scoreText = new TextBlock(0f, 0f, true, "0");
         scoreText.setCustomCff(currStar.getHeight() / 4f);

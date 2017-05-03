@@ -11,6 +11,7 @@ import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
+import com.java4game.cuadro.utils.Localization;
 
 /**
  * Created by FOGOK on 08.01.2017 2:23.
@@ -56,11 +57,11 @@ public class FlyingStage {
         String text = "";
 
         if (DialogSystem.ISLEARNING){
-            text = DialogSystem.LEARNING_PART == 0 ? "BASE" : "ARCADE";
+            text = DialogSystem.LEARNING_PART == 0 ? Localization.getText(Localization.LettersKey.BASE) : Localization.getText(Localization.LettersKey.ARCADE);
             stageT.setText(text);
             stageT.setTextColor(color);
 
-            numberT.setText("MODE");
+            numberT.setText(Localization.getText(Localization.LettersKey.MODE));
             numberT.setTextColor(color);
         }else{
             if (mode > 0){
@@ -68,13 +69,13 @@ public class FlyingStage {
                 if (mode == 1){
                     switch (TypeGameButton.TOUCHED_ARK){
                         case 0:
-                            text = "BRONZE";
+                            text = Localization.getText(Localization.LettersKey.BRONZE);
                             break;
                         case 1:
-                            text = "SILVER";
+                            text = Localization.getText(Localization.LettersKey.SILVER);
                             break;
                         case 2:
-                            text = "GOLD";
+                            text = Localization.getText(Localization.LettersKey.GOLD);
                             break;
                     }
                 }else{
@@ -93,13 +94,13 @@ public class FlyingStage {
                 stageT.setText(text);
                 stageT.setTextColor(color);
 
-                numberT.setText(mode == 1 ? "ARKADE" : "RANDOM");
+                numberT.setText(mode == 1 ? Localization.getText(Localization.LettersKey.ARCADE) : Localization.getText(Localization.LettersKey.RANDOM));
                 numberT.setTextColor(color);
 
-                stageT.setCustomCff(size * 0.25f);
-                numberT.setCustomCff(size * 0.25f);
+                stageT.setCustomCff(size * 0.25f * Localization.getCff(Localization.CffsKey.BRONZESILVERGOLD));
+                numberT.setCustomCff(size * 0.25f * Localization.getCff(Localization.CffsKey.BRONZESILVERGOLD));
             }else{
-                stageT.setText("STAGE");
+                stageT.setText(Localization.getText(Localization.LettersKey.STAGE));
                 stageT.setTextColor(color);
 
                 numberT.setText(level + "");

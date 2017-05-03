@@ -11,6 +11,7 @@ import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
+import com.java4game.cuadro.utils.Localization;
 
 import java.math.BigDecimal;
 
@@ -104,8 +105,7 @@ public class TimerBlock {
     }
 
     private void initTimeLetter(){
-        final String text = "TIME";
-        timeLetter = new TextBlock(0f, 0f, true, text);
+        timeLetter = new TextBlock(0f, 0f, true, Localization.getText(Localization.LettersKey.TIMEMODE));
         timeLetter.setCustomCff(goldStar.getHeight() / 4f);
         timeLetter.setPosition(goldStar.getX() + goldStar.getWidth() * 0.314f - timeLetter.getBounds().getWidth() * 0.53f,
                 goldStar.getY() + goldStar.getHeight() - timeLetter.getBounds().getHeight() * 0.9f);
@@ -286,7 +286,7 @@ public class TimerBlock {
         }
 
         if (MEGATEST){
-            starTimeBlock.setText("ALLTIME: " + stringBuilder.toString());
+            starTimeBlock.setText(Localization.getText(Localization.LettersKey.ALLTIME) + stringBuilder.toString());
             starTimeBlock.setPosition(Gm.WIDTH / 2f,
                     Gm.HEIGHT * 0.9f);
             starTimeBlock.setPositionToCenter();

@@ -12,6 +12,7 @@ import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Localization;
 
 import static com.java4game.cuadro.core.LevelGen.ISGAMEOVER;
 
@@ -52,11 +53,11 @@ public class TimerInArcade extends BaseObject{
         timerSeconds.setCustomCff(textSize);
 
         float otst = 0.15f;
-        timeText = new TextBlock(0f, 0f, false, "TIME");
+        timeText = new TextBlock(0f, 0f, false, Localization.getText(Localization.LettersKey.TIME));
         timeText.setCustomCff(textSize);
         timeText.setPosition(getBounds().getX(), getBounds().getY() + getBounds().getHeight() + otst);
 
-        minOneText = new TextBlock(0f, 0f, false, "1 MIN");
+        minOneText = new TextBlock(0f, 0f, false, "1 " + Localization.getText(Localization.LettersKey.MINUTE));
         minOneText.setCustomCff(textSize);
         minOneText.setPosition(getBounds().getX() + getBounds().getWidth() - minOneText.getBounds().getWidth(), getBounds().getY() + getBounds().getHeight() + otst);
 
@@ -82,7 +83,7 @@ public class TimerInArcade extends BaseObject{
         currentSeconds += timeAdd;
         if (currentSeconds > allSeconds){
             currentSeconds = allSeconds;
-            robotHead.setText("MAX TIME!!!", 0.7f).showInTimered(1f);
+            robotHead.setText(Localization.getText(Localization.LettersKey.MAXTIME), 0.7f).showInTimered(1f);
         }
     }
 

@@ -540,7 +540,7 @@ public class BlockGenerator {
                             mainBlock.setSlow();
 
                             if (!DialogSystem.ISLEARNING){
-                                robotHead.setText(Localization.getText(Localization.LettersKey.SLOWER), 0.8f * Localization.getCff(Localization.CffsKey.SLOWER)).showInTimered(1f);
+                                robotHead.setText(Localization.getText(Localization.LettersKey.SLOWER), 0.8f).showInTimered(1f);
 
                                 arkadeBlock.updateScore(5, 8, mult, fieldObjects[i].getCenterFloatX(), fieldObjects[i].getCenterFloatY());
 
@@ -776,10 +776,10 @@ public class BlockGenerator {
                                 if (arkadeBlock.getScore() - lastScore < 100) {
                                     if (arkadeBlock.getScore() >= 10000)
                                         robotHead.setText(Localization.getText(Localization.LettersKey.OHMYGODTEXT) + Localization.getText(Localization.LettersKey.NICEALREADYTEXT) +
-                                                arkadeBlock.getScore() + Localization.getText(Localization.LettersKey.PTS), 0.3f).showInTimered(2f);
+                                                arkadeBlock.getScore() + " " + Localization.getText(Localization.LettersKey.PTS), 0.3f).showInTimered(2f);
                                     else
                                         robotHead.setText(Localization.getText(Localization.LettersKey.NICEALREADYTEXT) +
-                                                arkadeBlock.getScore() + Localization.getText(Localization.LettersKey.PTS), 0.6f).showInTimered(2f);
+                                                arkadeBlock.getScore() + " " + Localization.getText(Localization.LettersKey.PTS), 0.6f).showInTimered(2f);
                                 }
 
                                 for (int j = 0; j < fieldObjects.length; j++) {

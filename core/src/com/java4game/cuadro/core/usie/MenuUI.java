@@ -19,6 +19,7 @@ import com.java4game.cuadro.objects.FlyingGlass;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
 
 import static com.java4game.cuadro.core.usie.TypeGameBottomBar.*;
@@ -194,7 +195,7 @@ public class MenuUI {
         silverB.setPositionToCenter();
 
         goldB.setText(Prefers.getInt(Prefers.KeyRecordGold) + "");
-        goldB.setText2("infinity");
+        goldB.setText2(Localization.getText(Localization.LettersKey.INFINITY));
         goldB.setLocked(Prefers.getInt(Prefers.KeyOpenedArkadeModes) < 2);
         goldB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f);
         goldB.setPositionToCenter();
@@ -203,7 +204,7 @@ public class MenuUI {
     private RobotHead robotHead;
     private void initRandomTextAnnotation(){
         robotHead = new RobotHead(typeGameBottomBar.getBounds().getY() + typeGameBottomBar.getBounds().getHeight() * 0.855f);
-        robotHead.setText("complete 25/50/75 levels in steps/time mode for open this mode", 0.5f);
+        robotHead.setText(Localization.getText(Localization.LettersKey.RANDOMANNOTATION), 0.5f);
     }
 
     private final float otstRandButtons = 2.6f;
@@ -221,20 +222,20 @@ public class MenuUI {
         int stagesOpenedCount = Prefers.getInt(Prefers.KeyOpenedStagesSteps);
         int timedOpenedCount = Prefers.getInt(Prefers.KeyOpenedStagesTimed);
 
-        normalB.setText("NORMAL");
-        normalB.setText2("GAMES: " + Prefers.getInt(Prefers.KeyRandomMode1));
+        normalB.setText(Localization.getText(Localization.LettersKey.NORMAL));
+        normalB.setText2(Localization.getText(Localization.LettersKey.GAMESCOUNT) + Prefers.getInt(Prefers.KeyRandomMode1));
         normalB.setLocked(stagesOpenedCount < 25 && timedOpenedCount < 25);
         normalB.setPosition(Gm.WIDTH / 2f, startPos + otstRandButtons * 1.2f);
         normalB.setPositionToCenter();
 
-        hardB.setText("HARD");
-        hardB.setText2("GAMES: " + Prefers.getInt(Prefers.KeyRandomMode2));
+        hardB.setText(Localization.getText(Localization.LettersKey.HARD));
+        hardB.setText2(Localization.getText(Localization.LettersKey.GAMESCOUNT) + Prefers.getInt(Prefers.KeyRandomMode2));
         hardB.setLocked(stagesOpenedCount < 50 && timedOpenedCount < 50);
         hardB.setPosition(Gm.WIDTH / 2f, startPos);
         hardB.setPositionToCenter();
 
-        extremeB.setText("EXTREME");
-        extremeB.setText2("GAMES: " + Prefers.getInt(Prefers.KeyRandomMode3));
+        extremeB.setText(Localization.getText(Localization.LettersKey.EXTREME));
+        extremeB.setText2(Localization.getText(Localization.LettersKey.GAMESCOUNT) + Prefers.getInt(Prefers.KeyRandomMode3));
         extremeB.setLocked(stagesOpenedCount < 75 && timedOpenedCount < 75);
         extremeB.setPosition(Gm.WIDTH / 2f, startPos - otstRandButtons * 1.2f);
         extremeB.setPositionToCenter();
@@ -407,7 +408,7 @@ public class MenuUI {
     }
 
     public void refreshTopBar(int i){
-        selectStageText = Assets.getNewSprite(i + 51);
+        selectStageText = Assets.getNewSprite(Localization.getCurrentLang().equals(Localization.Lang.ENG) ? i + 51 : i + 107);
         final float cffHeight = 0.3041f;
         selectStageText.setSize(Gm.WIDTH, Gm.WIDTH * cffHeight);
         selectStageText.setPosition(0f, Gm.HEIGHT - selectStageText.getHeight());

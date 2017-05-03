@@ -11,6 +11,7 @@ import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
+import com.java4game.cuadro.utils.Localization;
 
 /**
  * Created by FOGOK on 11.01.2017 6:00.
@@ -93,8 +94,7 @@ public class StarBlock {
         bronzeStar.setOriginCenter();
     }
     private void initStepsLetter(){
-        final String text = "STEPS";
-        stepsLetter = new TextBlock(0f, 0f, true, text);
+        stepsLetter = new TextBlock(0f, 0f, true, Localization.getText(Localization.LettersKey.STEPS));
         stepsLetter.setCustomCff(noneStar.getHeight() / 4f);
         stepsLetter.setPosition(noneStar.getX() + noneStar.getWidth() * 0.314f - stepsLetter.getBounds().getWidth() * 0.53f,
                                 noneStar.getY() + noneStar.getHeight() - stepsLetter.getBounds().getHeight() * 0.9f);

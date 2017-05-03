@@ -12,7 +12,11 @@ import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by FOGOK on 21.01.2017 11:17.
@@ -30,6 +34,8 @@ public class GameOverUI {
     private boolean isWin;
     private int mode;
 
+    List<String> linkedList = new LinkedList<String>();
+
     private GameOverButton nextLevelB, mainMenuB, restartB;
 
     private Interpolation showRecord = Interpolation.swingOut;
@@ -38,6 +44,7 @@ public class GameOverUI {
         this.sizeStar = sizeStar;
         this.ySquare = ySquare;
         this.mode = mode;
+
 
         if (mode > 0){
             arkadeWinSprite = Assets.getNewSprite(mode == 1 ? 62 : 63);
@@ -64,13 +71,13 @@ public class GameOverUI {
         final float sizeB = sizeStar / 2f;
 
         mainMenuB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.TOMAINMENU_PAUSE_ACTION,
-                0f, 0f, sizeB, 57, "MENU");
+                0f, 0f, sizeB, 57, Localization.getText(Localization.LettersKey.MENU));
 
         nextLevelB = new GameOverButton(MenuUI.TEST ? ButtonActions.All.RESTART_PAUSE_ACTION : ButtonActions.All.NEXT_LEVEL_ACT,
-                0f, 0f, sizeB, 58, "NEXT");
+                0f, 0f, sizeB, 58, Localization.getText(Localization.LettersKey.NEXT));
 
         restartB = new GameOverButton(ButtonActions.All.RESTART_PAUSE_ACTION,
-                0f, 0f, sizeB, 87, "RESTART");
+                0f, 0f, sizeB, 87, Localization.getText(Localization.LettersKey.RESTART));
     }
 
     private void setLose(){
@@ -105,7 +112,7 @@ public class GameOverUI {
     public void setText(boolean isWin){
         this.isWin = isWin;
         if (isWin) setWin(); else setLose();
-        loseWinText.setText(isWin ? "WIN" : "LOSE");
+        loseWinText.setText(isWin ? Localization.getText(Localization.LettersKey.WIN) : Localization.getText(Localization.LettersKey.LOSE));
         loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
         loseWinText.setPositionToCenter();
     }
@@ -127,20 +134,20 @@ public class GameOverUI {
     public void setRecord(boolean isNewRecord){
         if (isNewRecord){
             if (mode == 1)
-                arkadeRecord.setText("NEW RECORD: " + loseWinText.getText() + "!");
+                arkadeRecord.setText(Localization.getText(Localization.LettersKey.NEWRECORD) + loseWinText.getText() + "!");
             else
-                arkadeRecord.setText("GAMES PLAYED: " + specialText);
+                arkadeRecord.setText(Localization.getText(Localization.LettersKey.GAMESPLAYED) + specialText);
 
         }else{
             switch (TypeGameButton.TOUCHED_ARK){
                 case 0:
-                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordBronze));
+                    arkadeRecord.setText(Localization.getText(Localization.LettersKey.RECORD) + Prefers.getInt(Prefers.KeyRecordBronze));
                     break;
                 case 1:
-                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordSilver));
+                    arkadeRecord.setText(Localization.getText(Localization.LettersKey.RECORD) + Prefers.getInt(Prefers.KeyRecordSilver));
                     break;
                 case 2:
-                    arkadeRecord.setText("RECORD: " + Prefers.getInt(Prefers.KeyRecordGold));
+                    arkadeRecord.setText(Localization.getText(Localization.LettersKey.RECORD) + Prefers.getInt(Prefers.KeyRecordGold));
                     break;
             }
         }

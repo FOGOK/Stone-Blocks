@@ -10,6 +10,7 @@ import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Localization;
 
 public class GPauseUI {
 
@@ -30,25 +31,25 @@ public class GPauseUI {
 
         resumeB = new GameOverButton(ButtonActions.All.CONTINUE_PAUSE_ACTION,
                 (Gm.WIDTH - sizeB) / 2f - otst + sizeB / 2f,
-                ySquare / 2f, sizeB, 88, "RESUME");
+                ySquare / 2f, sizeB, 88, Localization.getText(Localization.LettersKey.CONTINUE));
         resumeB.getTextBlock().setTextColor(textColor);
 
 
         menuB = new GameOverButton(ButtonActions.All.TOMAINMENU_PAUSE_ACTION,
                 (Gm.WIDTH - sizeB) / 2f + sizeB / 2f,
-                ySquare / 2f, sizeB, 57, "MENU");
+                ySquare / 2f, sizeB, 57, Localization.getText(Localization.LettersKey.MENU));
         menuB.getTextBlock().setTextColor(textColor);
 
         restartB = new GameOverButton(ButtonActions.All.RESTART_PAUSE_ACTION,
                 (Gm.WIDTH - sizeB) / 2f + otst + sizeB / 2f,
-                ySquare / 2f, sizeB, 56, "RESTART");
+                ySquare / 2f, sizeB, 56, Localization.getText(Localization.LettersKey.RESTART));
         restartB.getTextBlock().setTextColor(textColor);
 
         resumeB.setPositionToCenter();
         menuB.setPositionToCenter();
         restartB.setPositionToCenter();
 
-        textBlock = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT / 2f, false, "PAUSE");
+        textBlock = new TextBlock(Gm.WIDTH / 2f, Gm.HEIGHT / 2f, false, Localization.getText(Localization.LettersKey.PAUSE));
         textBlock.setCustomCff(0.8f);
         textBlock.setPositionToCenter();
         textBlock.setTextColor(textColor);

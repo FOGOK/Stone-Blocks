@@ -6,6 +6,7 @@ import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.GameOverButton;
 import com.java4game.cuadro.core.uiwidgets.ManyStatsButton;
 import com.java4game.cuadro.core.uiwidgets.TextBlock;
+import com.java4game.cuadro.utils.Localization;
 
 public class RecordsScreen {
 
@@ -17,18 +18,18 @@ public class RecordsScreen {
         float sizeB = 2f;
         float sizeSecondB = sizeB * 0.4f;
         leaderBoards = new GameOverButton(ButtonActions.All.OPEN_LIDERBOARD,
-                Gm.WIDTH / 2f, startY + height * 0.6f, sizeB, 96, "LEADERBOARDS");
+                Gm.WIDTH / 2f, startY + height * 0.6f, sizeB, 96, Localization.getText(Localization.LettersKey.LEADERBOARDS));
         leaderBoards.setPositionToCenter();
 
         achievements = new GameOverButton(ButtonActions.All.OPEN_ACHIEVEMENTS,
-                Gm.WIDTH / 2f, startY + height * 0.3f, sizeB, 93, "ACHIEVEMENTS");
+                Gm.WIDTH / 2f, startY + height * 0.3f, sizeB, 93, Localization.getText(Localization.LettersKey.ACHIEVEMENTS));
         achievements.setPositionToCenter();
 
 
 
         float otst = 0.15f;
 
-        connectOnStartText = new TextBlock(Gm.WIDTH / 2f, startY + otst * 2f, false, "CONNECT ON START");
+        connectOnStartText = new TextBlock(Gm.WIDTH / 2f, startY + otst * 2f, false, Localization.getText(Localization.LettersKey.CONNECTONSTART));
         connectOnStartText.setCustomCff(sizeSecondB * 0.6f);
 
         connectOnStart = new ManyStatsButton(ButtonActions.All.CHECKBOXCLICK_AUTORIZETOSTART,

@@ -1,9 +1,11 @@
 package com.java4game.cuadro.core.uiwidgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Localization;
 
 /**
  * Created by FOGOK on 14.01.2017 22:40.
@@ -40,21 +42,22 @@ public class TypeGameButton extends BaseButton {
             textBlock = new TextBlock(x, y - h * 0.7f, false, "");
             switch (type){
                 case STEPS:
-                    textBlock.setText("STEPS");
+                    textBlock.setText(Localization.getText(Localization.LettersKey.STEPS));
                     break;
                 case TIME:
-                    textBlock.setText("TIME");
+                    textBlock.setText(Localization.getText(Localization.LettersKey.TIMEMODE));
                     break;
                 case ARCADE:
-                    textBlock.setText("ARCADE");
+                    textBlock.setText(Localization.getText(Localization.LettersKey.ARCADE));
                     break;
                 case RAND:
-                    textBlock.setText("RAND");
+                    textBlock.setText(Localization.getText(Localization.LettersKey.RANDOM));
                     break;
                 case STATS:
-                    textBlock.setText("RECORDS");
+                    textBlock.setText(Localization.getText(Localization.LettersKey.RECORDS));
                     break;
             }
+
             textBlock.setCustomCff(h / 4f);
         }else{
             lockSprite = Assets.getNewSprite(61);
@@ -111,6 +114,10 @@ public class TypeGameButton extends BaseButton {
         if (isTextBlockEnable){
             setFirstTexture(isSelected ? selectedSprite : normalSprite);
             setSecondTexture(isSelected ? selectedSprite : normalSprite);
+            if (isSelected)
+                textBlock.setTextColor(Color.valueOf("ffe56a"));
+            else
+                textBlock.setDefaultColor();
         }
     }
 

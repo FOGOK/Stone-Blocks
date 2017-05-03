@@ -12,7 +12,8 @@ import com.java4game.cuadro.core.usie.UI;
  */
 public class TextBlock extends BaseObject {
 
-    private Color textColor = Color.valueOf("323232");
+    private static Color defaultColor = Color.valueOf("323232");
+    private Color textColor = defaultColor;
     private boolean isTitle;
     private float customCff;
     private float alpha;
@@ -75,6 +76,12 @@ public class TextBlock extends BaseObject {
     public void setTextColor(Color textColor) {
         this.textColor = textColor;
     }
+    public void setDefaultColor() {
+        this.textColor = defaultColor;
+    }
+
+
+
     @Override
     public void draw(final SpriteBatch batch) {
         if (customCff != -1f || scale != -1f) UI.setCff(isTitle, customCff * scale);
