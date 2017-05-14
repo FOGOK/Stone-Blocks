@@ -11,7 +11,7 @@ public class Localization {
     public enum Lang {
         RUS, ENG
     }
-    private static Lang lang = Lang.RUS;
+    private static Lang lang = Lang.ENG;
 
     public enum LettersKey{
         BACK, TRAINING, HELLOINF, INF1, INF2, ARCMODE, CTBCFT, 
@@ -28,8 +28,8 @@ public class Localization {
     //RUS
     private static String[] rusLetters = new String[]{
         "назад", "тренировка", "привет!!!\n меня зовут мувер", "BLOCK MOVER", "версия 1.0.2\n\n" +
-            "идея, арт: андрей светашов\n" +
-            "программирование: олег карловский\n\n" +
+            "идея, арт: [#ff5800] андрей светашов[]\n" +
+            "код: [#07b1ff] олег карловский[]\n\n" +
             "больше игр здесь:", "аркадный режим", "нажмите на черный куб для тренировки",
             "красный", "синий", "желтый", "белый", "зеленый", "блок", "реверс", "телепорт",
             "ротатор", "замедлитель", "ускоритель", "прибавка времени", "мувер", "бомба",
@@ -53,8 +53,8 @@ public class Localization {
     //ENG
     private static String[] engLetters = new String[]{
         "back", "training", "hello!!!\n my name is mover", "BLOCK MOVER", "VERSION 1.0.2\n\n" +
-            "IDEA, ART: ANDREY SVETASHOV\n" +
-            "PROGRAMMING: OLEG KARLOVSKIY\n\n" +
+            "IDEA, ART: [#ff5800] ANDREY SVETASHOV[]\n" +
+            "CODE: [#07b1ff] OLEG KARLOVSKIY[]\n\n" +
             "MORE GAMES HERE:", "ARCADE MODE", "CLICK TO BLACK CUBE FOR TRAINING",
             "RED", "BLUE", "YELLOW", "WHITE", "GREEN", "BLOCK", "REVERS", "TELEPORT",
             "ROTATOR", "SLOWER", "TURBO", "TIME UP", "MOVER", "BOMB", "GAME OVER",

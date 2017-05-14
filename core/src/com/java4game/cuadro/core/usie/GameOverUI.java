@@ -34,8 +34,6 @@ public class GameOverUI {
     private boolean isWin;
     private int mode;
 
-    List<String> linkedList = new LinkedList<String>();
-
     private GameOverButton nextLevelB, mainMenuB, restartB;
 
     private Interpolation showRecord = Interpolation.swingOut;
@@ -44,7 +42,6 @@ public class GameOverUI {
         this.sizeStar = sizeStar;
         this.ySquare = ySquare;
         this.mode = mode;
-
 
         if (mode > 0){
             arkadeWinSprite = Assets.getNewSprite(mode == 1 ? 62 : 63);

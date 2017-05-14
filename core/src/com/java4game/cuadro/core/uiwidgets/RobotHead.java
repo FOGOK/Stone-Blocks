@@ -10,9 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.usie.UI;
+import com.java4game.cuadro.utils.Animation;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
-import com.java4game.cuadro.utils.Localization;
+import com.java4game.cuadro.utils.PosF;
 import com.java4game.cuadro.utils.Timer;
 
 import java.util.Random;
@@ -20,7 +21,8 @@ import java.util.Random;
 
 public class RobotHead {
 
-    private Sprite head, dialogCover, leftEave, rightEave;
+    private Sprite head, dialogCover;
+    private Animation<Sprite> eyesAnim;
     private float sizeH;
     private String text;
     private float sizeText;
@@ -44,13 +46,27 @@ public class RobotHead {
         textAreaBounds = new Rectangle();
         textAreaBounds.setSize(dialogCover.getWidth() * 0.866f, dialogCover.getHeight() * 0.853f);
 
-        leftEave = Assets.getNewSprite(97);
-        leftEave.setSize(head.getHeight() * 0.473f, head.getHeight() * 0.473f);
-
-        rightEave = new Sprite();
-        rightEave.set(leftEave);
+//        leftEave = Assets.getNewSprite(97);
+//        leftEave.setSize(head.getHeight() * 0.473f, head.getHeight() * 0.473f);
+//
+//        rightEave = new Sprite();
+//        rightEave.set(leftEave);
 
         timer = new Timer(1.3f);
+
+        eyesAnim = new Animation<Sprite>(0.05f,
+                Assets.getNewSprite(112),
+                Assets.getNewSprite(113),
+                Assets.getNewSprite(114));
+
+        eyesAnim.setPlayMode(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP_PINGPONG);
+        for (Sprite sprite : eyesAnim.getKeyFrames()){
+            sprite.setSize(head.getWidth() * 0.944f, head.getHeight() * 0.509f);
+            sprite.setOriginCenter();
+            sprite.setRotation(-5f);
+        }
+
+
 
         setPositionY(y);
     }
@@ -60,6 +76,7 @@ public class RobotHead {
     }
 
     private float dialogCoverX;
+    private PosF positionAnimEyes;
     public void setPositionY(float y){
         dialogCoverX = head.getWidth() * 0.864f;
 
@@ -73,8 +90,13 @@ public class RobotHead {
         textAreaBounds.setPosition(textAreaBounds.getX() + otst, textAreaBounds.getY() + otst);
         textAreaBounds.setSize(textAreaBounds.getWidth() - otst * 2f, textAreaBounds.getHeight() - otst * 2f);
 
-        leftEave.setPosition(head.getX() + head.getWidth() * 0.049f, head.getY() + head.getHeight() * 0.251f);
-        rightEave.setPosition(head.getX() + head.getWidth() * 0.514f, head.getY() + head.getHeight() * 0.215f);
+//        leftEave.setPosition(head.getX() + head.getWidth() * 0.049f, head.getY() + head.getHeight() * 0.251f);
+//        rightEave.setPosition(head.getX() + head.getWidth() * 0.514f, head.getY() + head.getHeight() * 0.215f);
+
+        positionAnimEyes = new PosF(head.getX() + head.getWidth() * 0.035f, head.getY() + head.getHeight() * 0.215f);
+        for (Sprite sprite : eyesAnim.getKeyFrames())
+            sprite.setPosition(positionAnimEyes.x, positionAnimEyes.y);
+
     }
 
     private void refreshHeadAnim(){
@@ -159,18 +181,17 @@ public class RobotHead {
 
             if (timer.next()) {
                 if (isEyesClosed){
-                    timer.reset(rnd.nextInt(20) / 10f);
+                    timer.reset(2f + rnd.nextInt(40) / 10f);
                     isEyesClosed = false;
                 }else{
-                    timer.reset(0.2f);
-                    isEyesClosed = true;
+                    eyesAnim.getKeyFrame(false).draw(batch);
+                    if (eyesAnim.isLooped(4)){
+                        isEyesClosed = true;
+                        eyesAnim.reset();
+                    }
                 }
             }
 
-            if (isEyesClosed){
-                leftEave.draw(batch);
-                rightEave.draw(batch);
-            }
         }
 
         headAnimation.update(Math.min(Gdx.graphics.getDeltaTime(), 0.016f));

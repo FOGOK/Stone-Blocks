@@ -45,6 +45,7 @@ public class UI {
         contentFont.setUseIntegerPositions(false);
         contentFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         contentFont.getData().setScale(CONVERTED_TO_ABSTRACT * DIFFCONTENTFONT);
+        contentFont.getData().markupEnabled = true;
 
 
         glyphLayout = new GlyphLayout();
