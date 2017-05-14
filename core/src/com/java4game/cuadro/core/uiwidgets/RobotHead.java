@@ -54,7 +54,7 @@ public class RobotHead {
 
         timer = new Timer(1.3f);
 
-        eyesAnim = new Animation<Sprite>(0.05f,
+        eyesAnim = new Animation<Sprite>(0.03f,
                 Assets.getNewSprite(112),
                 Assets.getNewSprite(113),
                 Assets.getNewSprite(114));
