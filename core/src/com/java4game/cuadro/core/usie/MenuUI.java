@@ -84,6 +84,7 @@ public class MenuUI {
     private TextBlock /*stageText, worldText, */starsText;
 
     private RecordsScreen recordsScreen;
+    private Settings settings;
 
     private StageButton[] stepsStagesButtons, timedStagesButtons;
 
@@ -127,6 +128,11 @@ public class MenuUI {
         initRecordsScreen();
         initRandomTextAnnotation();
         initRandomButtons();
+        initSettings();
+    }
+
+    private void initSettings() {
+        settings = new Settings();
     }
 
     private void initRecordsScreen(){
@@ -485,6 +491,7 @@ public class MenuUI {
 
                 gameNameTex.draw(batch);    // 1 объект
 
+                settings.draw(batch);
 
                 if (!objectAnimations[GAME_NAME].isNeedToUpdate()){  //если анимация прошла, тогда отрисовываем анимацию езжущего блока
                     blockAnimation.draw(batch);

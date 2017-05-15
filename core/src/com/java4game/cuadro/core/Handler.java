@@ -5,10 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
-import com.java4game.cuadro.core.uiwidgets.TypeGameButton;
 import com.java4game.cuadro.core.usie.GPauseUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
+import com.java4game.cuadro.utils.Localization;
 
 /**
  * Created by java4game and FOGOK on 10.09.2016 23:15.
@@ -30,6 +30,7 @@ public class Handler {
 
     public static boolean ISPAUSE;
     public static boolean ISRESTART;
+    public static boolean REFRESHLANG;
     ///
 
     //ui
@@ -81,6 +82,11 @@ public class Handler {
             menuUI.draw(batch);
         }
 
+        if (REFRESHLANG){
+            REFRESHLANG = false;
+            Localization.initEng();
+            menuUI = new MenuUI();
+        }
 
         if (ISRESTART) restart();
 

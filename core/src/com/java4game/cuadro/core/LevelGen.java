@@ -156,6 +156,8 @@ public class LevelGen {
         flyingStage.setNew(StageButton.LEVEL, flyStageColor, mode);
         if (!REFRESH_REFRESH)
             flyingStage.refreshRefresh();
+        else
+            MusicCore.play(MusicCore.GAME);
         //
         float starSize = 0f;
         if (!DialogSystem.ISLEARNING) {

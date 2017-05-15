@@ -6,8 +6,8 @@ import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
+import com.java4game.cuadro.core.usie.Settings;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
-import com.java4game.cuadro.utils.D;
 import com.java4game.cuadro.utils.Prefers;
 
 
@@ -22,7 +22,7 @@ public class ButtonActions {
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
         WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE,
-        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHECKBOXCLICK_AUTORIZETOSTART
+        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHANGE_LANGUAGE, CHANGE_MUSIC, CHANGE_SOUND, CHECKBOXCLICK_AUTORIZETOSTART
     }
 
     public static void activateAction(All action){
@@ -170,7 +170,23 @@ public class ButtonActions {
                 break;
 
             case SETTINGS_PAUSE_ACTION:
-                D.S("OPT");
+                Settings.OPENCLOSEACTION = true;
+                break;
+
+            case CHANGE_LANGUAGE:
+                int tmpLoc = Prefers.getInt(Prefers.RusEng);
+                Prefers.putInt(Prefers.RusEng, tmpLoc == 0 ? 1 : 0);
+                Handler.REFRESHLANG = true;
+                break;
+
+            case CHANGE_SOUND:
+                Prefers.putBool(Prefers.SoundEnb, !Prefers.getBool(Prefers.SoundEnb, false));
+                MusicCore.refreshState();
+                break;
+
+            case CHANGE_MUSIC:
+                Prefers.putBool(Prefers.MusicEnb, !Prefers.getBool(Prefers.MusicEnb, false));
+                MusicCore.refreshState();
                 break;
 
             case TOMAINMENU_PAUSE_ACTION:

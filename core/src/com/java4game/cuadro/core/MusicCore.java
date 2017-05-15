@@ -3,6 +3,7 @@ package com.java4game.cuadro.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.java4game.cuadro.utils.Prefers;
 import com.java4game.cuadro.utils.Timer;
 
 /**
@@ -13,7 +14,7 @@ import com.java4game.cuadro.utils.Timer;
  */
 public class MusicCore {
 
-    private static float MUSIC_VOLUME = 0.0f;   //0.3
+    private static float MUSIC_VOLUME;
     private static float SOUND_VOLUME = 1.0f;
 
     private static Timer stopTimer, startTimer;
@@ -40,6 +41,12 @@ public class MusicCore {
         stopTimer = new Timer(0);
         startTimer = new Timer(1.5f);
         currentPlay = MENU;
+        refreshState();
+    }
+
+    public static void refreshState(){
+        MUSIC_VOLUME = Prefers.getBool(Prefers.MusicEnb, false) ? 0.3f : 0f;
+        SOUND_VOLUME = Prefers.getBool(Prefers.SoundEnb, false) ? 1f : 0f;
     }
 
     public static void playSound(int i){

@@ -25,7 +25,8 @@ public class TrainingScreen {
         float heightCff = 0.3041f;
         botBar.setSize(Gm.WIDTH, Gm.WIDTH * heightCff);
 
-        topBar = Assets.getNewSprite(98);
+        topBar = Assets.getNewSprite(Localization.getCurrentLang().equals(Localization.Lang.RUS) ?
+                24 : 98);
         topBar.setSize(Gm.WIDTH, Gm.WIDTH * heightCff);
         topBar.setPosition(0f, Gm.HEIGHT - topBar.getHeight());
 

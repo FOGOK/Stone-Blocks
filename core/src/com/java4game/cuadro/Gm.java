@@ -19,6 +19,7 @@ import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.DebugDrawer;
 import com.java4game.cuadro.utils.DebugValueChanger;
 import com.java4game.cuadro.utils.GameUtils;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
 
 public class Gm extends ApplicationAdapter {
@@ -55,6 +56,7 @@ public class Gm extends ApplicationAdapter {
 
     private void initGame(){
         Prefers.initPrefs();
+        Localization.initEng();
         setStagesOpened();
         COUNT_BLOCKS = Prefers.getInt(Prefers.CountBlacks);
         ///
@@ -82,6 +84,9 @@ public class Gm extends ApplicationAdapter {
 
             Prefers.putInt(Prefers.KeyOpenedStagesSteps, 103);  //103
             Prefers.putInt(Prefers.KeyOpenedStagesTimed, 22);   //22
+
+            Prefers.putBool(Prefers.MusicEnb, true);
+            Prefers.putBool(Prefers.SoundEnb, true);
 
 
             Prefers.putInt(Prefers.CountBlacks, 100);

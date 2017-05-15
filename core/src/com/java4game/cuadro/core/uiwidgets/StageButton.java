@@ -3,7 +3,6 @@ package com.java4game.cuadro.core.uiwidgets;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.core.LevelGen;
-import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.utils.Assets;
@@ -52,7 +51,6 @@ public class StageButton extends TextButton {
         super.activateAction();
         if (action == ButtonActions.All.RESTART_PAUSE_ACTION){
             LEVEL = stage;
-            MusicCore.play(MusicCore.GAME);
             LevelGen.REFRESH_REFRESH = true;
         }else{ //endLearningDat
             menuUI.refreshStarsData();

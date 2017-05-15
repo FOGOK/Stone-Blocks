@@ -11,7 +11,7 @@ public class Localization {
     public enum Lang {
         RUS, ENG
     }
-    private static Lang lang = Lang.ENG;
+    private static Lang lang;
 
     public enum LettersKey{
         BACK, TRAINING, HELLOINF, INF1, INF2, ARCMODE, CTBCFT, 
@@ -23,6 +23,17 @@ public class Localization {
         STEPS, TIMEMODE, ARCADE, RANDOM, RECORDS, LEADERBOARDS, ACHIEVEMENTS, CONNECTONSTART,
         BASE, MODE, BRONZE, SILVER, GOLD, STAGE, POINTS, BLOCKS, TIME, MINUTE, MAXTIME,
         WIN, LOSE, RESTART, MENU, NEXT, ALLTIME, CONTINUE, PAUSE, NEWRECORD, RECORD, GAMESPLAYED
+    }
+
+    public static void initEng(){
+        switch (Prefers.getInt(Prefers.RusEng)){
+            case 0:
+                lang = Lang.RUS;
+                break;
+            case 1:
+                lang = Lang.ENG;
+                break;
+        }
     }
 
     //RUS
