@@ -133,14 +133,16 @@ public class FieldObject {
     int getSQX(boolean center, float value){
         final float centerP = center ? block.getWidth() / 2 : 0f;
         final float posXiiP = (value + centerP - fieldBounds.getX()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
-        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
+        return (int) posXiiP;
+//        bigDecimal = new BigDecimal(posXiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+//        return bigDecimal.intValue();
     }
     int getSQY(boolean center, float value){
         final float centerP = center ? block.getWidth() / 2 : 0f;
         final float posYiiP = (value + centerP - fieldBounds.getY()) / (fieldBounds.getWidth() / (LevelGen.SQSIZE + 3));
-        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
-        return bigDecimal.intValue();
+        return (int) posYiiP;
+//        bigDecimal = new BigDecimal(posYiiP).setScale(0, BigDecimal.ROUND_FLOOR);
+//        return bigDecimal.intValue();
     }
     int getSQX(float value){
         return getSQX(false, value);

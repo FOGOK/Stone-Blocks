@@ -151,6 +151,7 @@ public class ButtonActions {
 
             case OPEN_LEARNING_INTERACTIVE:
                 DialogSystem.ISLEARNING = true;
+                TypeGameBottomBar.SELECTED_BTN = 2;
                 switch (DialogSystem.LEARNING_PART){
                     case 0:
                         StageButton.LEVEL = StageButton.RANDOM_LEVEL;
