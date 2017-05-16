@@ -30,6 +30,7 @@ public class Prefers {
     public static final String RusEng = "RusEng";
     public static final String MusicEnb = "MusicEnb";
     public static final String SoundEnb = "SoundEnb";
+    public static final String GPGSStarted = "GPGSStarted";
     /////// DO NOT CHANGE FINAL STRINGS
 
     public static void initPrefs(){

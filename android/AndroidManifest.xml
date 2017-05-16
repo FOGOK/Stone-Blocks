@@ -6,9 +6,8 @@
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="20" />
 
-    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-    <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="ID ваших сервисов" />
-    <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="ID ваших сервисов" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +15,11 @@
         android:label="@string/app_name"
         android:theme="@style/GdxTheme"
         android:name="android.support.multidex.MultiDexApplication">
+
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/appId" />
+        <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="@string/appId" />
+
         <activity
             android:name="com.java4game.stoneblocks.AndroidLauncher"
             android:label="@string/app_name" 

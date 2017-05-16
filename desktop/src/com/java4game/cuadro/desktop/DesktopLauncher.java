@@ -3,16 +3,23 @@ package com.java4game.cuadro.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.IServices;
 import com.java4game.cuadro.core.Handler;
 
 import static com.java4game.cuadro.core.usie.MenuUI.TEST;
 
-public class DesktopLauncher {
+public class DesktopLauncher implements IServices {
+
+    private static DesktopLauncher desktopLauncher;
+
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 //        config.width = 160;
 //        config.height = 320;
+
+        if (desktopLauncher == null)
+            desktopLauncher = new DesktopLauncher();
 
         boolean Oleg = true;
 
@@ -45,6 +52,41 @@ public class DesktopLauncher {
             config.height = 854;
         }
 
-		new LwjglApplication(new Gm(), config);
+		new LwjglApplication(new Gm(desktopLauncher), config);
 	}
+
+    @Override
+    public void signIn() {
+
+    }
+
+    @Override
+    public void showAchievements() {
+
+    }
+
+    @Override
+    public void showLeaderboard() {
+
+    }
+
+    @Override
+    public void addScore(int where, int value) {
+
+    }
+
+    @Override
+    public int getScore(int where) {
+        return 0;
+    }
+
+    @Override
+    public void unlockAchievement(String achievementID) {
+
+    }
+
+    @Override
+    public boolean isAchievementUnlocked(String achievementID) {
+        return false;
+    }
 }

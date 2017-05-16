@@ -32,6 +32,8 @@ public class Gm extends ApplicationAdapter {
     private DebugValueChanger debugValueChanger;
     private DebugDrawer debugDrawer;
 
+    public static boolean OPEN_ACHIEVEMENTS, OPEN_LEADERBOARDS;
+
     protected static int COUNT_BLOCKS;
     /***/
 
@@ -42,7 +44,14 @@ public class Gm extends ApplicationAdapter {
 	private SpriteBatch batch;
     static OrthographicCamera camera;
     private Handler handler;
-	
+
+    private IServices iServices;
+
+    public Gm(IServices iServices){
+        this.iServices = iServices;
+    }
+
+
 	@Override
 	public void create () {
         //initNatives
@@ -51,6 +60,8 @@ public class Gm extends ApplicationAdapter {
         startTexture = new Texture(Gdx.files.internal("start.png"));
         startTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         isFirstIter = isGameInit = false;
+        OPEN_ACHIEVEMENTS = false;
+        OPEN_LEADERBOARDS = false;
         ///
 	}
 
@@ -76,18 +87,20 @@ public class Gm extends ApplicationAdapter {
         UI.initializate();
 
         handler = new Handler();
+        handler.setiServices(iServices);
     }
 
     private void setStagesOpened(){
-        if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0 || true){
+        if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0){
             Prefers.putBool(Prefers.KeyFirstOpenLearn, true);
 
             Prefers.putInt(Prefers.KeyOpenedStagesSteps, 103);  //103
             Prefers.putInt(Prefers.KeyOpenedStagesTimed, 22);   //22
 
-            Prefers.putBool(Prefers.MusicEnb, true);
-            Prefers.putBool(Prefers.SoundEnb, true);
+            Prefers.putBool(Prefers.MusicEnb, true);    //true
+            Prefers.putBool(Prefers.SoundEnb, true);        //true
 
+            Prefers.putInt(Prefers.KeyOpenedArkadeModes, 2);
 
             Prefers.putInt(Prefers.CountBlacks, 100);
             char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
@@ -146,8 +159,6 @@ public class Gm extends ApplicationAdapter {
                 initGame();
                 isGameInit = true;
             }
-
-
         }
 
 
@@ -172,6 +183,16 @@ public class Gm extends ApplicationAdapter {
         else
             sleep(1);
         ///
+
+        if (OPEN_ACHIEVEMENTS){
+            OPEN_ACHIEVEMENTS = false;
+            iServices.showAchievements();
+        }
+
+        if (OPEN_LEADERBOARDS){
+            OPEN_LEADERBOARDS = false;
+            iServices.showLeaderboard();
+        }
     }
 
     private long diff, start = System.currentTimeMillis();

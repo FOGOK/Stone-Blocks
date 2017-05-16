@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.java4game.cuadro.Gm;
+import com.java4game.cuadro.IServices;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.RestartButton;
 import com.java4game.cuadro.core.uiwidgets.RobotHead;
@@ -76,6 +77,8 @@ public class LevelGen {
     private Random rnd = new Random();
     private Interpolation pauseBInterp;
     private boolean arkadeSpecialAlphaFlag;
+
+    private IServices iServices;
 
     public LevelGen(MenuUI menuUI) {
         ISARKADE = StageButton.ARKADE_LEVEL == StageButton.LEVEL;
@@ -220,6 +223,10 @@ public class LevelGen {
             learningStart();
 
         MusicCore.playSound(8);
+    }
+
+    public void setiServices(IServices iServices) {
+        this.iServices = iServices;
     }
 
     private void createTESTLevel() {
@@ -508,6 +515,7 @@ public class LevelGen {
                         case 2:
                             scoreText = Prefers.getInt(Prefers.KeyRandomMode3) + 1;
                             Prefers.putInt(Prefers.KeyRandomMode3, scoreText);
+                            iServices.addScore(1, scoreText);
                             break;
                     }
                     break;
@@ -545,6 +553,8 @@ public class LevelGen {
         ISGAMEOVER = true;
         gameOverUI.setScoreText(arkadeBlock.getScore(), false);
         gameOverUI.setRecord(blockGenerator.isNewRecord());
+        if (TypeGameButton.TOUCHED_ARK == 2)
+            iServices.addScore(0, arkadeBlock.getScore());
     }
 
     public void dispose() {

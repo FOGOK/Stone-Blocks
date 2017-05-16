@@ -3,6 +3,7 @@ package com.java4game.cuadro.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.java4game.cuadro.IServices;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
 import com.java4game.cuadro.core.usie.GPauseUI;
@@ -37,6 +38,7 @@ public class Handler {
 //    GameUI gameUi;
 
     private MenuUI menuUI;
+    private IServices iServices;
     ///
 
     public static State state;
@@ -69,6 +71,10 @@ public class Handler {
 //        TypeGameButton.TOUCHED_ARK = 2;
 //        levelGen = new LevelGen(menuUI);
 //        pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
+    }
+
+    public void setiServices(IServices iServices) {
+        this.iServices = iServices;
     }
 
     public void draw(SpriteBatch batch){
@@ -107,6 +113,7 @@ public class Handler {
 
     public void restart(){
         levelGen = new LevelGen(menuUI);
+        levelGen.setiServices(iServices);
 
         if (pauseUI == null)
             pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());

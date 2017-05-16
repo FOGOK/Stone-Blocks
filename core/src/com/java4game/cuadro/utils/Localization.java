@@ -22,7 +22,8 @@ public class Localization {
         NORMAL, HARD, EXTREME, GAMESCOUNT, RANDOMANNOTATION, INFINITY,
         STEPS, TIMEMODE, ARCADE, RANDOM, RECORDS, LEADERBOARDS, ACHIEVEMENTS, CONNECTONSTART,
         BASE, MODE, BRONZE, SILVER, GOLD, STAGE, POINTS, BLOCKS, TIME, MINUTE, MAXTIME,
-        WIN, LOSE, RESTART, MENU, NEXT, ALLTIME, CONTINUE, PAUSE, NEWRECORD, RECORD, GAMESPLAYED
+        WIN, LOSE, RESTART, MENU, NEXT, ALLTIME, CONTINUE, PAUSE, NEWRECORD, RECORD, GAMESPLAYED,
+        TRY_INTERNET
     }
 
     public static void initEng(){
@@ -56,7 +57,7 @@ public class Localization {
             "ходы", "время", "аркада", "рандом", "рекорды", "таблица лидеров", "достижения", "подключение на старте", "базовый",
             "режим", "бронзовая", "серебряная", "золотая", "уровень", "очков", "блоков",
             "время", "минута", "максимальное время!!!", "победа", "проигрыш", "рестарт", "меню", "далее", "все время: ", "назад",
-            "пауза", "новый рекорд: ", "рекорд: ", "сыграно игр: "
+            "пауза", "новый рекорд: ", "рекорд: ", "сыграно игр: ", "Нет подключения интернет. Повторите попытку позже"
 
     };
     ///
@@ -80,7 +81,7 @@ public class Localization {
             "STEPS", "TIME", "ARCADE", "RANDOM", "RECORDS", "LEADERBOARDS", "ACHIEVEMENTS", "CONNECT ON START", "BASE",
             "MODE", "BRONZE", "SILVER", "GOLD", "STAGE", "POINTS", "BLOCKS",
             "TIME", "MINUTE", "max time!!!", "win", "lose", "restart", "menu", "next", "all time: ", "resume",
-            "pause", "new record: ", "record: ", "games played: "
+            "pause", "new record: ", "record: ", "games played: ", "No internet connection. Please try again later."
 
     };
     ///

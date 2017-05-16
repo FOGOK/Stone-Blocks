@@ -1,4 +1,4 @@
-package com.java4game.stoneblocks;
+package com.java4game.cuadro;
 
 
 public interface IServices {
@@ -7,8 +7,8 @@ public interface IServices {
     void showAchievements();
     void showLeaderboard();
 
-    void addScore(final String scoreName, final Integer value);
-    int getScore(final String scoreName);
+    void addScore(int where, final int value);
+    int getScore(int where);
 
     void unlockAchievement(final String achievementID);
     boolean isAchievementUnlocked(final String achievementID);

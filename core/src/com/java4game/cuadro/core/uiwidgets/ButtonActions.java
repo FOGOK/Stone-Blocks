@@ -1,6 +1,7 @@
 package com.java4game.cuadro.core.uiwidgets;
 
 import com.badlogic.gdx.Gdx;
+import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.DialogSystem;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
@@ -19,6 +20,8 @@ import com.java4game.cuadro.utils.Prefers;
  */
 public class ButtonActions {
 
+
+
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
         WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE,
@@ -31,10 +34,10 @@ public class ButtonActions {
 
                 break;
             case OPEN_ACHIEVEMENTS:
-
+                Gm.OPEN_ACHIEVEMENTS = true;
                 break;
             case OPEN_LIDERBOARD:
-
+                Gm.OPEN_LEADERBOARDS = true;
                 break;
             case OPEN_SITE:
                 Gdx.net.openURI("http://www.java4game.net");

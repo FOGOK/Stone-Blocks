@@ -7,4 +7,8 @@
     <string name="license_failed">License check failed.</string>
     <string name="unknown_error">Unknown error.</string>
 
+    <string name="appId">301291455299</string>
+    <string name="event_gold_arkade_score">CgkIw4b7suIIEAIQBQ</string>
+    <string name="event_giant_brain_random_games">CgkIw4b7suIIEAIQBg</string>
+
 </resources>

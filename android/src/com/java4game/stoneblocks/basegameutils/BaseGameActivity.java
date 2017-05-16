@@ -98,6 +98,8 @@ public abstract class BaseGameActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
+
+
         if (mHelper == null) {
             getGameHelper();
         }
