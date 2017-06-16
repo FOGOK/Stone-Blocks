@@ -39,7 +39,7 @@ public class Localization {
 
     //RUS
     private static String[] rusLetters = new String[]{
-        "назад", "тренировка", "привет!!!\n меня зовут мувер", "BLOCK MOVER", "версия 1.0.2\n\n" +
+        "назад", "тренировка", "привет!!!\n меня зовут мувер", "BLOCK MOVER", "версия 0.0.1\n\n" +
             "идея, арт: [#ff5800] андрей светашов[]\n" +
             "код: [#07b1ff] олег карловский[]\n\n" +
             "больше игр здесь:", "аркадный режим", "нажмите на черный куб для тренировки",
@@ -64,7 +64,7 @@ public class Localization {
 
     //ENG
     private static String[] engLetters = new String[]{
-        "back", "training", "hello!!!\n my name is mover", "BLOCK MOVER", "VERSION 1.0.2\n\n" +
+        "back", "training", "hello!!!\n my name is mover", "BLOCK MOVER", "VERSION 0.0.1\n\n" +
             "IDEA, ART: [#ff5800] ANDREY SVETASHOV[]\n" +
             "CODE: [#07b1ff] OLEG KARLOVSKIY[]\n\n" +
             "MORE GAMES HERE:", "ARCADE MODE", "CLICK TO BLACK CUBE FOR TRAINING",

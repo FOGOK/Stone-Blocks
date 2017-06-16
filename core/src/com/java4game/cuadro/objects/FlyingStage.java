@@ -100,6 +100,7 @@ public class FlyingStage {
                 stageT.setCustomCff(size * 0.25f * Localization.getCff(Localization.CffsKey.BRONZESILVERGOLD));
                 numberT.setCustomCff(size * 0.25f * Localization.getCff(Localization.CffsKey.BRONZESILVERGOLD));
             }else{
+                stageT.setCustomCff(size * 0.3f * Localization.getCff(Localization.CffsKey.BRONZESILVERGOLD));
                 stageT.setText(Localization.getText(Localization.LettersKey.STAGE));
                 stageT.setTextColor(color);
 

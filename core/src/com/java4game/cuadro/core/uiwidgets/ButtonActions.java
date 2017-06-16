@@ -6,6 +6,7 @@ import com.java4game.cuadro.core.DialogSystem;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.LevelGen;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.core.usie.BlockCounter;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.Settings;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
@@ -25,7 +26,7 @@ public class ButtonActions {
     public enum All{
         START_GAME_ACTION, CONTINUE_PAUSE_ACTION, RESTART_PAUSE_ACTION, SETTINGS_PAUSE_ACTION, TOMAINMENU_PAUSE_ACTION, NEXT_MENU_OPTION,
         WORLD1ACT, WORLD2ACT, WORLD3ACT, WORLD4ACT, WORLD5ACT, QUESTION_ACT, INFO_ACT, PAUSE_ACT, CHANGE_GAME_MODE, NEXT_LEVEL_ACT, START_ARKADE_MODE, START_RANDOM_MODE,
-        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHANGE_LANGUAGE, CHANGE_MUSIC, CHANGE_SOUND, CHECKBOXCLICK_AUTORIZETOSTART
+        BACK_TO_MAIN_SCREEN, OPEN_SITE, OPEN_ACHIEVEMENTS, OPEN_LIDERBOARD, OPEN_LEARNING_INTERACTIVE, CHANGE_LANGUAGE, CHANGE_MUSIC, CHANGE_SOUND, BLOCKCOUNTER_ACTION, CHECKBOXCLICK_AUTORIZETOSTART
     }
 
     public static void activateAction(All action){
@@ -43,6 +44,7 @@ public class ButtonActions {
                 Gdx.net.openURI("http://www.java4game.net");
                 break;
             case START_RANDOM_MODE:
+                DialogSystem.ISLEARNING = false;
                 LevelGen.REFRESH_REFRESH = true;
                 Handler.ISRESTART = true;
                 Handler.ISPAUSE = false;
@@ -51,6 +53,7 @@ public class ButtonActions {
                 StageButton.LEVEL = StageButton.RANDOM_LEVEL;
                 break;
             case START_ARKADE_MODE:
+                DialogSystem.ISLEARNING = false;
                 LevelGen.REFRESH_REFRESH = true;
                 Handler.ISRESTART = true;
                 Handler.ISPAUSE = false;
@@ -175,6 +178,9 @@ public class ButtonActions {
 
             case SETTINGS_PAUSE_ACTION:
                 Settings.OPENCLOSEACTION = true;
+                break;
+            case BLOCKCOUNTER_ACTION:
+                BlockCounter.OPENCLOSEACTION = true;
                 break;
 
             case CHANGE_LANGUAGE:

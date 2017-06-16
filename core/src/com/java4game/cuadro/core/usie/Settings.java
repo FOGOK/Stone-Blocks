@@ -24,7 +24,7 @@ public class Settings {
 
     public Settings() {
         settingsButton = new SettingsButton(ButtonActions.All.SETTINGS_PAUSE_ACTION,
-                Gm.WIDTH / 2f, 0f, 118);
+                Gm.WIDTH / 2f, 0f, 1.3f, 118);
         floatAnimator = new FloatAnimator(1f, 0f, 0.4f);
         floatAnimator.setNeedToUpdate(false);
 

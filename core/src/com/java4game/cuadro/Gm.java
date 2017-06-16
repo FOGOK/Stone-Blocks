@@ -6,13 +6,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.MusicCore;
+import com.java4game.cuadro.core.StartLogoAnim;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.Assets;
@@ -37,9 +37,9 @@ public class Gm extends ApplicationAdapter {
     protected static int COUNT_BLOCKS;
     /***/
 
-    private Texture startTexture;
+//    private Texture startTexture;
 
-    private boolean isGameInit, isFirstIter;
+    private boolean isGameInit;
 
 	private SpriteBatch batch;
     static OrthographicCamera camera;
@@ -57,12 +57,13 @@ public class Gm extends ApplicationAdapter {
         //initNatives
         batch = new SpriteBatch();
         initCamera();
-        startTexture = new Texture(Gdx.files.internal("start.png"));
-        startTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        isFirstIter = isGameInit = false;
+//        startTexture = new Texture(Gdx.files.internal("start.png"));
+//        startTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        isGameInit = false;
         OPEN_ACHIEVEMENTS = false;
         OPEN_LEADERBOARDS = false;
         ///
+        initGame();
 	}
 
     private void initGame(){
@@ -92,10 +93,10 @@ public class Gm extends ApplicationAdapter {
 
     private void setStagesOpened(){
         if (Prefers.getInt(Prefers.KeyOpenedStagesSteps) == 0){
-            Prefers.putBool(Prefers.KeyFirstOpenLearn, true);
+            Prefers.putBool(Prefers.KeyFirstOpenLearn, false);
 
-            Prefers.putInt(Prefers.KeyOpenedStagesSteps, 103);  //103
-            Prefers.putInt(Prefers.KeyOpenedStagesTimed, 22);   //22
+            Prefers.putInt(Prefers.KeyOpenedStagesSteps, 1);  //103
+            Prefers.putInt(Prefers.KeyOpenedStagesTimed, 1);   //22
 
             Prefers.putBool(Prefers.MusicEnb, true);    //true
             Prefers.putBool(Prefers.SoundEnb, true);        //true
@@ -139,7 +140,7 @@ public class Gm extends ApplicationAdapter {
         if (isGameInit)
             Gdx.gl.glClearColor(0, 0, 0, 1);
         else
-            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClearColor(1, 1f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -150,15 +151,12 @@ public class Gm extends ApplicationAdapter {
             MusicCore.handleVolumeAndTransition();
             handler.draw(batch);
         }else{
-            float sizeW = Gm.WIDTH * 0.8f;
-            float sizeH = sizeW * 1.095f;
-            batch.draw(startTexture, (Gm.WIDTH - sizeW) / 2f, (Gm.HEIGHT - sizeH) / 2f, sizeW, sizeH);
-            if (!isFirstIter)
-                isFirstIter = true;
-            else{
-                initGame();
-                isGameInit = true;
-            }
+//            float sizeW = Gm.WIDTH * 0.8f;
+//            float sizeH = sizeW * 1.095f;
+//            batch.draw(startTexture, (Gm.WIDTH - sizeW) / 2f, (Gm.HEIGHT - sizeH) / 2f, sizeW, sizeH);
+
+            StartLogoAnim.getInstance().draw(batch);
+            isGameInit = StartLogoAnim.getInstance().isStarted();
         }
 
 
@@ -247,7 +245,7 @@ public class Gm extends ApplicationAdapter {
         debugDrawer.dispose();
         MusicCore.dispose();
         Assets.dispose();
-        startTexture.dispose();
+//        startTexture.dispose();
         InitLevels.dispose();
 
 

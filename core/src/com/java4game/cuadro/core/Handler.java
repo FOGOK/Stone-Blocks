@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.IServices;
 import com.java4game.cuadro.core.uiwidgets.ButtonActions;
 import com.java4game.cuadro.core.uiwidgets.StageButton;
+import com.java4game.cuadro.core.usie.BlockCounter;
 import com.java4game.cuadro.core.usie.GPauseUI;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.TypeGameBottomBar;
@@ -37,6 +38,7 @@ public class Handler {
     //ui
 //    GameUI gameUi;
 
+    private BlockCounter blockCounter;
     private MenuUI menuUI;
     private IServices iServices;
     ///
@@ -54,8 +56,11 @@ public class Handler {
 
         DialogSystem.LEARNING_PART = 0;
 
+
         isBackPressed = false;
         menuUI = new MenuUI();
+        blockCounter = new BlockCounter();
+        blockCounter.setCountBlocks(20);
         if (!MenuUI.TEST)
             state = State.Menu;
         else{
@@ -70,7 +75,7 @@ public class Handler {
 //        StageButton.LEVEL = StageButton.ARKADE_LEVEL;
 //        TypeGameButton.TOUCHED_ARK = 2;
 //        levelGen = new LevelGen(menuUI);
-//        pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
+//        pauseUI = new GPauseUI(levelGen.getFieldBounds().getHeight());
     }
 
     public void setiServices(IServices iServices) {
@@ -97,6 +102,9 @@ public class Handler {
         if (ISRESTART) restart();
 
 
+        if (MenuUI.MENUSTATE != MenuUI.SELECTSTAGE || state == State.Game)
+            blockCounter.draw(batch, state == State.Game);
+
 
         if (isBackPressed || Gdx.input.isKeyJustPressed(Input.Keys.P)){
             isBackPressed = false;
@@ -118,6 +126,8 @@ public class Handler {
         if (pauseUI == null)
             pauseUI = new GPauseUI(levelGen.getFieldBounds().getY());
         pauseUI.setRestartAction(DialogSystem.ISLEARNING ? ButtonActions.All.OPEN_LEARNING_INTERACTIVE : ButtonActions.All.RESTART_PAUSE_ACTION);
+
+        blockCounter.setyPauseBtn(levelGen.getPauseBtnY());
 
         ISRESTART = false;
     }

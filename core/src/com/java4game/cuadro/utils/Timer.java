@@ -52,6 +52,10 @@ public class Timer {
         isStarted = false;
     }
 
+    public boolean isEnd(){
+        return seconds > targetSeconds;
+    }
+
     public boolean isStarted() {
         return isStarted;
     }

@@ -26,7 +26,7 @@ public class AndroidLauncher extends AndroidApplication implements IServices, Ga
 		super.onCreate(savedInstanceState);
         initGPGS();
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.useImmersiveMode = true;     //прячем кнопки домой и т.д. на некоторых устройствах
+        config.useImmersiveMode = true;  //прячем кнопки домой и т.д. на некоторых устройствах
         config.useWakelock = true;
 		initialize(new Gm(this), config);
 	}

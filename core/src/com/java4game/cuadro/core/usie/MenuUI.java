@@ -637,9 +637,9 @@ public class MenuUI {
             initAnimGlass();
             resetAnim = true;
             RESETANIMATION = false;
-//            infoButton.setPosition(infoButton.getX(), posYs[2] - infoButton.getHeight());
-//            qButton.setPosition(qButton.getX(), Gm.HEIGHT - posYs[1]);
-//            startButton.setPosition(startButton.getX(), Gm.HEIGHT - posYs[0]);
+//            infoButton.setPosition(infoButton.getWidth(), posYs[2] - infoButton.getHeight());
+//            qButton.setPosition(qButton.getWidth(), Gm.HEIGHT - posYs[1]);
+//            startButton.setPosition(startButton.getWidth(), Gm.HEIGHT - posYs[0]);
         }
         for (int i = 0; i < objectAnimations.length; i++) {
             FloatAnimator objAnim = objectAnimations[i];

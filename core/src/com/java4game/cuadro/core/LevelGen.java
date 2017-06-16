@@ -65,7 +65,7 @@ public class LevelGen {
     private StarBlock starBlock;
     private TimerBlock timerBlock;
     private ArkadeBlock arkadeBlock;
-    private RestartButton restartButton;
+    private RestartButton pauseBtn;
     private GameOverUI gameOverUI;
     private Sprite starLearn;
     private TextBlock textLearn;
@@ -208,9 +208,9 @@ public class LevelGen {
 
 
         final float sizePauseBtn = 2.3f;
-        restartButton = new RestartButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
-        restartButton.setPositionToCenter();
-        restartButton.completeX();
+        pauseBtn = new RestartButton(ButtonActions.All.PAUSE_ACT, 0.1f, Gm.HEIGHT - sizePauseBtn * 0.4f, sizePauseBtn);
+        pauseBtn.setPositionToCenter();
+        pauseBtn.completeX();
 
         pauseBInterp = Interpolation.exp5Out;
 
@@ -315,10 +315,10 @@ public class LevelGen {
             }
 
 
-            restartButton.setOffsetX(pauseBInterp.apply(-restartButton.getWidth(), 0f, flyingStage.getProgressEnd()));
-            restartButton.setAlpha(pauseBInterp.apply(0f, 1f, flyingStage.getProgressEnd()));
-            restartButton.setEnabled(!Handler.ISPAUSE && !ISGAMEOVER);
-            restartButton.draw(batch);
+            pauseBtn.setOffsetX(pauseBInterp.apply(-pauseBtn.getWidth(), 0f, flyingStage.getProgressEnd()));
+            pauseBtn.setAlpha(pauseBInterp.apply(0f, 1f, flyingStage.getProgressEnd()));
+            pauseBtn.setEnabled(!Handler.ISPAUSE && !ISGAMEOVER);
+            pauseBtn.draw(batch);
         }
 
 
@@ -401,7 +401,7 @@ public class LevelGen {
                         break;
                 }
 
-            restartButton.drawIcon(batch);
+            pauseBtn.drawIcon(batch);
             if (timerInArcade != null) {
                 timerInArcade.setAlpha(gameTransparency);
                 timerInArcade.draw(batch, true);
@@ -555,6 +555,10 @@ public class LevelGen {
         gameOverUI.setRecord(blockGenerator.isNewRecord());
         if (TypeGameButton.TOUCHED_ARK == 2)
             iServices.addScore(0, arkadeBlock.getScore());
+    }
+
+    public float getPauseBtnY(){
+        return pauseBtn.getY();
     }
 
     public void dispose() {

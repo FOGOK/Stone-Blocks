@@ -90,8 +90,8 @@ public class RobotHead {
         textAreaBounds.setPosition(textAreaBounds.getX() + otst, textAreaBounds.getY() + otst);
         textAreaBounds.setSize(textAreaBounds.getWidth() - otst * 2f, textAreaBounds.getHeight() - otst * 2f);
 
-//        leftEave.setPosition(head.getX() + head.getWidth() * 0.049f, head.getY() + head.getHeight() * 0.251f);
-//        rightEave.setPosition(head.getX() + head.getWidth() * 0.514f, head.getY() + head.getHeight() * 0.215f);
+//        leftEave.setPosition(head.getWidth() + head.getWidth() * 0.049f, head.getHeight() + head.getHeight() * 0.251f);
+//        rightEave.setPosition(head.getWidth() + head.getWidth() * 0.514f, head.getHeight() + head.getHeight() * 0.215f);
 
         positionAnimEyes = new PosF(head.getX() + head.getWidth() * 0.035f, head.getY() + head.getHeight() * 0.215f);
         for (Sprite sprite : eyesAnim.getKeyFrames())

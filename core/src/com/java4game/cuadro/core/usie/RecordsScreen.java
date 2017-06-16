@@ -49,7 +49,7 @@ public class RecordsScreen {
     public void draw(SpriteBatch batch){
         leaderBoards.draw(batch);
         achievements.draw(batch);
-        connectOnStart.draw(batch);
-        connectOnStartText.draw(batch);
+//        connectOnStart.draw(batch);
+//        connectOnStartText.draw(batch);
     }
 }

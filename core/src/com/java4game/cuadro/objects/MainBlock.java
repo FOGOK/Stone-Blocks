@@ -488,16 +488,16 @@ public class MainBlock extends FieldObject{
 
     ///                     trash
 //    if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            block.setX(block.getX() - speed * speedCff * Gm.mdT);
+//            block.setX(block.getWidth() - speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            block.setX(block.getX() + speed * speedCff * Gm.mdT);
+//            block.setX(block.getWidth() + speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.UP))
-//            block.setY(block.getY() + speed * speedCff * Gm.mdT);
+//            block.setY(block.getHeight() + speed * speedCff * Gm.mdT);
 //
 //    if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-//            block.setY(block.getY() - speed * speedCff * Gm.mdT);
+//            block.setY(block.getHeight() - speed * speedCff * Gm.mdT);
 //
 //    Gm.DEBUG_VALUE1 = "X: " + getSQX() + " Y: " + getSQY();
 }
