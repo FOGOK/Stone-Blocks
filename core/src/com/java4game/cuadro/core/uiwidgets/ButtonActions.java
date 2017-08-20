@@ -64,7 +64,7 @@ public class ButtonActions {
                 break;
             case CHANGE_GAME_MODE:
                 TypeGameBottomBar.SELECTED_BTN = TypeGameButton.TOUCHED_B;
-                MusicCore.playSound(4);
+                MusicCore.playSound(4, 0.4f);
                 break;
 //            case COMPLETE_LEARN:
 //                final char[] chars = Prefers.getString(Prefers.KeyStarsSteps).toCharArray();
@@ -117,7 +117,7 @@ public class ButtonActions {
                 }else{
                     MenuUI.MENUSTATE = MenuUI.TRAINING;
                 }
-                MusicCore.playSound(4);
+                MusicCore.playSound(4, 0.4f);
                 break;
             case START_GAME_ACTION:
                 Handler.state = Handler.State.Game;

@@ -39,8 +39,10 @@ public class TypeGameBottomBar extends BaseObject {
 
     public void draw(SpriteBatch batch) {
         for (int i = 0; i < tgButtons.length; i++) {
-            tgButtons[i].setSelected(i == SELECTED_BTN);
-            tgButtons[i].draw(batch);
+            if (i != 1) {
+                tgButtons[i].setSelected(i == SELECTED_BTN);
+                tgButtons[i].draw(batch);
+            }
         }
 
         if (lastSelectedBtn != SELECTED_BTN){

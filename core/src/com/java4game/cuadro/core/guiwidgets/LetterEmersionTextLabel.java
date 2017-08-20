@@ -19,10 +19,15 @@ public class LetterEmersionTextLabel extends TextLabel {
 
     public LetterEmersionTextLabel(float x, float y, float sizeText, String text, float charsSpeed) {
         super(x, y, sizeText, text);
+        timer = new Timer(charsSpeed);
+    }
+
+    @Override
+    public void setText(String text) {
+        super.setText(text);
         charSettingsStrBld = new StringBuilder();
         finalStringStrBld = new StringBuilder();
         textChars = text.toCharArray();
-        timer = new Timer(charsSpeed);
     }
 
     public void resetAnimation(){
@@ -55,21 +60,30 @@ public class LetterEmersionTextLabel extends TextLabel {
 
         finalStringStrBld.setLength(0);
         for (int i = 0; i < textChars.length; i++) {
-            charSettingsStrBld.setLength(0);
-            charSettingsStrBld.append(openCl);
-            charSettingsStrBld.append(hashCl);
-            if (i >= currentCharAnimate)
-                color.a = i > currentCharAnimate ? 0f : timer.getProgress() * alpha;
-            else
-                color.a = alpha;
-            charSettingsStrBld.append(color.toString());
-            color.a = 1f;
-            charSettingsStrBld.append(closeCl);
-            charSettingsStrBld.append(textChars[i]);
-            finalStringStrBld.append(charSettingsStrBld.toString());
+
+            if (textChars[i] != ' ') {
+                charSettingsStrBld.setLength(0);
+                charSettingsStrBld.append(openCl);
+                charSettingsStrBld.append(hashCl);
+                if (i >= currentCharAnimate)
+                    color.a = i > currentCharAnimate ? 0f : timer.getProgress() * alpha;
+                else
+                    color.a = alpha;
+
+                charSettingsStrBld.append(color.toString());
+                color.a = 1f;
+                charSettingsStrBld.append(closeCl);
+                charSettingsStrBld.append(textChars[i]);
+                finalStringStrBld.append(charSettingsStrBld.toString());
+            } else {
+                finalStringStrBld.append(' ');
+                finalStringStrBld.append(' ');//noBag
+            }
+
+
         }
 
-        setText(finalStringStrBld.toString());
+        text = finalStringStrBld.toString();
 
         super.refreshTextParams();
     }

@@ -3,26 +3,28 @@ package com.java4game.cuadro.core.uiwidgets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
+import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonData;
+import com.esotericsoftware.spine.SkeletonJson;
+import com.esotericsoftware.spine.SkeletonMeshRenderer;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.usie.UI;
-import com.java4game.cuadro.utils.Animation;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.FloatAnimator;
-import com.java4game.cuadro.utils.PosF;
 import com.java4game.cuadro.utils.Timer;
-
-import java.util.Random;
 
 
 public class RobotHead {
 
-    private Sprite head, dialogCover;
-    private Animation<Sprite> eyesAnim;
+    private Sprite dialogCover;
     private float sizeH;
     private String text;
     private float sizeText;
@@ -30,15 +32,17 @@ public class RobotHead {
     private GlyphLayout glyphLayout = new GlyphLayout();
     private FloatAnimator headAnimation;
 
-    private Timer timer;
+    private static PolygonSpriteBatch polygonSpriteBatch;
+    private static SkeletonMeshRenderer skeletonMeshRenderer;
+    private Skeleton headSkeleton;
+    private AnimationState animationState;
+
+
     private int appendedNumber;
 
     public RobotHead(float y) {
         sizeH = Gm.WIDTH * 0.32f;
         if (sizeH > 3.6f) sizeH = 3.6f;
-
-        head = Assets.getNewSprite(90);
-        head.setSize(sizeH * 1.04f, sizeH);
 
         dialogCover = Assets.getNewSprite(89);
         dialogCover.setSize(sizeH * 0.829f * 2.67f, sizeH * 0.829f);
@@ -46,44 +50,59 @@ public class RobotHead {
         textAreaBounds = new Rectangle();
         textAreaBounds.setSize(dialogCover.getWidth() * 0.866f, dialogCover.getHeight() * 0.853f);
 
-//        leftEave = Assets.getNewSprite(97);
-//        leftEave.setSize(head.getHeight() * 0.473f, head.getHeight() * 0.473f);
-//
-//        rightEave = new Sprite();
-//        rightEave.set(leftEave);
-
-        timer = new Timer(1.3f);
-
-        eyesAnim = new Animation<Sprite>(0.03f,
-                Assets.getNewSprite(112),
-                Assets.getNewSprite(113),
-                Assets.getNewSprite(114));
-
-        eyesAnim.setPlayMode(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP_PINGPONG);
-        for (Sprite sprite : eyesAnim.getKeyFrames()){
-            sprite.setSize(head.getWidth() * 0.944f, head.getHeight() * 0.509f);
-            sprite.setOriginCenter();
-            sprite.setRotation(-5f);
-        }
-
-
-
+        initSpineAnim();
         setPositionY(y);
     }
 
+    private void initSpineAnim(){
+        if (polygonSpriteBatch == null) {
+            skeletonMeshRenderer = new SkeletonMeshRenderer();
+            polygonSpriteBatch = new PolygonSpriteBatch();
+        }
+
+        SkeletonJson json = new SkeletonJson(Assets.getTextureAtlas());
+        float scale = 0.012f;
+        json.setScale(scale);
+        SkeletonData baseData = json.readSkeletonData(Gdx.files.internal("robotHead.json"));
+
+        headSkeleton = new Skeleton(baseData);
+        headSkeleton.getData().setWidth(Assets.getNewSprite(90).getWidth() * scale);
+        headSkeleton.getData().setHeight(Assets.getNewSprite(90).getHeight() * scale);
+
+        AnimationStateData animationStateData = new AnimationStateData(baseData);
+        animationState = new AnimationState(animationStateData);
+        animationState.setTimeScale(0.4f);
+
+        animationState.setAnimation(0, "animtion0", true);
+    }
+
+    private void renderSpine(SpriteBatch batch){
+        animationState.update(Gdx.graphics.getDeltaTime());
+
+        animationState.apply(headSkeleton);
+        headSkeleton.updateWorldTransform();
+
+        batch.end();
+        polygonSpriteBatch.setProjectionMatrix(Gm.getCamera().combined);
+        polygonSpriteBatch.begin();
+        skeletonMeshRenderer.draw(polygonSpriteBatch, headSkeleton);
+        polygonSpriteBatch.end();
+        batch.begin();
+
+    }
+
     public float getTopY(){
-        return head.getY() + head.getHeight();
+        return headSkeleton.getY() + headSkeleton.getData().getHeight();
     }
 
     private float dialogCoverX;
-    private PosF positionAnimEyes;
     public void setPositionY(float y){
-        dialogCoverX = head.getWidth() * 0.864f;
+        dialogCoverX = headSkeleton.getData().getWidth() * 0.864f;
 
-        head.setY(y);
+        headSkeleton.setY(y);
         refreshHeadAnim();
 
-        dialogCover.setPosition(head.getX() + dialogCoverX, y);
+        dialogCover.setPosition(headSkeleton.getX() + dialogCoverX - headSkeleton.getData().getWidth() / 2f, y);
 
         textAreaBounds.setPosition(dialogCover.getX() + dialogCover.getWidth() * 0.11f, dialogCover.getY() + dialogCover.getHeight() * 0.159f);
         float otst = 0.1f;
@@ -92,25 +111,20 @@ public class RobotHead {
 
 //        leftEave.setPosition(head.getWidth() + head.getWidth() * 0.049f, head.getHeight() + head.getHeight() * 0.251f);
 //        rightEave.setPosition(head.getWidth() + head.getWidth() * 0.514f, head.getHeight() + head.getHeight() * 0.215f);
-
-        positionAnimEyes = new PosF(head.getX() + head.getWidth() * 0.035f, head.getY() + head.getHeight() * 0.215f);
-        for (Sprite sprite : eyesAnim.getKeyFrames())
-            sprite.setPosition(positionAnimEyes.x, positionAnimEyes.y);
-
     }
 
     private void refreshHeadAnim(){
-        setPositionHead(head.getY());
+        setPositionHead(headSkeleton.getY() + headSkeleton.getData().getHeight() / 2f);
         headAnimation = new FloatAnimator();
         headAnimation.setInterpolation(Interpolation.pow5)
-                .setFrom(-head.getWidth())
-                .setTo(head.getX())
+                .setFrom(-headSkeleton.getData().getWidth())
+                .setTo(headSkeleton.getX())
                 .setAnimationTime(0.3f);
     }
 
     private void setPositionHead(float y){
         float sizeWidth = dialogCoverX + dialogCover.getWidth();
-        head.setPosition((Gm.WIDTH - sizeWidth) / 2f, y);
+        headSkeleton.setPosition((Gm.WIDTH - sizeWidth) / 2f + headSkeleton.getData().getWidth() / 2f, y);
     }
 
     public RobotHead setText(String text, float sizeText){
@@ -157,8 +171,8 @@ public class RobotHead {
         if (!isShow)
             return;
 
-        head.setX(headAnimation.current);
-        head.draw(batch);
+        headSkeleton.setPosition(headAnimation.current, dialogCover.getY() + headSkeleton.getData().getHeight() / 2f);
+        renderSpine(batch);
 
         if (!headAnimation.isNeedToUpdate()){
 
@@ -179,25 +193,15 @@ public class RobotHead {
             UI.setCff(false, sizeText);
             UI.getContentFont().draw(batch, glyphLayout, textAreaBounds.getX(), textAreaBounds.getY() + (textAreaBounds.getHeight() + glyphLayout.height) / 2f);
 
-            if (timer.next()) {
-                if (isEyesClosed){
-                    timer.reset(2f + rnd.nextInt(40) / 10f);
-                    isEyesClosed = false;
-                }else{
-                    eyesAnim.getKeyFrame(false).draw(batch);
-                    if (eyesAnim.isLooped(4)){
-                        isEyesClosed = true;
-                        eyesAnim.reset();
-                    }
-                }
-            }
-
         }
 
         headAnimation.update(Math.min(Gdx.graphics.getDeltaTime(), 0.016f));
+
+
     }
 
-    private boolean isEyesClosed;
-    private Random rnd = new Random();
-
+    public static void dispose(){
+        polygonSpriteBatch.dispose();
+        polygonSpriteBatch = null;
+    }
 }

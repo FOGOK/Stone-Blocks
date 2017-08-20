@@ -23,6 +23,7 @@ import com.java4game.cuadro.objects.StarBlock;
 import com.java4game.cuadro.objects.TimerBlock;
 import com.java4game.cuadro.objects.TimerInArcade;
 import com.java4game.cuadro.utils.Assets;
+import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
 
 import java.util.Random;
@@ -197,8 +198,8 @@ public class LevelGen {
             starLearn.setSize(3.1f, 3.1f);
             starLearn.setCenter(Gm.WIDTH / 2f, fieldBounds.getY() + fieldSize + 2.3f);
 
-            textLearn = new TextBlock(0f, 0f, false, "TRAINING");
-            textLearn.setCustomCff(0.5f);
+            textLearn = new TextBlock(0f, 0f, false, Localization.getText(Localization.LettersKey.TRAINING));
+            textLearn.setCustomCff(0.5f * Localization.getCff(Localization.CffsKey.CTBCFT));
             textLearn.setPosition(starLearn.getX() + starLearn.getWidth() / 2f, starLearn.getY() + starLearn.getHeight() / 2f);
             textLearn.setPositionToCenter();
 

@@ -22,11 +22,13 @@ public class TypeGameButton extends BaseButton {
     private int type;
     private boolean isSelected;
     private Sprite selectedSprite, normalSprite, lockSprite, targSprite, winSprite;
+    private Sprite gpIcon;
     private TextBlock textBlock, textBlock2;
     private boolean isTextBlockEnable;
     private boolean isArkade;
 
     private boolean isLocked;
+    private boolean isGpIcon;
 
 
     public TypeGameButton(ButtonActions.All action, float x, float y, float h, int back, int type, boolean isTextBlockEnable, boolean isArkade) {
@@ -91,6 +93,18 @@ public class TypeGameButton extends BaseButton {
 
     }
 
+    public void setGpIcon(boolean isgpIcon) {
+        this.isGpIcon = isgpIcon;
+        if (isGpIcon) {
+            if (gpIcon == null)
+                gpIcon = Assets.getNewSprite(50);
+
+            gpIcon.setSize(getWidth() * 0.35f, getWidth() * 0.35f);
+            gpIcon.setCenter(getX() + getWidth() / 2f, getY() + getHeight() / 2f);
+            gpIcon.setOriginCenter();
+        }
+    }
+
     public void setText(String text){
         textBlock.setText(text);
     }
@@ -153,6 +167,10 @@ public class TypeGameButton extends BaseButton {
     public void draw(SpriteBatch batch) {
         handleTouchAnimation();
         super.draw(batch);
+
+        if (isGpIcon)
+            gpIcon.draw(batch);
+
         if (!isTextBlockEnable && isLocked)
             lockSprite.draw(batch);
 
@@ -188,6 +206,8 @@ public class TypeGameButton extends BaseButton {
         if (!isTextBlockEnable){
             lockSprite.setScale(btnScale);
         }
+        if (isGpIcon)
+            gpIcon.setScale(btnScale);
     }
 
     @Override

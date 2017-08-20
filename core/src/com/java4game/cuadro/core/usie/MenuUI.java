@@ -185,6 +185,7 @@ public class MenuUI {
         bronzeB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f + otstArkButtons * 1.2f, otstArkButtons, 33, 0, false, true);
         silverB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f, otstArkButtons, 34, 1, false, true);
         goldB = new TypeGameButton(ButtonActions.All.START_ARKADE_MODE, Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f, otstArkButtons, 35, 2, false, true);
+
         refreshArkadeButtons();
     }
 
@@ -205,6 +206,7 @@ public class MenuUI {
         goldB.setLocked(Prefers.getInt(Prefers.KeyOpenedArkadeModes) < 2);
         goldB.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - otstArkButtons * 1.2f);
         goldB.setPositionToCenter();
+        goldB.setGpIcon(true);
     }
 
     private RobotHead robotHead;

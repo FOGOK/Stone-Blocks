@@ -202,8 +202,8 @@ public class BlockGenerator {
                                 fieldBounds, mainBlock, fieldObjects);
                         break;
                     case HOLE:
-//                        color = rnd.nextInt(5);
-                        color = 2;
+                        color = rnd.nextInt(5);
+//                        color = 2;
                         fieldObjects[i] = new Hole(Assets.getNewSprite(13 + color), fieldBounds,
                                 arkadeAndRandomPositions[i].x, arkadeAndRandomPositions[i].y, color);
                         break;

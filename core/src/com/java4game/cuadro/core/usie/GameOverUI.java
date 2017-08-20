@@ -15,9 +15,6 @@ import com.java4game.cuadro.utils.GameUtils;
 import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Created by FOGOK on 21.01.2017 11:17.
  * Если ты это читаешь, то знай, что этот код хуже
@@ -110,6 +107,8 @@ public class GameOverUI {
         this.isWin = isWin;
         if (isWin) setWin(); else setLose();
         loseWinText.setText(isWin ? Localization.getText(Localization.LettersKey.WIN) : Localization.getText(Localization.LettersKey.LOSE));
+        float locCff = isWin ? Localization.getCff(Localization.CffsKey.WIN) : Localization.getCff(Localization.CffsKey.LOSE);
+        loseWinText.setCustomCff(sizeStar / 2.9f * locCff);
         loseWinText.setPosition(Gm.WIDTH / 2f, Gm.HEIGHT / 2f - sizeStar * 0.075f);
         loseWinText.setPositionToCenter();
     }

@@ -13,11 +13,11 @@ import com.java4game.cuadro.core.Handler;
 import com.java4game.cuadro.core.InitLevels;
 import com.java4game.cuadro.core.MusicCore;
 import com.java4game.cuadro.core.StartLogoAnim;
+import com.java4game.cuadro.core.uiwidgets.RobotHead;
 import com.java4game.cuadro.core.usie.MenuUI;
 import com.java4game.cuadro.core.usie.UI;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.DebugDrawer;
-import com.java4game.cuadro.utils.DebugValueChanger;
 import com.java4game.cuadro.utils.GameUtils;
 import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Prefers;
@@ -29,8 +29,8 @@ public class Gm extends ApplicationAdapter {
     private SpriteBatch debugBatch;
     private BitmapFont bf;
     public static String DEBUG_VALUE1 = "", DEBUG_VALUE2 = "";
-    private DebugValueChanger debugValueChanger;
-    private DebugDrawer debugDrawer;
+//    private DebugValueChanger debugValueChanger;
+//    private DebugDrawer debugDrawer;
 
     public static boolean OPEN_ACHIEVEMENTS, OPEN_LEADERBOARDS;
 
@@ -77,8 +77,8 @@ public class Gm extends ApplicationAdapter {
         bf = new BitmapFont();
         bf.setColor(Color.BLACK);
         debugBatch = new SpriteBatch();
-        debugValueChanger = new DebugValueChanger(3, debugBatch);
-        debugDrawer = new DebugDrawer();
+//        debugValueChanger = new DebugValueChanger(3, debugBatch);
+//        debugDrawer = new DebugDrawer();
         ///
 
         //initAll Game
@@ -101,18 +101,18 @@ public class Gm extends ApplicationAdapter {
             Prefers.putBool(Prefers.MusicEnb, true);    //true
             Prefers.putBool(Prefers.SoundEnb, true);        //true
 
-            Prefers.putInt(Prefers.KeyOpenedArkadeModes, 2);
+            Prefers.putInt(Prefers.KeyOpenedArkadeModes, 0);
 
             Prefers.putInt(Prefers.CountBlacks, 100);
             char[] chars = new char[MenuUI.COUNTSTAGESINWORLD[0]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[0]; i++) {
-                chars[i] = '3';
+                chars[i] = '0';
             }
             Prefers.putString(Prefers.KeyStarsSteps, new String(chars));
 
             chars = new char[MenuUI.COUNTSTAGESINWORLD[1]];
             for (int i = 0; i < MenuUI.COUNTSTAGESINWORLD[1]; i++) {
-                chars[i] = '3';
+                chars[i] = '0';
             }
             Prefers.putString(Prefers.KeyStarsTimed, new String(chars));
         }
@@ -225,8 +225,8 @@ public class Gm extends ApplicationAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.C))
             showDebugValChanger = !showDebugValChanger;
 
-        if (showDebugValChanger)
-            debugValueChanger.draw();
+//        if (showDebugValChanger)
+//            debugValueChanger.draw();
     }
 
     public static OrthographicCamera getCamera(){
@@ -241,8 +241,9 @@ public class Gm extends ApplicationAdapter {
         batch.dispose();
         debugBatch.dispose();
         handler.dispose();
-        debugValueChanger.dispose();
-        debugDrawer.dispose();
+//        debugValueChanger.dispose();
+        RobotHead.dispose();
+//        debugDrawer.dispose();
         MusicCore.dispose();
         Assets.dispose();
 //        startTexture.dispose();

@@ -34,7 +34,7 @@ public class Timer {
 
     public boolean next(){
         isStarted = true;
-        seconds += Gdx.graphics.getDeltaTime();
+        seconds += Math.min(Gdx.graphics.getDeltaTime(), 0.032f);
         return seconds > targetSeconds;
     }
 

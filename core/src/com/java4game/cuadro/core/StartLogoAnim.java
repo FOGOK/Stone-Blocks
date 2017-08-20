@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.java4game.cuadro.Gm;
 import com.java4game.cuadro.core.guiwidgets.AspectRatioHelper;
+import com.java4game.cuadro.core.guiwidgets.BaseWidget;
 import com.java4game.cuadro.core.guiwidgets.LetterEmersionTextLabel;
 import com.java4game.cuadro.utils.Assets;
 import com.java4game.cuadro.utils.GMUtils;
-import com.java4game.cuadro.utils.Localization;
 import com.java4game.cuadro.utils.Timer;
 
 /**
@@ -28,7 +28,7 @@ public class StartLogoAnim {
 
     private float animSpeed = 0.002f;
 
-    private int animLogoIters, animLogoMax = 3;
+    private int animLogoIters, animLogoMax = 2;
 
     private Timer timer;
 
@@ -43,10 +43,12 @@ public class StartLogoAnim {
         logoJ4G.setCenter(Gm.WIDTH / 2f, Gm.HEIGHT / 2f);
         logoJ4G.setOriginCenter();
 
-        textLabel = new LetterEmersionTextLabel(Gm.WIDTH / 2f, Gm.HEIGHT / 2f, 0.8f, Localization.getCurrentLang() == Localization.Lang.ENG ?
-                "PRESENTS" : "ПРЕДСТАВЛЯЮТ", 0.12f);
+        textLabel = new LetterEmersionTextLabel(Gm.WIDTH / 2f, logoFogok.getY() - 2f, 0.8f,
+                "A FOGOK COMPANY", 0.05f);
 
         timer = new Timer(2.3f);
+
+//        isStarted = true;
     }
 
 
@@ -69,24 +71,26 @@ public class StartLogoAnim {
                 logoJ4G.setAlpha(alpha);
                 logoJ4G.draw(batch);
                 break;
-            case 2:
-                textLabel.setSizeText(textLabel.getSizeText() + animSpeed * Gm.mdT * 0.7f);
-                textLabel.setAlpha(alpha);
-                textLabel.draw(batch);
-                break;
         }
+
+        textLabel.setSizeText(textLabel.getSizeText() + animSpeed * Gm.mdT * 0.7f);
+        textLabel.setAlpha(alpha);
+        textLabel.draw(batch);
 
         if (timer.next()) {
             if (animLogoIters < animLogoMax) {
                 switch (animLogoIters) {
                     case 0:
-
+                        textLabel.resetAnimation();
+                        textLabel.setText("AND JAVA4GAME COMPANY");
+                        textLabel.setSizeText(0.5f);
+                        textLabel.setPosition(BaseWidget.Align.LeftBottom, Gm.WIDTH / 2f, logoFogok.getY() - 2f);
                         break;
                     case 1:
-
-                        break;
-                    case 2:
-
+                        textLabel.resetAnimation();
+                        textLabel.setSizeText(0.8f);
+                        textLabel.setText("PRESENTS");
+                        textLabel.setPosition(BaseWidget.Align.LeftBottom, Gm.WIDTH / 2f, Gm.HEIGHT / 2f);
                         break;
                 }
                 animLogoIters++;
